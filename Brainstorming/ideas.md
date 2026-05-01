@@ -1,13 +1,3 @@
-# Dexter
-
----
-# Hugo
-
----
-# Zen
-
----
-# Gabe
 ### Body design ideas and fundamental mechanics
 
 ## Defence Robot 🛡️
