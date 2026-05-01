@@ -39,27 +39,27 @@ while True:
         ev3.screen.print("Motors forward")
 
         motorA.run(500)
-        motorB.run(500)
-        motorC.run(500)
-        motorD.run(500)
+        # motorB.run(500)
+        # motorC.run(500)
+        # motorD.run(500)
 
     elif Button.DOWN in buttons:
         ev3.screen.clear()
         ev3.screen.print("Motors backward")
 
         motorA.run(-500)
-        motorB.run(-500)
-        motorC.run(-500)
-        motorD.run(-500)
+        # motorB.run(-500)
+        # motorC.run(-500)
+        # motorD.run(-500)
 
     elif Button.CENTER in buttons:
         ev3.screen.clear()
         ev3.screen.print("Motors STOP")
 
         motorA.stop()
-        motorB.stop()
-        motorC.stop()
-        motorD.stop()
+        # motorB.stop()
+        # motorC.stop()
+        # motorD.stop()
 
         ''' ===== SENSOR TEST ===== '''
     elif Button.LEFT in buttons:
