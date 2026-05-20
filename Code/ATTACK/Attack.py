@@ -15,14 +15,13 @@ from pybricks.tools import wait
 from pybricks.iodevices import I2CDevice
 
 # Non Ev3 Imports
-from enum import Enum
 from threading import *
 import os
 import time
 import random
 
 # States
-class State(Enum):
+class State():
     pass
 
 # State Machine

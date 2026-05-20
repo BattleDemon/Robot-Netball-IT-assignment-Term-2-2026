@@ -42,12 +42,16 @@ class Defender():
     def __init__(self):
         self.ev3 = EV3Brick()
         self.driver = "Make a Drive Base Like Class that controls motors (handles turns ect)"
+        
+        self.has_ball = False
         self.ball_sensor = ColorSensor() # Add Port
+        self.ball_sensor_thread = Thread(target=ball_sensing)
+        self.ball_sensor_thread.daemon = True
+        self.ball_sensor_thread.start()
+
         self.foul_button = TouchSensor() # Add Port
 
         self.stateMachine = State_Controller()
-
-        self.has_ball = False
 
         self.IR_sensor = I2CDevice(Port.S2,0x08)
         self.IR_position = None
@@ -56,7 +60,15 @@ class Defender():
         self.IR_thread.daemon = True
         self.IR_thread.start()
 
-        
+    def ball_sensing(self):
+        while True:
+            if self.ball_sensor.color() == Color.BLACK:
+                self.has_ball = True
+                while True:
+                    if self.ball_sensor.color() != Color.BLACK:
+                        break
+                time.sleep(0.5)
+            time.sleep(0.5)
 
     def main(self):
         self.ev3.screen.print("EV3 TEST READY")
