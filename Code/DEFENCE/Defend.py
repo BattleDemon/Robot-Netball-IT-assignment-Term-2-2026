@@ -23,7 +23,13 @@ import random
 
 # States
 class State(Enum):
-    pass
+    IDLE
+    FOUL
+    PASSING
+    COLLECTING
+    POSITIONING
+    MOVING
+
 
 # State Machine
 class State_Machine():
