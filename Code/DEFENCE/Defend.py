@@ -1,4 +1,7 @@
 #!/usr/bin/env pybricks-micropython
+
+''' This File is a combination of Hugo and Dexter's work '''
+
 # Import things from the other files so we can use them from one file
 
 from pybricks.hubs import EV3Brick
