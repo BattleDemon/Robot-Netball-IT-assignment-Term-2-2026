@@ -9,6 +9,7 @@ from pybricks.iodevices import I2CDevice
 
 import time
 
+### Not currently working might need to make a child class, have it store positon and strngth then read that from main
 
 def irLocator(owner, ownerIR_sensor):
     ir_sensor = ownerIR_sensor
@@ -22,4 +23,4 @@ def irLocator(owner, ownerIR_sensor):
         owner.IR_position = position
         owner.IR_strength = strength
 
-        time.wait(0.25)
+        time.sleep(0.25)

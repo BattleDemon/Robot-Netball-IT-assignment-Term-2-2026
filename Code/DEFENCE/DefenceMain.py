@@ -15,7 +15,6 @@ from pybricks.tools import wait
 from pybricks.iodevices import I2CDevice
 
 # Non Ev3 Imports
-from enum import Enum
 from threading import *
 import os
 import time
@@ -23,8 +22,10 @@ import random
 
 from IRlocation import irLocator
 
+ev3 = EV3Brick()
+
 # States
-class State(Enum):
+class State():
     IDLE = 1
     FOUL = 2
     PASSING = 3
@@ -49,3 +50,15 @@ class Defender():
 
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
         self.IR_thread.deamon = True
+        self.IR_thread.start()
+
+    def main(self):
+        ev3.screen.print("EV3 TEST READY")
+        time.sleep(1)
+        while True:
+            ev3.screen.print(self.IR_position) 
+
+            time.sleep(0.4)
+
+defender = Defender()
+defender.main()
