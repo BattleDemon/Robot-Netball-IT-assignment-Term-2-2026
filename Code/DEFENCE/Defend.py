@@ -21,15 +21,16 @@ import os
 import time
 import random
 
+has_ball = False
+
 # States
 class State(Enum):
-    IDLE
-    FOUL
-    PASSING
-    COLLECTING
-    POSITIONING
-    MOVING
-
+    IDLE = 1
+    FOUL = 2
+    PASSING = 3
+    RETRIEVING = 4
+    LOCATING = 5
+    POSITIONING = 6
 
 # State Machine
 class State_Machine():
