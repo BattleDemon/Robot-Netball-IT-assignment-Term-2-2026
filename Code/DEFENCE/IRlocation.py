@@ -9,12 +9,12 @@ from pybricks.iodevices import I2CDevice
 
 import time
 
-### Not currently working might need to make a child class, have it store positon and strngth then read that from main
-
 def irLocator(owner, ownerIR_sensor):
     ir_sensor = ownerIR_sensor
 
-    while true:
+    print("IR thread started")
+
+    while True:
         ball_sensor_data = ir_sensor.read(2,2)
 
         position = ball_sensor_data[0]

@@ -49,12 +49,14 @@ class Defender():
         self.IR_strength = None
 
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
-        self.IR_thread.deamon = True
+        self.IR_thread.daemon = True
         self.IR_thread.start()
 
     def main(self):
         ev3.screen.print("EV3 TEST READY")
         time.sleep(1)
+        ev3.screen.clear()
+
         while True:
             ev3.screen.print(self.IR_position) 
 
