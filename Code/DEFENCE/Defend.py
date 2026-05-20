@@ -33,9 +33,10 @@ class State(Enum):
     POSITIONING = 6
 
 # State Machine
-class State_Machine():
-    pass
+class State_Controller():
+    def __init__(self):
+        self.state = State.IDLE
 
 class Defender(): 
     def __init__(self):
-        pass
+        self.stateMachine = State_Controller()
