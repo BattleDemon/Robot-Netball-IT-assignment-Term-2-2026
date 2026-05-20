@@ -21,6 +21,8 @@ import os
 import time
 import random
 
+from IRlocation import irLocator
+
 # States
 class State(Enum):
     IDLE = 1
@@ -39,3 +41,11 @@ class Defender():
     def __init__(self):
         self.stateMachine = State_Controller()
         self.has_ball = False
+
+        self.IR_sensor = I2CDevice(Port.S2,0x08)
+
+        self.IR_position = None
+        self.IR_strength = None
+
+        self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
+        self.IR_thread.deamon = True
