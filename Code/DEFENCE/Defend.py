@@ -8,9 +8,23 @@ from pybricks.ev3devices import (
 )
 from pybricks.parameters import Port, Button, Color
 from pybricks.tools import wait
-import time
 
 from pybricks.iodevices import I2CDevice
+
+# Non Ev3 Imports
+from enum import Enum
+from threading import *
+import os
+import time
+import random
+
+# States
+class State(Enum):
+    pass
+
+# State Machine
+class State_Machine():
+    pass
 
 class Defender(): 
     def __init__(self):
