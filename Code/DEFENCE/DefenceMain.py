@@ -20,9 +20,9 @@ import os
 import time
 import random
 
+# Local Imports
 from IRlocation import irLocator
 
-ev3 = EV3Brick()
 
 # States
 class State():
@@ -40,25 +40,31 @@ class State_Controller():
 
 class Defender(): 
     def __init__(self):
+        self.ev3 = EV3Brick()
+        self.driver = "Make a Drive Base Like Class that controls motors (handles turns ect)"
+        self.ball_sensor = ColorSensor() # Add Port
+        self.foul_button = TouchSensor() # Add Port
+
         self.stateMachine = State_Controller()
+
         self.has_ball = False
 
         self.IR_sensor = I2CDevice(Port.S2,0x08)
-
         self.IR_position = None
         self.IR_strength = None
-
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
         self.IR_thread.daemon = True
         self.IR_thread.start()
 
+        
+
     def main(self):
-        ev3.screen.print("EV3 TEST READY")
+        self.ev3.screen.print("EV3 TEST READY")
         time.sleep(1)
-        ev3.screen.clear()
+        self.ev3.screen.clear()
 
         while True:
-            ev3.screen.print(self.IR_position) 
+            self.ev3.screen.print(self.IR_position) 
 
             time.sleep(0.4)
 
