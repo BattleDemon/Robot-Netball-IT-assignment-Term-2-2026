@@ -11,3 +11,6 @@
 # Leave foul zone 
 
 # return to normal state
+
+class Foul_controller():
+    pass
