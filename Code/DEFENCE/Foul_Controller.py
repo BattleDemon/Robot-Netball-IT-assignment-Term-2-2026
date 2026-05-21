@@ -1,23 +1,17 @@
 #!/usr/bin/env pybricks-micropython
 
 import time
+from threading import Thread
+from pybricks.ev3devices import ColorSensor, TouchSensor
+from pybricks.parameters import Color
 
-''' Work of Dexter '''
+from state_controller import State, State_Controller
 
-#User Presses touch sensor once (tells machine it is being moved to foul)
-
-#User Presses again to signify the machine is in the foul zone.abs
-
-# Wait until foul has elapsed
-
-# Leave foul zone 
-
-# return to normal state
 
 FOUL_TIME = 5
 
 class Foul_controller():
-    def __init__(self, owner, colour_sensor):
+    def __init__(self, state_controller: State_Controller, colour_sensor: ColorSensor):
         self.colour_sensor = colour_sensor
         
         self.observe_ground_thread = Thread(target=observe_ground)
@@ -53,8 +47,6 @@ class Foul_controller():
         time_thread.start()
 
         # UPDATE STATE MACHINE
-
-        # STOP DRIVER
 
     def timer(self):
         time.wait(FOUL_TIME)
