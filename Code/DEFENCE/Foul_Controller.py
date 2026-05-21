@@ -13,4 +13,13 @@
 # return to normal state
 
 class Foul_controller():
-    pass
+    def __init__(self,colour_sensor):
+        self.colour_sensor = colour_sensor
+        
+        self.see_ground_thread = Thread(target=see_ground)
+
+    def see_ground(self):
+        pass
+
+    def foul(self):
+        pass
