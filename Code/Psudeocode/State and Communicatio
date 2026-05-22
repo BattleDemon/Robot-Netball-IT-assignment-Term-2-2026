@@ -1,0 +1,32 @@
+
+Enum States:
+    # all states both robots
+    IDLE
+    FOUL
+    PASSING
+    RETRIEVING 
+    LOCATING 
+    POSITIONING
+    Recieving
+
+Class StateManager():
+# positon (x,y, angle)
+    Position_other
+    Position (Tuple)
+    posioton_ball_us
+    posiiton_ball_them
+    State.Enum
+    Has Ball bool
+    Request (Asking to pass / recieve ball ect)
+
+    # Request (two way tell have ball ready to pass, attacking yes i am ready to recieve when in position)
+
+    Get info (the above stuff from other things )
+
+Class CommunicationManager():
+    Send info form StateManager
+    
+    Recieve from other robots
+    
+    If need decode / encode
+
