@@ -1,0 +1,43 @@
+CLASS Defender (or Attacker):
+
+    SETUP:
+        initialise all hardware (motors, sensors)
+        create a StateManager instance
+        create a CommunicationManager instance, passing it the StateManager
+        start all sensor threads
+        start CommunicationManager send/receive threads
+
+    MAIN LOOP:
+        read current state from StateManager
+
+        IF state is IDLE:
+            sit still, wait
+
+        IF state is LOCATING:
+            use IR data from StateManager to orient toward ball
+            call driver to rotate / search
+
+        IF state is RETRIEVING:
+            drive toward ball using IR position data
+            if colour sensor detects ball, set has_ball = True
+            tell StateManager to transition to next appropriate state
+
+        IF state is PASSING:
+            align toward other robot using position data
+            trigger pass mechanism
+            update StateManager has_ball = False
+            set request to NONE
+
+        ... and so on for each state
+
+    SENSOR THREADS:
+        IR thread:
+            continuously read IR sensor
+            call state_manager.update_ball_position(angle, strength)
+
+        Colour thread:
+            continuously check for ball contact
+            update state_manager.has_ball if changed
+
+        Foul button thread:
+            if pressed, call state_manager.transition_state(FOUL)

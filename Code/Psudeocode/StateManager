@@ -1,0 +1,46 @@
+CLASS StateManager:
+
+    ATTRIBUTES:
+        state               # current State enum value
+        has_ball            # bool
+
+        position_self       # (x, y, angle) tuple
+        position_other      # (x, y, angle) tuple from comms
+
+        position_ball_self  # (x, y) or (angle, strength) from IR, relative
+        position_ball_other # same but reported by other robot via comms
+
+        request             # current outgoing request enum (PASS, RECEIVE, NONE)
+        incoming_request    # last request received from other robot
+
+    METHODS:
+
+        update_self_position(x, y, angle):
+            # Called by robot class when odometry or sensor gives new position
+            # Updates position_self
+
+        update_other_position(x, y, angle):
+            # Called by CommunicationManager when data arrives from other robot
+
+        update_ball_position(angle, strength):
+            # Called by IR sensor thread on this robot
+            # Converts or stores raw IR data as ball position estimate
+
+        update_other_ball_position(data):
+            # Called by CommunicationManager with other robot's ball reading
+
+        set_request(request_type):
+            # Robot logic calls this when it wants to signal something
+            # e.g. "I am ready to receive" or "I am about to pass"
+            # CommunicationManager will pick this up and send it
+
+        update_incoming_request(request_type):
+            # CommunicationManager calls this when a request arrives
+
+        transition_state(new_state):
+            # Central place all state changes go through
+            # Could log, validate, or add entry/exit actions here later
+
+        get_snapshot():
+            # Returns a dictionary of all current info
+            # Used by CommunicationManager to know what to send
