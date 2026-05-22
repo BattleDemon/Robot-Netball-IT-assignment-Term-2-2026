@@ -24,7 +24,7 @@ ev3 = EV3Brick()
 
 motorL = Motor(Port.C)
 motorR = Motor(Port.D)
-pusher = Motor(Port.A)
+#pusher = Motor(Port.A)
 
 motorL.run(1000)
 motorR.run(1000)
