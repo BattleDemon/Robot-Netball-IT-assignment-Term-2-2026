@@ -1,0 +1,413 @@
+[00:00 -> 00:02]  So
+[00:02 -> 00:08]  Here's how we're gonna do it. We are going to have the main branch the master branch
+[00:09 -> 00:11]  No one touches that
+[00:12 -> 00:20]  Directly without like permission and everything from everyone right not even me or Dexter we don't touch it
+[00:22 -> 00:23]  Instead
+[00:23 -> 00:25]  We create a branch
+[00:26 -> 00:37]  Whoa, okay, so there's a main branch off of our main mm-hmm
+[00:39 -> 00:42]  Hold a
+[00:43 -> 00:48]  True-one right whatever your feature is okay, you name it what your feature is mm-hmm
+[00:49 -> 00:51]  then
+[00:51 -> 00:53]  You do all you need to do on feature one
+[00:55 -> 01:01]  Now a really important thing is that you try to edit other files
+[01:02 -> 01:08]  As little as possible because doing
+[01:08 -> 01:12]  Editing of others files that they're working on as well
+[01:13 -> 01:19]  Creates a whole lot of like merge requests that I have to sort through and solve
+[01:20 -> 01:22]  Mm-hmm. We don't like that
+[01:22 -> 01:23]  so
+[01:23 -> 01:25]  You work on your files
+[01:25 -> 01:27]  You don't really touch anything else
+[01:28 -> 01:32]  If you need to do something because something's not working you just like need to change something
+[01:32 -> 01:34]  you can either
+[01:35 -> 01:41]  Do it if it's a really small change and we'll deal with like one merge conflict, right? It won't be bad or
+[01:42 -> 01:45]  If it's like, okay, I need to change quite a lot
+[01:46 -> 01:51]  it's then you might be considering creating another branch and
+[01:53 -> 01:57]  Doing that feature so for example if you're working on
+[01:59 -> 02:04]  Navigation of your robot and you realize my main function needs to be entirely different
+[02:05 -> 02:06]  Oh
+[02:06 -> 02:13]  But Zen's also working on his thing with a completely different main function. You have a chat with Zen
+[02:14 -> 02:16]  You say is then I need to do this
+[02:17 -> 02:18]  Can I do this?
+[02:18 -> 02:22]  Yeah, it sounds fine. I don't know why I'm making your voice have it
+[02:26 -> 02:28]  Sen says yep, cool do it
+[02:29 -> 02:32]  create a new branch do that merge to main and
+[02:33 -> 02:34]  then
+[02:34 -> 02:42]  You rebase your branch. Don't worry about that. What you can do an easy method is just save all your changes locally and then
+[02:42 -> 02:45]  Get a new branch and then just reimport all your changes
+[02:46 -> 02:50]  Technically, there is a git version that you can do called rebasing. I'm pretty sure
+[02:51 -> 02:56]  where you can just like
+[02:59 -> 03:01]  Okay
+[03:01 -> 03:03]  Disgusting know you're here. That's how we do it, right?
+[03:04 -> 03:08]  This ensures as little merge conflicts as possible now
+[03:09 -> 03:13]  It's also you need to figure out who you need to check with right?
+[03:13 -> 03:17]  so because me and Dexter are pretty much working on the
+[03:18 -> 03:21]  Defense robot and you guys will be pretty much working on the attack
+[03:21 -> 03:26]  But if you're changing something to do with the attack robot, you don't need to check with me and Dexter
+[03:26 -> 03:32]  That's just a you got problem same with us if I'm changing something with the defense robot. I'm checking the Dexter
+[03:32 -> 03:34]  I don't need to clear it clear with you
+[03:34 -> 03:39]  If we're changing something that affects all of us, then I'm talking to all of you and we're asking
+[03:41 -> 03:43]  Good communication is how you'd be part of a team
+[03:44 -> 03:47]  Are we going to establish constant variables?
+[03:48 -> 03:54]  Yes, so there will be there will be some constant variables within employed the main file that involves
+[03:55 -> 03:58]  like
+[03:58 -> 04:03]  Some things that we don't change but there shouldn't be too many between robots
+[04:04 -> 04:08]  The robots can like can be pretty individual
+[04:09 -> 04:11]  the only thing is
+[04:12 -> 04:14]  Like there might be
+[04:14 -> 04:22]  Speed setting if we want it to be constant, like we just make sure both robots on the same speed
+[04:23 -> 04:28]  But even that doesn't really matter like you can have different speed robots and it would be fine
+[04:29 -> 04:31]  communication wise
+[04:31 -> 04:35]  There might be some things with actual communication between yes
+[04:35 -> 04:41]  Yeah, like community communication file that we're going to have is going to be quite collaborative
+[04:42 -> 04:45]  Yeah, I think we haven't assigned it on the github yet
+[04:45 -> 04:47]  so communication is just a
+[04:48 -> 04:50]  dead space as of current
+[04:51 -> 04:55]  For now, we don't actually need it. We don't need to communicate until in a bit
+[04:56 -> 05:00]  Kind of soon because we're nearing the deadline but in a bit
+[05:01 -> 05:03]  Okay, what do we actually?
+[05:06 -> 05:08]  Yeah
+[05:19 -> 05:21]  Without the IR sensor
+[05:21 -> 05:28]  It depends on how your robots build what senses it has but for us personally, we're going to be
+[05:29 -> 05:34]  Tracking a theoretical position. That's what I'm doing based on what I want to do what our wheels have done
+[05:35 -> 05:41]  Yeah, and part of your your finishing of design here. You should keep into account what needs communicating
+[05:42 -> 05:47]  Such as the position how how it deals with fouls
+[05:47 -> 05:52]  The the rules say that the foul area is white
+[05:52 -> 05:56]  So you got power sense or you can do what I originally tried to do with the touch sensor
+[05:56 -> 05:58]  Those sorts of things
+[06:03 -> 06:05]  So
+[06:05 -> 06:07]  That we
+[06:07 -> 06:08]  do
+[06:08 -> 06:13]  Like crack on to it get our robots designed and then test test test
+[06:13 -> 06:15]  Until you know, everything works
+[06:16 -> 06:17]  and then we
+[06:17 -> 06:24]  Like as soon as that's done you get started with the main coding and then if something breaks halfway through
+[06:25 -> 06:29]  You quickly fix it then you continue try not to let I can set back
+[06:30 -> 06:32]  Set you back all the way
+[06:32 -> 06:34]  This involves keeping our code
+[06:35 -> 06:37]  object oriented
+[06:38 -> 06:40]  We all know what object oriented is a lot of classes
+[06:43 -> 06:48]  So object oriented coding is a coding methodology
+[06:48 -> 06:50]  where
+[06:50 -> 06:52]  When you're focused on
+[06:52 -> 06:54]  Objects like classes
+[06:56 -> 06:57]  Functions
+[06:57 -> 06:59]  so instead of
+[07:01 -> 07:06]  Like instead of a code flow where you're just going one line to the next
+[07:07 -> 07:14]  Like there's no such thing as a function in this you're just straight coding everything you have like cool
+[07:15 -> 07:16]  deaf
+[07:16 -> 07:18]  this function and then
+[07:18 -> 07:20]  Class
+[07:20 -> 07:22]  And then you define the class later
+[07:23 -> 07:25]  It goes
+[07:25 -> 07:27]  and then
+[07:27 -> 07:29]  You call the function later
+[07:30 -> 07:36]  That kind of thing that's object oriented yeah, there's different levels
+[07:37 -> 07:43]  Probably for our cases. We want everything in a main function, which it will then call all the other things
+[07:43 -> 07:45]  so the only thing out of
+[07:46 -> 07:47]  the class
+[07:47 -> 07:49]  Aside from
+[07:50 -> 07:54]  Like random functions that could be some sort of utility
+[07:55 -> 07:59]  Should only be defining the class once and then running. Yeah
+[08:00 -> 08:05]  Yeah, so keeping keeping the functions also within their necessary scope
+[08:06 -> 08:07]  so
+[08:07 -> 08:11]  If you have a robot class you keep your robot functions in the robot class
+[08:11 -> 08:15]  Any classes that don't need to be within the general robot class you can instead
+[08:15 -> 08:17]  Or any functions that can be
+[08:18 -> 08:24]  Within like one of the sub classes you make put in the subclass like if only this
+[08:26 -> 08:32]  Navigational class is going to use this one function. Why would you give the entire?
+[08:33 -> 08:37]  Like parent parent class that function when you can just give to the navigation one
+[08:38 -> 08:40]  saves like
+[08:41 -> 08:47]  It doesn't save computation because you're not calling it anyways within the class but
+[08:48 -> 08:49]  it saves
+[08:49 -> 08:56]  Mental computation when you're looking at your code way easier if you're like able to establish some sort of like
+[08:59 -> 09:01]  Necessarily necessary things
+[09:02 -> 09:04]  I've tried to make it so yes
+[09:06 -> 09:07]  We've
+[09:07 -> 09:09]  So you have your robot?
+[09:11 -> 09:17]  And that's a that's its own Bible. So this is where you have all your like main robot class things
+[09:17 -> 09:23]  But so that we don't create more merge conflicts, so we don't overwrite anything. Someone's working on we need
+[09:24 -> 09:26]  other classes such as
+[09:26 -> 09:28]  navigation
+[09:28 -> 09:33]  Dot pi dot pi have its own class, which is then imported into robot
+[09:33 -> 09:37]  Yeah, so there will always be some form of merge conflict
+[09:38 -> 09:39]  within
+[09:39 -> 09:41]  Like a pull request not always technically
+[09:42 -> 09:44]  There will be a lot of merge conflicts
+[09:44 -> 09:48]  with each one, but it should only really be one or two because you've kept
+[09:49 -> 09:53]  Everything that you've created to one file and then all the merge conflict is is you?
+[09:54 -> 09:56]  like I did something I
+[09:57 -> 09:59]  Did something to the robot by to make it run?
+[10:01 -> 10:03]  inside your boss you have a
+[10:05 -> 10:06]  self
+[10:06 -> 10:09]  That class equals an instance of that cost
+[10:11 -> 10:15]  And then it calling that in its name
+[10:16 -> 10:18]  Okay, probably be the only things
+[10:20 -> 10:24]  That should create much. Oh, yeah, and those are those are easy to deal with
+[10:24 -> 10:30]  Yeah, like a merge conflict is that is the same as just clicking a button
+[10:31 -> 10:33]  And it's solved
+[10:33 -> 10:34]  there like
+[10:34 -> 10:38]  it's just when you get to when you've rewritten a file and
+[10:39 -> 10:41]  Keep some of it. You don't want others
+[10:41 -> 10:47]  And I have to say okay keep both changes and they have to go through and edit each individual thing until it works
+[10:48 -> 10:53]  Yeah, but we're all good. So branches are our friends
+[10:54 -> 10:56]  For each feature that you're doing
+[10:56 -> 10:59]  Yeah, so I've started doing that sort of thing
+[11:00 -> 11:01]  with
+[11:01 -> 11:03]  Because now that I've realized
+[11:04 -> 11:06]  The foul area is
+[11:07 -> 11:14]  White should I just like let it know like because I'm gonna map out like as you as you're doing we're gonna map out
+[11:16 -> 11:23]  Well, should I say I want to make it like yours how it sort of knows exactly or theoretically where it is
+[11:24 -> 11:26]  on the playing field and then
+[11:27 -> 11:28]  each section
+[11:28 -> 11:30]  can then
+[11:31 -> 11:33]  Each corner that would be white
+[11:37 -> 11:39]  What was the problem
+[11:49 -> 11:51]  We can just
+[11:53 -> 11:58]  Wait, what do you what do you yeah, what do you mean like all the things that connect to the
+[11:58 -> 12:00]  I
+[12:01 -> 12:03]  Connecting to the
+[12:04 -> 12:07]  Tread are connected to the one that
+[12:08 -> 12:10]  sends out the signal
+[12:10 -> 12:12]  and the one that doesn't says
+[12:17 -> 12:23]  Yeah, we can just switch that over yeah, yeah, we'll probably have to use to like to disassemble it yeah to
+[12:24 -> 12:26]  to you three
+[12:28 -> 12:35]  What are the important if you do bricks what to call them but then that just gives us more ports to work with
+[12:37 -> 12:43]  So I'll have to figure out how to make what do we need so
+[12:44 -> 12:47]  There's one that's going to be for communicating
+[12:48 -> 12:50]  One of the one of the tape what's that used for?
+[12:51 -> 12:56]  So yeah, but what the one of the tape that's for communicating. So do we put the wheels attached to that one?
+[12:56 -> 13:01]  Yeah. Yep. So we need the wheels attached to that one and then we can probably
+[13:02 -> 13:08]  Put conveyor belt or a few other things
+[13:09 -> 13:13]  into the other ev3 if needed or I
+[13:15 -> 13:16]  Don't know
+[13:16 -> 13:18]  Yeah, okay
+[13:18 -> 13:24]  Is the cannon gonna be attached to the because the driving one will have the IR sensor
+[13:24 -> 13:26]  So
+[13:31 -> 13:38]  The turret the whole turret system I'm planning to keep that attached to the body of the ev3
+[13:41 -> 13:43]  Does that answer your question
+[13:47 -> 13:48]  Sorry
+[13:48 -> 13:50]  I'm quite tired
+[13:50 -> 13:52]  Say it again
+[13:52 -> 13:59]  Because we've got the cannon are we going to attach it to the because the driving one will have the IR sensor to locate the
+[13:59 -> 14:00]  ball
+[14:00 -> 14:06]  Are we going to attach to that one or are we going to attach to the one with the treadmill? Oh
+[14:08 -> 14:10]  It will have to connect to
+[14:16 -> 14:18]  Unfortunately, we can't really help you with the
+[14:18 -> 14:23]  Attacking robot design. Yeah, just like I think we've had a chat to Tim. Mm-hmm
+[14:25 -> 14:29]  That's okay just because we need to share the workload everything everyone needs to do something, right
+[14:30 -> 14:33]  We've done the defending part. So we can't really
+[14:34 -> 14:36]  Help you with the attacking part. That's all
+[14:42 -> 14:47]  Because one of the ev3 robots that's being used to
+[14:49 -> 14:51]  Communicating for I
+[14:54 -> 14:56]  Guess knowing where it is
+[14:56 -> 14:57]  Hugo
+[14:57 -> 15:03]  With the IR sensor. Is that being used on the ev3 robots with the
+[15:04 -> 15:06]  tape
+[15:06 -> 15:08]  Yes, okay
+[15:10 -> 15:12]  The communicating ev3
+[15:19 -> 15:26]  But recommendation is definitely the tape like the communicating one because that one's going to be controlling your movement
+[15:29 -> 15:31]  Yeah
+[15:36 -> 15:39]  If we know the location of both our robots, yeah
+[15:43 -> 15:47]  Direction to the ball we can basically triangulate. Yeah
+[15:49 -> 15:51]  So
+[15:57 -> 16:03]  It depending on the so the turret Zen the way I wanted it to work was the same way as
+[16:04 -> 16:06]  Movement for moving around
+[16:07 -> 16:13]  Depending on where the hoop is going to be like the shooting hoop. I just we just let it know
+[16:14 -> 16:17]  I mean, I'm gonna let it know like hey the
+[16:19 -> 16:22]  Shooting hoop is here on the grid
+[16:23 -> 16:25]  and
+[16:25 -> 16:29]  Then I'm just gonna have to test it and see if it is able to
+[16:29 -> 16:31]  Go to that section
+[16:32 -> 16:39]  After finding the ball and how to get into soup and then it sort of just gets to the position once it thinks it's at
+[16:39 -> 16:41]  the position it will just
+[16:42 -> 16:46]  Turn on the flicking motor and shoot the ball out hopefully into
+[16:47 -> 16:49]  the shoot
+[16:51 -> 16:55]  So there are set variables that can be changed in brain.py
+[16:57 -> 17:00]  I
+[17:00 -> 17:02]  was originally going to
+[17:03 -> 17:07]  think of a self learning system, but I realized that is
+[17:09 -> 17:11]  Yeah, it's a bit of a doozy
+[17:12 -> 17:14]  That might be what I did
+[17:15 -> 17:19]  Hi game and like make a 3d processor for it to then build its own
+[17:22 -> 17:26]  It can hardly handle much he's tested
+[17:27 -> 17:29]  Yeah
+[17:31 -> 17:33]  It cannot render well
+[17:33 -> 17:35]  Do it internally
+[17:50 -> 17:55]  Yeah doesn't have the power of a laptop, but yeah
+[17:56 -> 17:58]  It's small and old
+[18:01 -> 18:05]  Well, we can't run it through anything because they have to be
+[18:07 -> 18:09]  Running just on themselves
+[18:09 -> 18:11]  without anything extended
+[18:13 -> 18:19]  Well, yeah, but then you've got to have this big cable and then that's another thing we have to think of which we don't really
+[18:19 -> 18:20]  have
+[18:20 -> 18:22]  too much time to think of
+[18:27 -> 18:34]  But yeah, I've set out the I've laid out the start of the coding so once we're done with the
+[18:36 -> 18:42]  Designing and building and testing that components work then we can get started with
+[18:45 -> 18:52]  Testing some of the code I've made some testing codes in the testing folder, but they're mostly for me
+[18:52 -> 18:56]  Would I be able to help you with
+[18:58 -> 18:59]  the
+[18:59 -> 19:00]  movement
+[19:00 -> 19:04]  in terms of localization like because it's gonna have a
+[19:05 -> 19:07]  mini-map of where it is
+[19:07 -> 19:13]  So like when it starts, it's gonna be like, oh I start at the back of the map in the center
+[19:17 -> 19:19]  Touching the cup
+[19:23 -> 19:29]  Um, what do you what do you mean?
+[19:41 -> 19:47]  It should already know if we just if we said it like if we laid out the same as
+[19:48 -> 19:50]  Hughes doing but adding
+[19:50 -> 19:55]  More on top like telling it where the hoop is already set
+[19:56 -> 19:58]  Then it can sort of just go there knowing
+[19:59 -> 20:01]  If it's at a corner or something like that
+[20:01 -> 20:07]  But then if we have the issue where Tim is going to be changing the location of the hoop
+[20:07 -> 20:10]  Then we will probably need that sort of touch sensor
+[20:11 -> 20:13]  Use where it?
+[20:14 -> 20:17]  Goes towards something touches it and then it knows or something
+[20:20 -> 20:22]  There's a lot to think about
+[20:29 -> 20:31]  Well, yeah the the map
+[20:32 -> 20:39]  It's mini mind map. So it knows where it is. It just depends what is going to be needed to use that
+[20:40 -> 20:43]  So for me, I'm gonna need it for
+[20:44 -> 20:49]  The turret system that's gonna require the mini-map
+[20:52 -> 20:55]  Yeah, and then I think that might be it because
+[20:59 -> 21:01]  The only other part is the
+[21:02 -> 21:04]  the grabbing
+[21:04 -> 21:06]  that has to be
+[21:06 -> 21:11]  That has to know how far it is as well. But then I don't know if we tell it to
+[21:12 -> 21:14]  Find how far the claw is
+[21:14 -> 21:21]  from the ball in the claw in the grabbing sort of class or we do it in the
+[21:22 -> 21:24]  movement class
+[21:26 -> 21:30]  No movement should just be focused on moving around the map yeah and
+[21:31 -> 21:36]  Knowing where it is actually and then okay. So then that means claw is gonna have to use the
+[21:37 -> 21:40]  Mini-map system as well to figure out if it's there or not
+[21:41 -> 21:44]  Which I've sort of thought about and implemented in a way
+[21:58 -> 22:00]  Yes, so
+[22:01 -> 22:06]  You're gonna have to figure out a way to know exactly how many units
+[22:07 -> 22:12]  In your navigation system is equal to the length of the board. Yep
+[22:14 -> 22:18]  Yep, we're gonna do the same
+[22:20 -> 22:22]  That's okay
+[22:23 -> 22:27]  Nothing says that we can't collaborate a little bit and help each other
+[22:27 -> 22:32]  But also because it's a school assignment group project. We can't help each other that much
+[22:38 -> 22:40]  That's alright
+[22:42 -> 22:44]  All right, I think I'm gonna head back to
+[22:45 -> 22:47]  English
+[22:47 -> 22:51]  So I just quickly made a branch an example branch
+[22:53 -> 22:58]  And I'm just gonna quickly manufacture a merge conflict
+[22:59 -> 23:03]  So we can see what that does
+[23:05 -> 23:12]  So here I have example branch pool and if we look at the code here it has a comment there testing example
+[23:13 -> 23:23]  So, let's create a pull request it should not open it opens in the web, okay
+[23:25 -> 23:27]  Okay, so
+[23:28 -> 23:36]  Test pull request so you put a title
+[23:38 -> 23:44]  Description added function blah blah
+[23:45 -> 23:47]  Then
+[23:47 -> 23:53]  What is a signings I do not know what that is so project you can
+[23:54 -> 23:57]  Attach it to this one. Mm-hmm. And
+[23:57 -> 23:59]  I believe
+[23:59 -> 24:07]  Does this work? Where is it? How do I attach the issue should be where they attach an issue?
+[24:12 -> 24:17]  Not there. Not there. Is that a remote in your pocket? Are you just happy to see me good?
+[24:17 -> 24:19]  Are you just happy to see me good
+[24:21 -> 24:26]  Okay, so here's what you're merging into so merge into main
+[24:27 -> 24:29]  from the example one
+[24:31 -> 24:38]  Says it can't automatically merge so it needs pull request you create a pull request
+[24:42 -> 24:45]  Then someone else will go in here
+[24:48 -> 24:51]  Reviewers they'll set themselves as a reviewer
+[24:54 -> 24:59]  They'll look at this I'll see what code you added. I'll see the conflict
+[25:01 -> 25:05]  They'll decide if that's too big of a conflict and it needs some other
+[25:06 -> 25:09]  Handling or if it's just a small thing like this
+[25:11 -> 25:17]  Except things that a pull requests reviewer can do they can either change it themselves
+[25:18 -> 25:23]  Well, they can just fucking deny the pull request and tell you to change it
+[25:24 -> 25:30]  Sorry, we've just resolved that so market as a resolved and then commit merge
+[25:30 -> 25:33]  So that pulls this this one here
+[25:34 -> 25:37]  back into the actual
+[25:39 -> 25:46]  I've never really gonna be much use this merge pull request confirm merge and
+[25:49 -> 25:55]  You can optionally delete that branch now that it's useless or you can keep it around
+[25:55 -> 26:02]  Mm-hmm, and now that code from that branch should be in here and it is
+[26:03 -> 26:05]  So yeah
+[26:05 -> 26:11]  Okay, you'll where might that be useful to do like to use the entire
+[26:13 -> 26:20]  You you you must create a pull request every time you decide to merge back into me. Oh, yeah, I'm constantly pulling
+[26:20 -> 26:26]  I've never had merge conflicts or anything. Okay, so pulling and a pull request a very different
+[26:27 -> 26:33]  So pulling is just retrieving the stuff. That's online. Yeah back onto your system. Yeah
+[26:33 -> 26:41]  Pull request is changing something from your branch or whatever branch. You're low-key working on on to the main branch
+[26:43 -> 26:45]  Make sense
+[26:45 -> 26:47]  I
+[26:53 -> 26:58]  Have something on my branch that I want on the main branch or technically any other branch
+[26:59 -> 27:02]  Here's a cool request
+[27:02 -> 27:04]  but your senior coder and
+[27:05 -> 27:10]  Look at it and decide if it's ready to merge or if you need to do work on it
+[27:12 -> 27:14]  It's just merging but you request
+[27:16 -> 27:18]  So I should
+[27:20 -> 27:25]  Okay, because I haven't done that yet, so if you're just committing to your branch
+[27:42 -> 27:44]  Wait, so do I
+[27:45 -> 27:51]  Make a branch for my work. Yes, and not just for all your work
+[27:59 -> 28:05]  I'm so confused what so you're working on navigation. Yeah
+[28:06 -> 28:07]  Yeah
+[28:07 -> 28:09]  You'll create a branch called
+[28:10 -> 28:12]  Navigation
+[28:12 -> 28:14]  Right
+[28:19 -> 28:21]  You create another branch
+[28:27 -> 28:29]  Right
+[28:29 -> 28:31]  Yeah
+[28:33 -> 28:50]  So then I need to see an example of this okay, so
+[28:53 -> 28:57]  I'm just gonna quickly delete this man branch
+[29:00 -> 29:07]  So I can example so new branch so I'm I'm here I've been assigned to making the foul system
+[29:08 -> 29:13]  Right. So because I'm working on defense. I'll say defense
+[29:15 -> 29:18]  Foul system. Mm-hmm
+[29:19 -> 29:21]  Branch
+[29:21 -> 29:25]  This is now it's on branch you can publish that branch that just means it's on
+[29:25 -> 29:32]  The the github web so you can access it across multiple devices, but this doesn't put it on
+[29:34 -> 29:36]  here
+[29:36 -> 29:38]  So this was it in the brain? Oh
+[29:39 -> 29:46]  Specific branch. Yeah, and then it gets okay. So then once it's reviewed then it goes to main so then
+[29:48 -> 29:50]  You
+[29:50 -> 29:53]  Okay in your file so foul here
+[29:54 -> 29:59]  You work on on the code here. You write all the things you write make it work
+[30:00 -> 30:02]  then once that's ready
+[30:03 -> 30:05]  you make a
+[30:06 -> 30:08]  Pool request
+[30:08 -> 30:12]  So create report pull request. Mm-hmm
+[30:13 -> 30:15]  It'll open in the web
+[30:16 -> 30:23]  Right now it says there's no changes so it doesn't need to do anything. Mm-hmm. You give that a title you're finished. Oh
+[30:24 -> 30:28]  Defense foul you add a little description like this does this blah blah blah
+[30:29 -> 30:31]  then
+[30:31 -> 30:34]  It will either automatically send us a message
+[30:34 -> 30:36]  or it will
+[30:36 -> 30:42]  Or you can ping us on discord meal meal here go like I have this branch
+[30:43 -> 30:45]  I'm ready to push it to main
+[30:45 -> 30:49]  Does anything is there any changes that need to be made?
+[30:49 -> 30:53]  Are there any really bad merge conflicts that need fixing?
+[30:54 -> 30:56]  etc, etc
+[30:56 -> 30:58]  one of us will
+[30:58 -> 31:03]  Confirm that we'll be like, oh, it looks good. No merge conflicts. Mm-hmm. Push it through
+[31:03 -> 31:05]  We'll probably
+[31:05 -> 31:09]  Merge it for you. Yeah, or we can click
+[31:09 -> 31:11]  Reviewed
+[31:11 -> 31:15]  So it's all good thumbs up and then you could merge it
+[31:16 -> 31:21]  Depends how that works. So then for everything because if you check on the on the folder system
+[31:21 -> 31:25]  I mean the file system of what I've done in the code
+[31:28 -> 31:32]  Do I make a branch for everything that I've made so far like no, so
+[31:33 -> 31:41]  All these things that they're pretty basic they're all placeholder or early stuff right but for any future
+[31:44 -> 31:46]  Development new branch
+[31:46 -> 31:48]  turret
+[31:49 -> 31:54]  Movement right and then I just branch I push
+[31:55 -> 32:00]  Changes to the push changes this so set your current branch, right? Okay, whatever that is
+[32:01 -> 32:04]  Push your code to that that branch
+[32:04 -> 32:06]  Once you finished making that
+[32:07 -> 32:13]  Create a pull request one of us will deal with that and then eventually we'll be on main
+[32:14 -> 32:16]  What?
+[32:16 -> 32:19]  Yeah, I think so. All right, so
+[32:21 -> 32:23]  Yeah, okay, and then
+[32:24 -> 32:30]  No, never mind. So the because I've got testing scripts. Can I leave those in main?
+[32:31 -> 32:37]  Look or should I make a branch for testing scripts? So that's
+[32:38 -> 32:41]  That's a good question because it's in the testing
+[32:42 -> 32:43]  folder of
+[32:43 -> 32:45]  code, I
+[32:45 -> 32:48]  Guess it couldn't hurt to be its own branch, but it also isn't affecting
+[32:49 -> 32:54]  The that's what I see as a whole because it doesn't get touched really matter. Yeah
+[32:55 -> 33:00]  Okay, so I reckon you can have testing code pushing to main, okay
+[33:01 -> 33:07]  But as long as it's only in the testing folder and yeah, it's not actually
+[33:08 -> 33:10]  changing anything
+[33:10 -> 33:13]  Yeah, the actual files. Yeah. Yeah easy
+[33:13 -> 33:17]  Alright, so from now on in the attack folder if I go to make any
+[33:18 -> 33:20]  changes to like
+[33:20 -> 33:22]  main.py or
+[33:24 -> 33:28]  To the turret system, I'll just make a branch for the turret system and
+[33:29 -> 33:35]  Then create a pull request once I'm done with the changes. Yep, and then that's it. Yep. Oh
+[33:36 -> 33:38]  Yeah
+[33:44 -> 33:46]  All right, I think I'm gonna head back
