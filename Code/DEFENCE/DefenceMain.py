@@ -22,7 +22,7 @@ import random
 from IRlocation import irLocator
 from state_controller import State, State_Controller
 from movement import Driver
-from foul import Foul_controller
+from Foul_Controller import Foul_controller
 
 #rgeogeo
 
@@ -37,7 +37,8 @@ class Defender():
         self.ball_sensor_thread.daemon = True
         self.ball_sensor_thread.start()
 
-        self.foul_button = TouchSensor() # Add Port
+        self.bottom_color_sensor = ColorSensor() # Add Port
+        self.Foul_controller = Foul_controller()
 
         self.stateMachine = State_Controller()
 
