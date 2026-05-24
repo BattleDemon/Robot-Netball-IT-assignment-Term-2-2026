@@ -1,0 +1,59 @@
+Date: 24/05/2026
+Started coding ~3:40PM, finished ~9:20PM
+
+Alright so, sincde I'm assigned to write the movement.py file which is now located in /code/GENERAL/movement.py, 
+Dexter made the GENERAL folder so that both robots can share code that is the same across both of them which makes sense. 
+The reason I got assigned this is because Hugo said since both robots need a colour sensor for foul detection, and each robot 
+should have one, it made sense for me to take over the movement code since I was already working on the attack robot and 
+understand the field layout and what not. Plus Zen and I are still building the attack robot base meaning that he has not started on his 
+movement code yet, meaning if I write the shared movement module now he can just import it and use it straight away.
+
+So what movement.py actually does. It is a shared navigation module that both the Attack and Defence robot can import. 
+The main thing is the Driver class which handles all the wheel odometry, field mapping, boundary checks, foul detection 
+via the colour sensor, and the pivot movement which is important for netball rules. I made it so you just change the 
+TEAM variable at the top from "ATTACK" to "DEFENCE" and it automatically sets the correct start position and which hoop 
+you are aiming at. For Attack the start position is near the far end of the field at (79, 199) roughly, and the hoop it 
+shoots toward is at (79, 0). For Defence it starts near (79, 20) and shoots toward (79, 219). This means no confusion during 
+testing about which side is which. Even though Tim has given us a yellow circle to work with, it is just another coordinate 
+that would be roughly (79, 109.5). The only time the yellow circle matters in the rules is for the restart after a goal but that
+should be a human placing the robot there manually. It doesn't need to autonomously find the yellow circle with a sensor.
+
+The way the odometry works is there is a background thread running at 20 Hz that reads the motor encoder angles every 0.05 seconds 
+and calculates how far each wheel has turned. From that it works out the average distance travelled and the change in heading, 
+then updates the x and y position using trig. The heading convention I used is 0 degrees = facing toward the attack hoop 
+(positive y direction), 90 degrees = facing right (positive x), etc. This made the most sense because the field is longer than 
+it is wide so having 0 point down the length felt natural.
+
+I also added a MyTank class at the bottom which is just a thin wrapper around Driver so that Hugo's old code from DefenceMain.py 
+that imports MyTank does not break. Dexter's code imports Driver directly so that works too.
+
+For foul detection there is a is_in_foul_area() method that first checks the colour sensor for white, and if the sensor glitches it 
+falls back to checking the theoretical position against known foul zone coordinates. There is also sees_black_tape() for boundary 
+detection and is_in_bounds() with a 5cm margin so the robot knows if it is getting too close to the edge.
+
+The pivot method is important because of the netball rule where while holding the ball one wheel must remain still. 
+So pivot("LEFT", speed, seconds) locks the left wheel and moves the right one, and vice versa. This means Zen can call that when the 
+attack robot has the ball and needs to pivot before shooting.
+
+There are also some helper methods like face_hoop() which turns the robot to face the target hoop, angle_to_hoop() which calculates 
+what heading the robot needs, distance_to_hoop() for shot power calculations, and drive_to_point(tx, ty) which turns toward a coordinate 
+and drives straight there. These will be useful for Zen's movement code and also for the turret/shooting code since Gabe can use 
+distance_to_hoop() to figure out how hard to shoot.
+
+One thing I need to test and probably tweak is the WHEEL_DIAMETER and TRACK_WIDTH constants. I put 5.6cm for the wheel diameter and 12.3cm 
+for the track width but these need to be measured on the actual robot because if they are wrong the odometry will drift. 
+Also the foul zone coordinates are approximate and need to be checked against the actual field.
+
+If we plug a gyro sensor in later there is support for that too. The odometry loop will blend gyro readings with encoder readings 
+(90% encoder, 10% gyro) to help fight drift. We do not have a gyro allocated yet but the code is ready for it if we do lol.
+
+Links I used / that helped:
+- PyBricks EV3 devices reference: https://pybricks.com/ev3-micropython/ev3devices.html (already had this from earlier, useful for Motor and ColorSensor API)
+- IR Seeker v2 docs: https://irseeker.buildingblockrobotics.com (Dexter found this, we use it for the IR thread)
+- Wheel odometry math explanation: https://robotacademy.net.au/lesson/differential-drive-odometry/ (this helped me understand the encoder delta to position calculation, 
+specifically the part about using the average distance and the difference between wheels to get heading change)
+- General differential drive kinematics: https://www.cs.columbia.edu/~allen/F15/NOTES/icckinematics.pdf (I skimmed this for the math behind arc length per wheel during turns, 
+the formula wheel_dist = (angle/360) * pi * track_width)
+
+The code passed syntax check with python3 -m py_compile so it should be good to go. Next step is for Zen to start using it in his movement code 
+and for us to test the odometry accuracy on the actual field.

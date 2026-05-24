@@ -1,0 +1,101 @@
+[00:00 -> 00:12]  So, some of the files that are to do with coding are going to be the same, as Tim said, for movement, and some other examples.
+[00:12 -> 00:22]  So, what we're going to do is the movement scripts themselves will have to be separate because ports are going to be a bit different.
+[00:22 -> 00:25]  Whatever, like starting positions are going to be a bit different.
+[00:25 -> 00:28]  But, the general...
+[00:28 -> 00:31]  We've got a class that takes in those inputs, so...
+[00:31 -> 00:32]  Exactly.
+[00:32 -> 00:33]  It's just...
+[00:33 -> 00:37]  Like, you just change some of the steps.
+[00:37 -> 00:49]  But, that means we don't need to make multiple files for the different robots because the actual code for just how to move the robot is going to be the same.
+[00:49 -> 00:55]  And therefore, we only need one person coding it.
+[00:55 -> 00:57]  Right.
+[00:57 -> 00:58]  Same goes for...
+[00:58 -> 00:59]  Like, a few other things.
+[00:59 -> 01:01]  The communication between robots.
+[01:01 -> 01:03]  Really only need one person coding it.
+[01:03 -> 01:09]  Now, this does mean that we're going to have to make the other code quite modular.
+[01:09 -> 01:24]  So, the positional code, whoever's writing that is going to have to make it, like, very contained within itself.
+[01:24 -> 01:26]  So, it calculates all the things.
+[01:26 -> 01:29]  And all it returns is coordinates.
+[01:29 -> 01:31]  And an angle.
+[01:31 -> 01:33]  Whatever other information you need.
+[01:33 -> 01:37]  And then the communication just grabs that information.
+[01:37 -> 01:39]  They don't really communicate other than that little bit.
+[01:39 -> 01:40]  Right.
+[01:40 -> 01:46]  So, we need to discuss who's doing what.
+[01:46 -> 01:49]  Other communication.
+[01:49 -> 01:58]  But, to do that, because we need an equal workload each, we're going to need to figure out what you guys are going to need to code.
+[01:58 -> 02:01]  So, me and Dexter have kind of already set up a basic...
+[02:01 -> 02:04]  What we'll need for our robot.
+[02:04 -> 02:09]  You guys are going to need to set up a bit of a basic what you need for your robot.
+[02:09 -> 02:11]  And then we'll cross-check.
+[02:11 -> 02:13]  That, like, a very basic version of it.
+[02:13 -> 02:14]  Yeah.
+[02:14 -> 02:16]  So, we'll cross-check it.
+[02:16 -> 02:19]  We'll combine what we need to combine.
+[02:19 -> 02:20]  Look at the list.
+[02:20 -> 02:22]  Look at the big list.
+[02:22 -> 02:25]  And then decide who does what.
+[02:25 -> 02:29]  And I think it's important to play to our strengths here.
+[02:29 -> 02:30]  Mm-hmm.
+[02:30 -> 02:39]  So, like, if someone feels more comfortable doing something, then we can probably give them that one.
+[02:39 -> 02:40]  Mm-hmm.
+[02:40 -> 02:45]  So, like, I know that me and Dexter are, like, spec maths.
+[02:45 -> 02:48]  Zen is methods.
+[02:48 -> 02:49]  Right.
+[02:49 -> 02:51]  Gabe, no offense.
+[02:51 -> 02:52]  But you're only...
+[02:52 -> 02:54]  Are you essentials or apps?
+[02:54 -> 02:55]  Essentials.
+[02:55 -> 02:59]  Like, the maths just may come easier to one of us three.
+[02:59 -> 03:00]  If that makes sense.
+[03:00 -> 03:02]  Mm-hmm.
+[03:02 -> 03:04]  Unless the maths does come easy to you.
+[03:04 -> 03:07]  But we just...
+[03:07 -> 03:09]  All we need to do is play to our strengths.
+[03:09 -> 03:10]  Right?
+[03:10 -> 03:14]  So, the people who are good at certain things should do that.
+[03:14 -> 03:23]  So, if possible, can we put our tasks up on the GitHub?
+[03:23 -> 03:29]  So, all of the coding things and try and divide them into, like, logical what you need to do.
+[03:29 -> 03:30]  Mm-hmm.
+[03:30 -> 03:38]  There's a few things that me and Dexter have already started just because they're part of the building process and the testing process.
+[03:38 -> 03:49]  Like, I've already assigned myself to the shooting or the passing and catching system for the defensive robot because I had to write the code to test it.
+[03:49 -> 03:52]  And the code to test it is just the code that we're going to play with, basically.
+[03:52 -> 03:53]  Mm-hmm.
+[03:53 -> 03:55]  So, that's already been started.
+[03:55 -> 03:59]  I've been working on some of the state machine and the foul detection.
+[03:59 -> 04:00]  So, if you guys could possibly...
+[04:00 -> 04:07]  If you guys could possibly get a color sensor looking down, that way we can have that code working for both of us.
+[04:07 -> 04:08]  Mm-hmm.
+[04:08 -> 04:10]  That would be good.
+[04:10 -> 04:21]  But we basically just want to, like, get all our things together as soon as possible before we continue.
+[04:21 -> 04:25]  So that later on in the line we don't have any conflicts to do with, oh, we thought you guys were doing this.
+[04:25 -> 04:27]  We thought you guys were doing this.
+[04:27 -> 04:28]  Oh, no, we're actually not doing that.
+[04:28 -> 04:29]  We've changed.
+[04:29 -> 04:30]  And so it's like, cool.
+[04:30 -> 04:31]  We need good communication.
+[04:31 -> 04:32]  Yeah.
+[04:32 -> 04:33]  All right.
+[04:33 -> 04:34]  All right.
+[04:34 -> 04:39]  So, if you can put stuff up on the GitHub, if you guys have access to the GitHub right now.
+[04:39 -> 04:42]  Yeah.
+[04:42 -> 04:48]  And then maybe later half of this lesson we can go through, sort out who's doing what.
+[04:48 -> 04:49]  Yep.
+[04:49 -> 04:51]  And what needs to be combined, just so.
+[04:51 -> 04:52]  Yeah.
+[04:52 -> 04:54]  Do you want to get all the construction done?
+[04:54 -> 04:55]  Yes.
+[04:55 -> 04:56]  That's fair.
+[04:56 -> 04:57]  Which is an important thing.
+[04:57 -> 05:00]  So, that's what I'm saying later in the lesson.
+[05:00 -> 05:01]  Like, we'll give us time.
+[05:01 -> 05:02]  But, yeah.
+[05:02 -> 05:11]  Because the thing is, like, me and Dexter can't start coding too many things.
+[05:11 -> 05:16]  Because we need to give you guys also an equal workload.
+[05:16 -> 05:17]  Yeah.
+[05:17 -> 05:18]  Of the coding.
+[05:18 -> 05:19]  Everything.
+[05:19 -> 05:29]  We all need to do probably at least one major part of the coding that is important to the actual function of the robots.
+[05:29 -> 05:39]  And then, like, divvying up the rest of the small things, roughly, so that no one's doing too much work on.
+[05:39 -> 05:40]  No person's doing no work at all.
