@@ -37,7 +37,7 @@ attack robot has the ball and needs to pivot before shooting.
 
 There are also some helper methods like face_hoop() which turns the robot to face the target hoop, angle_to_hoop() which calculates 
 what heading the robot needs, distance_to_hoop() for shot power calculations, and drive_to_point(tx, ty) which turns toward a coordinate 
-and drives straight there. These will be useful for Zen's movement code and also for the turret/shooting code since Gabe can use 
+and drives straight there. These will be useful for Zen's movement code and also for the turret/shooting code since I can use 
 distance_to_hoop() to figure out how hard to shoot.
 
 One thing I need to test and probably tweak is the WHEEL_DIAMETER and TRACK_WIDTH constants. I put 5.6cm for the wheel diameter and 12.3cm 
