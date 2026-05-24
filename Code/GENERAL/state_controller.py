@@ -21,7 +21,9 @@ class Request(Enum):
 
 # State Machine
 class State_Controller():
-    def __init__(self):
+    def __init__(self, owner):
+        self.owner = owner
+
         self.state = State.IDLE
         self.other_state: State
 
@@ -41,12 +43,15 @@ class State_Controller():
         self.request: Request
         self.incoming_request: Request
 
-    def update_self_position(x, y, angle):
+    def update_self_position(self, x, y, angle):
         pass
 
-    def update_other_position(x, y, angle):
+    def update_other_position(self, x, y, angle):
         pass
 
-    def get_snapshot():
+    def get_snapshot(self, ):
         # Gather all info the communication manager needs
+        pass
+
+    def alerted_of_foul(self):
         pass
