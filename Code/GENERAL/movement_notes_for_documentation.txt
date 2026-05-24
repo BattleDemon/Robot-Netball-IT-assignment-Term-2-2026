@@ -50,10 +50,11 @@ If we plug a gyro sensor in later there is support for that too. The odometry lo
 Links I used / that helped:
 - PyBricks EV3 devices reference: https://pybricks.com/ev3-micropython/ev3devices.html (already had this from earlier, useful for Motor and ColorSensor API)
 - IR Seeker v2 docs: https://irseeker.buildingblockrobotics.com (Dexter found this, we use it for the IR thread)
-- Wheel odometry math explanation: https://robotacademy.net.au/lesson/differential-drive-odometry/ (this helped me understand the encoder delta to position calculation, 
-specifically the part about using the average distance and the difference between wheels to get heading change)
-- General differential drive kinematics: https://www.cs.columbia.edu/~allen/F15/NOTES/icckinematics.pdf (I skimmed this for the math behind arc length per wheel during turns, 
-the formula wheel_dist = (angle/360) * pi * track_width)
+- General differential drive kinematics: https://www.cs.columbia.edu/~allen/F15/NOTES/icckinematics.pdf (I used this for the math behind arc length per wheel during turns,
+ specifically the formula wheel_dist = (angle/360) * pi * track_width)
+
+I think the odometry math itself is standard differential-drive kinematics... encoder deltas give distance per wheel, average of both wheels gives forward distance, 
+difference divided by track width gives heading change. 
 
 The code passed syntax check with python3 -m py_compile so it should be good to go. Next step is for Zen to start using it in his movement code 
 and for us to test the odometry accuracy on the actual field.
