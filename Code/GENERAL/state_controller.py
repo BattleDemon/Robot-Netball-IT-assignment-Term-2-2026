@@ -11,6 +11,7 @@ class State(Enum):
     LOCATING = 4
     POSITIONING = 5
     RECIEVING = 6
+    SHOOTING = 7
 
 class Request(Enum):
     PASS = 0
@@ -55,3 +56,26 @@ class State_Controller():
 
     def alerted_of_foul(self):
         pass
+
+# State Calculations
+
+## Foul
+    # If have been placed on the foul colour 
+
+## Retreive 
+    # If you don't have ball, and other doesn't have ball, and the ball has a know location
+
+## Locating
+    # if neither you nor the other robot know where the ball is 
+
+## Passing
+    # If you have the ball, have requested to pass and gotten back a revieving
+
+## Positioning 
+    # if other has ball and you need to get out of its way
+
+## Recieving 
+    # iF OTHER IS REQUESTING TO PASS 
+
+## SHOOTING
+    # IF HAVE CAPABILITIES TO SHOOT AND HAS BALL ( NOT DEFENDING RBOOT)
