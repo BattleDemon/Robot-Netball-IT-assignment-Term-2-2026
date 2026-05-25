@@ -62,7 +62,7 @@ class State_Controller():
 
         return snapshot
 
-    def set_others(self, snapshot):
+    def update_incoming(self, snapshot):
 
         self.others_state = snapshot["state"]
         self.others_position = snapshot["position"]
