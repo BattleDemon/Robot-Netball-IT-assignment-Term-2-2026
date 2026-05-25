@@ -19,9 +19,10 @@ import time
 import random
 
 # Local Imports
-from IRlocation import irLocator
-from state_controller import State, State_Controller
-from movement import Driver
+from GENERAL.IRlocation import irLocator
+from GENERAL.state_controller import State, State_Controller
+from GENERAL.movement import Driver
+import CatchAndThrow
 from Foul_Controller import Foul_controller
 
 #rgeogeo
@@ -48,6 +49,9 @@ class Defender():
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
         self.IR_thread.daemon = True
         self.IR_thread.start()
+        self.CatchAndThrowThread = Thread(target=CatchAndThrow.Catch_throw)
+        self.CatchAndThrowThread.start()
+
 
     def ball_sensing(self):
         while True:
