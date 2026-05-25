@@ -23,33 +23,28 @@ class Request(Enum):
 
 # State Machine
 class State_Controller():
-    def __init__(self, owner):
+    def __init__(self, owner, x_pos, y_pos, angle, ball_angle):
         self.owner = owner
 
         self.state = State.IDLE
-        self.others_state: State
+        self.others_state: State = State.IDLE
 
-        self.x_pos: float
-        self.y_pos: float
-        self.angle: float
-
-        self.position: tuple
+        self.position: tuple = (x_pos, y_pos, angle)
         self.others_position: tuple
 
-        self.ball_position: tuple
-        self.others_ball_position: tuple
+        self.ball_position: int = ball_angle
+        self.others_ball_position: int
+        self.has_ball: bool = False
+        self.others_has_ball: bool = False
 
-        self.has_ball: bool
-        self.others_has_ball: bool
-
-        self.request: Request
-        self.incoming_request: Request
+        self.request: Request = Request.NONE
+        self.incoming_request: Request = Request.NONE
 
     def update_position(self,x,y,angle):
         self.position = (x,y,angle)
 
     def update_ball_position(self, angle):
-        self.ball_position = ()
+        self.ball_position = (angle)
 
     def update_have_ball(self):
         self.has_ball = not self.has_ball
