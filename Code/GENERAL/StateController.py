@@ -10,13 +10,13 @@ class State(Enum):
     RETRIEVING = 3
     LOCATING = 4
     POSITIONING = 5
-    RECIEVING = 6
+    RECEIVING = 6
     SHOOTING = 7
     WAITING = 8
 
 class Request(Enum):
     PASS = 0
-    RECIEVE = 1
+    RECEIVE = 1
     RETRIEVE = 2
     REPOSITION = 3
     DECLINE = 4 # Refuse to do the request, might need one one or two occassion s
@@ -25,20 +25,20 @@ class Request(Enum):
 
 # State Machine
 class State_Controller():
-    def __init__(self, owner, x_pos, y_pos, angle, ball_angle, ball_dist):
+    def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist):
         self.owner = owner
-        self.owner_type = owner.type
+        self.owner_type = robot_type
 
         self.state = State.IDLE
         self.others_state: State = State.IDLE
 
         self.position: tuple = (x_pos, y_pos, angle)
-        self.others_position: tuple
+        self.others_position: tuple = None
 
         self.ball_position: int = ball_angle
         self.ball_distance: float = ball_dist
-        self.others_ball_position: int
-        self.others_ball_dist: float 
+        self.others_ball_position: int = None
+        self.others_ball_dist: float = None
         self.has_ball: bool = False
         self.others_has_ball: bool = False
 
@@ -48,8 +48,9 @@ class State_Controller():
     def update_position(self,x,y,angle):
         self.position = (x,y,angle)
 
-    def update_ball_position(self, angle):
-        self.ball_position = (angle)
+    def update_ball_angle_and_dist(self, angle, distance):
+        self.ball_position = angle
+        self.ball_distance = distance
 
     def update_have_ball(self):
         self.has_ball = not self.has_ball
@@ -74,7 +75,7 @@ class State_Controller():
         self.others_position = snapshot["position"]
         self.others_ball_position = snapshot["ball position"]
         self.others_ball_dist = snapshot["ball distance"]
-        self.others_ball_position = snapshot["has ball"]
+        self.others_has_ball = snapshot["has ball"]
         self.incoming_request = snapshot["request"]
 
 
@@ -90,8 +91,8 @@ class State_Controller():
             if self.incoming_request == self.request:
                 if self.request == Request.PASS:
                     self.state = State.PASSING
-                elif self.request == Request.RECIEVE:
-                    self.state = State.RECIEVING
+                elif self.request == Request.RECEIVE:
+                    self.state = State.RECEIVING
 
                 return
             else:
@@ -100,8 +101,8 @@ class State_Controller():
         if self.incoming_request != Request.NONE:
             if self.incoming_request == Request.PASS:
                 if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
-                    self.state = State.RECIEVING
-                    self.request = Request.RECIEVE  # echo confirmation back
+                    self.state = State.RECEIVING
+                    self.request = Request.RECEIVE  # echo confirmation back
                     return
                 else:
                     self.request = Request.DECLINE
@@ -111,6 +112,8 @@ class State_Controller():
                 if self.has_ball or self.state == State.FOUL:
                     self.request = Request.DECLINE
                     return
+                self.state = State.RETRIEVING
+                self.request = Request.NONE
 
             if self.incoming_request == Request.REPOSITION:
                 if self.state not in  (State.FOUL, State.PASSING, State.SHOOTING): 
@@ -143,8 +146,7 @@ class State_Controller():
 
                 return
 
-        if not self.has_ball and not self.others_has_ball:
-            if self.ball_distance is None and self.others_ball_dist is None:
+            if self.others_ball_dist is None:
                 self.state = State.LOCATING
                 self.request = Request.NONE
                 return
@@ -158,14 +160,14 @@ class State_Controller():
 # State calculated every few seconds or after a state has done its thing (You have opassed the ball, your foul has elapsed and you've returned to the location)
 
 ## Foul
-    # Have recieved foul condition
+    # Have RECEIVEd foul condition
     # THis is a special state since its triggered after been picked up and placed in the foul box, 
     # it also has a individual way of returning to idle since it needs to return to the field after the foul has elapsed
 
 ## Retreive 
     # If you don't have ball, and other doesn't have ball, and the ball has a know location
     # If your closest
-    # Not nessisary but can be influnce by if you've been asked to recieve 
+    # Not nessisary but can be influnce by if you've been asked to RECEIVE 
 
 ## Locating
     # if neither you nor the other robot know where the ball is 
@@ -179,7 +181,7 @@ class State_Controller():
 ## Positioning 
     # if other has ball and you need to get out of its way, or if your just moving around
 
-## Recieving 
+## Recieving if self.ball_distance is not None
     # iF OTHER IS REQUESTING TO PASS 
     # and doesn't have the ball
     # other has the ball
@@ -192,10 +194,3 @@ class State_Controller():
 
 ## Waiting 
     # if waiting for a request to come back (stay in until you get a declined or the correct one back (NONE is default and not a decline))
-'''if self.state == State.WAITING:
-            if self.incoming_request == self.request:
-                match self.request:
-                    case Request.
-            elif self.incoming_request == Request.DECLINE:
-                pass
-'''
