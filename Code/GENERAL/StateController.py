@@ -25,9 +25,11 @@ class Request(Enum):
 
 # State Machine
 class State_Controller():
-    def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist):
+    def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist, hoop_x, hoop_y):
         self.owner = owner
         self.owner_type = robot_type
+
+        self.hoop_positon = (hoop_x, hoop_y)
 
         self.state = State.IDLE
         self.others_state: State = State.IDLE
@@ -78,6 +80,13 @@ class State_Controller():
         self.others_has_ball = snapshot["has ball"]
         self.incoming_request = snapshot["request"]
 
+    def _near_hoop(self, threshold=20):
+        dx = self.position[0] - self.hoop_position[0]
+        dy = self.position[1] - self.hoop_position[1]
+
+        distance = (dx**2 + dy**2) ** 0.5
+
+        return distance < threshold
 
     def determine_state(self):
 
@@ -104,7 +113,7 @@ class State_Controller():
             if self.incoming_request == Request.PASS:
                 if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
                     self.state = State.RECEIVING
-                    self.request = Request.RECEIVE  # echo confirmation back
+                    self.request = Request.RECEIVE
                     return
                 else:
                     self.request = Request.DECLINE
@@ -125,8 +134,7 @@ class State_Controller():
 
 
 
-        if self.has_ball and self.owner_type == "attack":
-            # Some how determin if near hoop
+        if self.has_ball and self.owner_type == "attack" and self._near_hoop():
 
             self.state = State.SHOOTING
             self.request = Request.NONE
@@ -140,7 +148,7 @@ class State_Controller():
         if not self.has_ball and not self.others_has_ball:
             if self.ball_distance is not None:
                 if self.ball_distance <= self.others_ball_dist or self.others_state in (State.FOUL, State.POSITIONING):
-                    if self.owner_type == "attack": # and near hoop once determine that
+                    if self.owner_type == "attack" and self._near_hoop():
                         self.state = State.POSITIONING
                         self.request = Request.RETRIEVE
 
@@ -154,10 +162,10 @@ class State_Controller():
 
                 return
 
-                if self.others_ball_dist is None and self.others_ball_dist is None:
-                    self.state = State.LOCATING
-                    self.request = Request.NONE
-                    return
+            if self.others_ball_dist is None and self.others_ball_dist is None:
+                self.state = State.LOCATING
+                self.request = Request.NONE
+                return
 
         self.state = State.IDLE
         self.request = Request.NONE
