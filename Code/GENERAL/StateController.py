@@ -88,6 +88,8 @@ class State_Controller():
             if self.incoming_request == Request.DECLINE:
                 self.request = Request.NONE
 
+                self.state = State.IDLE
+
             if self.incoming_request == self.request:
                 if self.request == Request.PASS:
                     self.state = State.PASSING
@@ -138,18 +140,24 @@ class State_Controller():
         if not self.has_ball and not self.others_has_ball:
             if self.ball_distance is not None:
                 if self.ball_distance <= self.others_ball_dist or self.others_state in (State.FOUL, State.POSITIONING):
-                    self.state = State.RETRIEVING
+                    if self.owner_type == "attack": # and near hoop once determine that
+                        self.state = State.POSITIONING
+                        self.request = Request.RETRIEVE
+
+                    else:
+                        self.state = State.RETRIEVING
+                        self.request = Request.NONE
+                
+                else:
+                    self.state = State.POSITIONING
+                    self.request = Request.REPOSITION
+
+                return
+
+                if self.others_ball_dist is None and self.others_ball_dist is None:
+                    self.state = State.LOCATING
                     self.request = Request.NONE
-
-                # Else
-                # determing if self or other is retreiving
-
-                return
-
-            if self.others_ball_dist is None:
-                self.state = State.LOCATING
-                self.request = Request.NONE
-                return
+                    return
 
         self.state = State.IDLE
         self.request = Request.NONE
