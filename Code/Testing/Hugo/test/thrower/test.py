@@ -1,4 +1,4 @@
-#!/usr/bin/env pybricks-micropython321  
+#!/usr/bin/env pybricks-micropython
 
 from time import sleep, time
 from pybricks.hubs import EV3Brick
