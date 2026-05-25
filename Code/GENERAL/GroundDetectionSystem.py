@@ -23,7 +23,7 @@ class Foul_controller():
 
         self.colour_sensor = colour_sensor
         
-        self.observe_ground_thread = Thread(target=observe_ground)
+        self.observe_ground_thread = Thread(target=self.observe_ground)
         self.observe_ground_thread.daemon = True
         self.observe_ground_thread.start()
 
@@ -37,16 +37,16 @@ class Foul_controller():
         while True:
             self.observed_colour = self.colour_sensor.color_name()
 
-            if self.colour_sensor == FOUL_COLOUR and not self.currently_foul:
+            if self.observed_colour == FOUL_COLOUR and not self.currently_foul:
                 self.on_foul_detected()
 
-            elif self.colour_sensor == BORDER_COLOUR:
+            elif self.observed_colour == BORDER_COLOUR:
                 self.on_tape = True
 
-            elif self.colour_sensor == FIRST_MARKER:
+            elif self.observed_colour == FIRST_MARKER:
                 pass
 
-            elif self.colour_sensor == SECOND_MARKER:
+            elif self.observed_colour == SECOND_MARKER:
                 pass
 
             time.sleep(0.75)
@@ -61,7 +61,7 @@ class Foul_controller():
         # UPDATE STATE MACHINE
 
     def foul_timer(self):
-        time.wait(FOUL_TIME)
+        time.sleep(FOUL_TIME)
 
         # Return to field 
 
