@@ -2,63 +2,76 @@
 
 from enum import Enum
 
-# States
+# --- Enums ---
+
+# All possible states a robot can be in
 class State(Enum):
-    IDLE = 0
-    FOUL = 1
-    PASSING = 2
-    RETRIEVING = 3
-    LOCATING = 4
-    POSITIONING = 5
-    RECEIVING = 6
-    SHOOTING = 7
-    WAITING = 8
+    IDLE = 0        # No tasks
+    FOUL = 1        # Robot has been fouled and is in the foul box or leaving it
+    PASSING = 2     # Passing the ball to the other robot
+    RETRIEVING = 3  # Moving to collect ball
+    LOCATING = 4    # Searching for ball
+    POSITIONING = 5 # Moving out of the way
+    RECEIVING = 6   # Waiting to recieve a pass
+    SHOOTING = 7    # Attempting to shoot at the hoop
+    WAITING = 8     # Waiting for the other robot to respond to a request
 
+# Requests that can be sent between the robots
 class Request(Enum):
-    PASS = 0
-    RECEIVE = 1
-    RETRIEVE = 2
-    REPOSITION = 3
-    DECLINE = 4 # Refuse to do the request, might need one one or two occassion s
-    NONE = 5
+    PASS = 0        # Asking the other robot to pass the ball
+    RECEIVE = 1     # Asking the other robot to recieve a pass
+    RETRIEVE = 2    # Asking the other robot to collect the ball
+    REPOSITION = 3  # Ask other robot to move
+    DECLINE = 4     # Refusing the incoming request
+    NONE = 5        # No active request
 
 
-# State Machine
+# --- State Machine ---
+
 class State_Controller():
     def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist, hoop_x, hoop_y):
-        self.owner = owner
-        self.owner_type = robot_type
+        self.owner = owner # Local stored refrence to owner
+        self.owner_type = robot_type # Robot role: "attack" or "defence"
 
-        self.hoop_positon = (hoop_x, hoop_y)
+        self.hoop_positon = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
 
+        # This robot's state and the last know state of the other
         self.state = State.IDLE
         self.others_state: State = State.IDLE
 
+        # This robots and the other's positions
         self.position: tuple = (x_pos, y_pos, angle)
         self.others_position: tuple = None
 
+        # Ball tracking for this robot and the other
         self.ball_position: int = ball_angle
         self.ball_distance: float = ball_dist
         self.others_ball_position: int = None
         self.others_ball_dist: float = None
+
+        # Ball posession
         self.has_ball: bool = False
         self.others_has_ball: bool = False
 
+        # Outgoing and latest incoming requests
         self.request: Request = Request.NONE
         self.incoming_request: Request = Request.NONE
 
+    # update local robot position and heading
     def update_position(self,x,y,angle):
         self.position = (x,y,angle)
 
+    # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):
         self.ball_position = angle
         self.ball_distance = distance
 
+    # toggle ball possession
     def update_have_ball(self):
         self.has_ball = not self.has_ball
 
+    # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
-        # Create a snap shot dictionary to send to the communication manager
 
         snapshot = {
             "state" : self.state,
@@ -71,6 +84,7 @@ class State_Controller():
 
         return snapshot
 
+    # Unpack the received snapshot and store it
     def update_incoming(self, snapshot):
 
         self.others_state = snapshot["state"]
@@ -80,6 +94,7 @@ class State_Controller():
         self.others_has_ball = snapshot["has ball"]
         self.incoming_request = snapshot["request"]
 
+    # Return's true if the robot is near us
     def _near_hoop(self, threshold=20):
         dx = self.position[0] - self.hoop_position[0]
         dy = self.position[1] - self.hoop_position[1]
@@ -90,15 +105,24 @@ class State_Controller():
 
     def determine_state(self):
 
+        # --- Foul --- 
+        # Is triggered by foul controller and turned off 
         if self.state == State.FOUL:
+
             return
 
+        # --- Waiting ---
+        # Stays waiting until the other robot responsd to our request
+
         if self.state == State.WAITING:
+            # Other robot declined our request
             if self.incoming_request == Request.DECLINE:
+                # Resets our request
                 self.request = Request.NONE
 
-                self.state = State.IDLE
+                # Does not return so it can redetermine state
 
+            # Confirmed request and assing state
             if self.incoming_request == self.request:
                 if self.request == Request.PASS:
                     self.state = State.PASSING
@@ -107,106 +131,97 @@ class State_Controller():
 
                 return
             else:
+                # No responce yet
                 return
     
+        # --- Handle Incoming requests from other robot ---
         if self.incoming_request != Request.NONE:
+
             if self.incoming_request == Request.PASS:
+                # Other robot wants to pass, accept if don't have ball
                 if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
                     self.state = State.RECEIVING
-                    self.request = Request.RECEIVE
+                    self.request = Request.RECEIVE # Return confirmation
+
                     return
                 else:
+                    # Decline if don't meet requirments
                     self.request = Request.DECLINE
+
                     return
 
             if self.incoming_request == Request.RETRIEVE:
+                # Other robot wants you to get ball
+                # Decline if have ball or are in foul
                 if self.has_ball or self.state == State.FOUL:
                     self.request = Request.DECLINE
+
                     return
+
                 self.state = State.RETRIEVING
                 self.request = Request.NONE
 
             if self.incoming_request == Request.REPOSITION:
+                # other robot need you to move from its path or reposition in some way
                 if self.state not in  (State.FOUL, State.PASSING, State.SHOOTING): 
                     self.state = State.POSITIONING
                     self.request = Request.NONE
+
                     return
 
 
+        # --- Self Determined State ---
+        # Ordered in priority order
 
         if self.has_ball and self.owner_type == "attack" and self._near_hoop():
+            # Can only shoot if has ball is the attacker, and if close enough to hoop
 
             self.state = State.SHOOTING
             self.request = Request.NONE
+
             return
 
+        # Passing
+        # Have ball and wants to pass to other
         if self.has_ball:
             self.request = Request.PASS
             self.state = State.WAITING
+
             return
 
+        # Neither robot has the ball
         if not self.has_ball and not self.others_has_ball:
+
+            # The Ball has a known location
             if self.ball_distance is not None:
+
+                # This robot is closer, or the other robot is occupied
                 if self.ball_distance <= self.others_ball_dist or self.others_state in (State.FOUL, State.POSITIONING):
+
+                    # Attacker is near the hoop, better to hold its positon and let defence retreive
                     if self.owner_type == "attack" and self._near_hoop():
                         self.state = State.POSITIONING
                         self.request = Request.RETRIEVE
 
+                    # Go get ball
                     else:
                         self.state = State.RETRIEVING
                         self.request = Request.NONE
                 
+                # other robot is closer, stay still and let it retrieve
                 else:
-                    self.state = State.POSITIONING
-                    self.request = Request.REPOSITION
+                    self.state = State.WAITING
+                    self.request = Request.RETRIEVE
 
                 return
 
+            # neither robot knows where the ball is, lets find it
             if self.others_ball_dist is None and self.others_ball_dist is None:
                 self.state = State.LOCATING
                 self.request = Request.NONE
                 return
 
+        # My logic has failed and there is no state that fits
         self.state = State.IDLE
         self.request = Request.NONE
         
-
-# State Calculations
-
-# State calculated every few seconds or after a state has done its thing (You have opassed the ball, your foul has elapsed and you've returned to the location)
-
-## Foul
-    # Have RECEIVEd foul condition
-    # THis is a special state since its triggered after been picked up and placed in the foul box, 
-    # it also has a individual way of returning to idle since it needs to return to the field after the foul has elapsed
-
-## Retreive 
-    # If you don't have ball, and other doesn't have ball, and the ball has a know location
-    # If your closest
-    # Not nessisary but can be influnce by if you've been asked to RECEIVE 
-
-## Locating
-    # if neither you nor the other robot know where the ball is 
-    # neither robot has the ball
-    # Neither robot's is in state passing or shooting
-
-## Passing
-    # If you have the ball, have requested to pass and gotten back a confiormation recieving
-    # if other logic works but have not requested to pass, request to pass
-
-## Positioning 
-    # if other has ball and you need to get out of its way, or if your just moving around
-
-## Recieving if self.ball_distance is not None
-    # iF OTHER IS REQUESTING TO PASS 
-    # and doesn't have the ball
-    # other has the ball
-
-## SHOOTING
-    # IF HAVE CAPABILITIES TO SHOOT AND HAS BALL ( NOT DEFENDING RBOOT)
-    # has ball 
-    # is near hoop (we will have hoop locations i mightr need to make a local varaible )
-
-
-## Waiting 
-    # if waiting for a request to come back (stay in until you get a declined or the correct one back (NONE is default and not a decline))
