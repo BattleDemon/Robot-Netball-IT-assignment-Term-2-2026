@@ -2,8 +2,6 @@
 
 ''' This File is a combination of Hugo and Dexter's work '''
 
-# Import things from the other files so we can use them from one file
-
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (
     Motor, TouchSensor, ColorSensor,
@@ -15,11 +13,19 @@ from pybricks.tools import wait
 from pybricks.iodevices import I2CDevice
 
 # Non Ev3 Imports
-from enum import Enum
 from threading import *
 import os
 import time
 import random
 
+# Local Imports
+from GENERAL.IRlocation import irLocator
+from GENERAL.state_controller import State, State_Controller
+from GENERAL.movement import Driver
+import CatchAndThrow
+from Foul_Controller import Foul_controller
+
 class SubDefence():
-    pass
+    def __init__(self) -> None:
+        self.CatchAndThrowThread = Thread(target=CatchAndThrow.Catch_throw)
+        self.CatchAndThrowThread.start()
