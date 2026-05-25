@@ -78,17 +78,79 @@ class State_Controller():
 
 
     def determine_state(self):
+
+        if self.state == State.FOUL:
+            return
+
+        if self.state == State.WAITING:
+            if self.incoming_request == Request.DECLINE:
+                self.request = Request.NONE
+
+            if self.incoming_request == self.request:
+                if self.request == Request.PASS:
+                    self.state = State.PASSING
+                elif self.request == Request.RECIEVE:
+                    self.state = State.RECIEVING
+
+                return
+            else:
+                return
     
         if self.incoming_request != Request.NONE:
-            pass 
+            if self.incoming_request == Request.PASS:
+                if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
+                    self.state = State.RECIEVING
+                    self.request = Request.RECIEVE  # echo confirmation back
+                    return
+                else:
+                    self.request = Request.DECLINE
+                    return
+
+            if self.incoming_request == Request.RETRIEVE:
+                if self.has_ball or self.state == State.FOUL:
+                    self.request = Request.DECLINE
+                    return
+
+            if self.incoming_request == Request.REPOSITION:
+                if self.state not in  (State.FOUL, State.PASSING, State.SHOOTING): 
+                    self.state = State.POSITIONING
+                    self.request = Request.NONE
+                    return
 
 
 
+        if self.has_ball and self.owner_type == "attack":
+            # Some how determin if near hoop
 
+            self.state = State.SHOOTING
+            self.request = Request.NONE
+            return
 
+        if self.has_ball:
+            self.request = Request.PASS
+            self.state = State.WAITING
+            return
+
+        if not self.has_ball and not self.others_has_ball:
+            if self.ball_distance is not None:
+                if self.ball_distance <= self.others_ball_dist or self.others_state in (State.FOUL, State.POSITIONING):
+                    self.state = State.RETRIEVING
+                    self.request = Request.NONE
+
+                # Else
+                # determing if self or other is retreiving
+
+                return
+
+        if not self.has_ball and not self.others_has_ball:
+            if self.ball_distance is None and self.others_ball_dist is None:
+                self.state = State.LOCATING
+                self.request = Request.NONE
+                return
+
+        self.state = State.IDLE
+        self.request = Request.NONE
         
-        
-
 
 # State Calculations
 
