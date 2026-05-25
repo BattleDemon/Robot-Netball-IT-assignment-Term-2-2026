@@ -49,8 +49,8 @@ class Defender():
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
         self.IR_thread.daemon = True
         self.IR_thread.start()
-        self.CatchAndThrowThread = Thread(target=CatchAndThrow.Catch_throw)
-        self.CatchAndThrowThread.start()
+        
+        
 
 
     def ball_sensing(self):
