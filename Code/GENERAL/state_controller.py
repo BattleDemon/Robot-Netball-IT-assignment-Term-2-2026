@@ -17,7 +17,8 @@ class Request(Enum):
     PASS = 0
     RECIEVE = 1
     RETRIEVE = 2
-    NONE = 3
+    REPOSITION = 3
+    NONE = 4
 
 
 # State Machine
@@ -26,20 +27,20 @@ class State_Controller():
         self.owner = owner
 
         self.state = State.IDLE
-        self.other_state: State
+        self.others_state: State
 
         self.x_pos: float
         self.y_pos: float
         self.angle: float
 
         self.position: tuple
-        self.other_position: tuple
+        self.others_position: tuple
 
         self.ball_position: tuple
-        self.other_ball_position: tuple
+        self.others_ball_position: tuple
 
         self.has_ball: bool
-        self.other_has_ball: bool
+        self.others_has_ball: bool
 
         self.request: Request
         self.incoming_request: Request
@@ -50,9 +51,18 @@ class State_Controller():
     def update_other_position(self, x, y, angle):
         pass
 
-    def get_snapshot(self, ):
-        # Gather all info the communication manager needs
-        pass
+    def get_snapshot(self):
+        # Create a snap shot dictionary to send to the communication manager
+
+        snapshot = {
+            "state" : self.state,
+            "position" : self.position,
+            "ball position": self.ball_position,
+            "has ball": self.has_ball,
+            "request" : self.request
+        }
+
+        return snapshot
 
     def alerted_of_foul(self):
         pass
