@@ -12,18 +12,20 @@ class State(Enum):
     POSITIONING = 5
     RECIEVING = 6
     SHOOTING = 7
+    WAITING = 8
 
 class Request(Enum):
     PASS = 0
     RECIEVE = 1
     RETRIEVE = 2
     REPOSITION = 3
-    NONE = 4
+    DECLINE = 4 # Refuse to do the request, might need one one or two occassion s
+    NONE = 5
 
 
 # State Machine
 class State_Controller():
-    def __init__(self, owner, x_pos, y_pos, angle, ball_angle):
+    def __init__(self, owner, x_pos, y_pos, angle, ball_angle, ball_dist):
         self.owner = owner
 
         self.state = State.IDLE
@@ -33,7 +35,9 @@ class State_Controller():
         self.others_position: tuple
 
         self.ball_position: int = ball_angle
+        self.ball_distance: float = ball_dist
         self.others_ball_position: int
+        self.others_ball_dist: float 
         self.has_ball: bool = False
         self.others_has_ball: bool = False
 
@@ -56,6 +60,7 @@ class State_Controller():
             "state" : self.state,
             "position" : self.position,
             "ball position": self.ball_position,
+            "ball distance": self.ball_distance,
             "has ball": self.has_ball,
             "request" : self.request
         }
@@ -67,14 +72,16 @@ class State_Controller():
         self.others_state = snapshot["state"]
         self.others_position = snapshot["position"]
         self.others_ball_position = snapshot["ball position"]
+        self.others_ball_dist = snapshot["ball distance"]
         self.others_ball_position = snapshot["has ball"]
         self.incoming_request = snapshot["request"]
 
 
     def determine_state(self):
-        pass
 
-    def determine_request(self):
+        if self.state == State.WAITING:
+            pass
+
         pass
 
 # State Calculations
@@ -84,6 +91,7 @@ class State_Controller():
 
 ## Retreive 
     # If you don't have ball, and other doesn't have ball, and the ball has a know location
+    # If your closest
 
 ## Locating
     # if neither you nor the other robot know where the ball is 
@@ -99,3 +107,6 @@ class State_Controller():
 
 ## SHOOTING
     # IF HAVE CAPABILITIES TO SHOOT AND HAS BALL ( NOT DEFENDING RBOOT)
+
+## Waiting 
+    # if waiting for a request 
