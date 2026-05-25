@@ -27,6 +27,7 @@ class Request(Enum):
 class State_Controller():
     def __init__(self, owner, x_pos, y_pos, angle, ball_angle, ball_dist):
         self.owner = owner
+        self.owner_type = owner.type
 
         self.state = State.IDLE
         self.others_state: State = State.IDLE
