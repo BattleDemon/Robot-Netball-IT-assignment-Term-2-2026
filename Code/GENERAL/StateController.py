@@ -37,7 +37,7 @@ class State_Controller():
         self.owner = owner # Local stored refrence to owner
         self.owner_type = robot_type # Robot role: "attack" or "defence"
 
-        self.hoop_positon = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
+        self.hoop_position = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
 
         # This robot's state and the last know state of the other
         self.state = State.IDLE
