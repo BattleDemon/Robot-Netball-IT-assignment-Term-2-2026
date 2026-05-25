@@ -78,11 +78,12 @@ class State_Controller():
 
 
     def determine_state(self):
-
-        if self.state == State.WAITING:
+        if self.has_ball:
             pass
+        elif self.others_has_ball:
+            pass
+        
 
-        pass
 
 # State Calculations
 
@@ -110,3 +111,10 @@ class State_Controller():
 
 ## Waiting 
     # if waiting for a request 
+'''if self.state == State.WAITING:
+            if self.incoming_request == self.request:
+                match self.request:
+                    case Request.
+            elif self.incoming_request == Request.DECLINE:
+                pass
+'''
