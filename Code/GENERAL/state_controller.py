@@ -45,11 +45,14 @@ class State_Controller():
         self.request: Request
         self.incoming_request: Request
 
-    def update_self_position(self, x, y, angle):
-        pass
+    def update_position(self,x,y,angle):
+        self.position = (x,y,angle)
 
-    def update_other_position(self, x, y, angle):
-        pass
+    def update_ball_position(self, angle):
+        self.ball_position = ()
+
+    def update_have_ball(self):
+        self.has_ball = not self.has_ball
 
     def get_snapshot(self):
         # Create a snap shot dictionary to send to the communication manager
@@ -64,7 +67,19 @@ class State_Controller():
 
         return snapshot
 
-    def alerted_of_foul(self):
+    def set_others(self, snapshot):
+
+        self.others_state = snapshot["state"]
+        self.others_position = snapshot["position"]
+        self.others_ball_position = snapshot["ball position"]
+        self.others_ball_position = snapshot["has ball"]
+        self.incoming_request = snapshot["request"]
+
+
+    def determine_state(self):
+        pass
+
+    def determine_request(self):
         pass
 
 # State Calculations
