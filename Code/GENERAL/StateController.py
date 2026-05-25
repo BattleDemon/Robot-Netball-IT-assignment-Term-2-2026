@@ -78,39 +78,57 @@ class State_Controller():
 
 
     def determine_state(self):
-        if self.has_ball:
-            pass
-        elif self.others_has_ball:
-            pass
+    
+        if self.incoming_request != Request.NONE:
+            pass 
+
+
+
+
+
+        
         
 
 
 # State Calculations
 
+# State calculated every few seconds or after a state has done its thing (You have opassed the ball, your foul has elapsed and you've returned to the location)
+
 ## Foul
-    # If have been placed on the foul colour 
+    # Have recieved foul condition
+    # THis is a special state since its triggered after been picked up and placed in the foul box, 
+    # it also has a individual way of returning to idle since it needs to return to the field after the foul has elapsed
 
 ## Retreive 
     # If you don't have ball, and other doesn't have ball, and the ball has a know location
     # If your closest
+    # Not nessisary but can be influnce by if you've been asked to recieve 
 
 ## Locating
     # if neither you nor the other robot know where the ball is 
+    # neither robot has the ball
+    # Neither robot's is in state passing or shooting
 
 ## Passing
-    # If you have the ball, have requested to pass and gotten back a revieving
+    # If you have the ball, have requested to pass and gotten back a confiormation recieving
+    # if other logic works but have not requested to pass, request to pass
 
 ## Positioning 
-    # if other has ball and you need to get out of its way
+    # if other has ball and you need to get out of its way, or if your just moving around
 
 ## Recieving 
     # iF OTHER IS REQUESTING TO PASS 
+    # and doesn't have the ball
+    # other has the ball
 
 ## SHOOTING
     # IF HAVE CAPABILITIES TO SHOOT AND HAS BALL ( NOT DEFENDING RBOOT)
+    # has ball 
+    # is near hoop (we will have hoop locations i mightr need to make a local varaible )
+
 
 ## Waiting 
-    # if waiting for a request 
+    # if waiting for a request to come back (stay in until you get a declined or the correct one back (NONE is default and not a decline))
 '''if self.state == State.WAITING:
             if self.incoming_request == self.request:
                 match self.request:
