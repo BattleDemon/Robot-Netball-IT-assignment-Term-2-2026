@@ -70,6 +70,14 @@ class State_Controller():
     def update_have_ball(self):
         self.has_ball = not self.has_ball
 
+    # Allow foul controller to set foul
+    def set_foul_state(self):
+        self.state = State.FOUL
+
+    # Allow foul controller to return to idle
+    def set_idle_state(self):
+        self.state = State.IDLE
+
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
 
