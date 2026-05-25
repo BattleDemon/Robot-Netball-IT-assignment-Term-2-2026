@@ -107,13 +107,13 @@ class State_Controller():
         self.incoming_request = snapshot["request"]
 
     # Return's true if the robot is near us
-    def _near_hoop(self, threshold=20):
-        dx = self.position[0] - self.hoop_position[0]
-        dy = self.position[1] - self.hoop_position[1]
+    def _near_hoop(self, dist_threshold=20):
+        dist_to_hoop_x = self.position[0] - self.hoop_position[0]
+        dist_to_hoop_y = self.position[1] - self.hoop_position[1]
 
-        distance = (dx**2 + dy**2) ** 0.5
+        dist_to_hoop = (dist_to_hoop_x**2 + dist_to_hoop_y**2) ** 0.5
 
-        return distance < threshold
+        return dist_to_hoop < dist_threshold
 
     def determine_state(self):
 
