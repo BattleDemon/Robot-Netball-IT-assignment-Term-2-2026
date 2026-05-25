@@ -1,5 +1,9 @@
 #!/usr/bin/env pybricks-micropython
 
+'''
+    This file is the work of Dexter
+'''
+
 from enum import Enum
 
 # --- Enums ---
