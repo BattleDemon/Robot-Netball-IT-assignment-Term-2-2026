@@ -2,13 +2,14 @@
 
 import time
 from threading import Thread
-from pybricks.ev3devices import ColorSensor, TouchSensor
+from pybricks.ev3devices import ColorSensor
 from pybricks.parameters import Color
 
 from state_controller import State, State_Controller
 
 
 FOUL_TIME = 5
+
 FOUL_COLOUR = "Black"
 
 FIRST_MARKER = "Blue"
@@ -18,6 +19,8 @@ BORDER_COLOUR = "White"
 
 class Foul_controller():
     def __init__(self, state_controller: State_Controller, colour_sensor: ColorSensor):
+        self.state_controller = state_controller
+
         self.colour_sensor = colour_sensor
         
         self.observe_ground_thread = Thread(target=observe_ground)
@@ -34,18 +37,21 @@ class Foul_controller():
         while True:
             self.observed_colour = self.colour_sensor.color_name()
 
-            if self.colour_sensor == "White" and not self.currently_foul:
-                self.on_white_detected()
+            if self.colour_sensor == FOUL_COLOUR and not self.currently_foul:
+                self.on_foul_detected()
 
-            if self.colour_sensor == "Black" and not self.currently_foul:
+            elif self.colour_sensor == BORDER_COLOUR:
                 self.on_tape = True
 
-            if self.colour_sensor != "Black" and self.on_tape:
-                self.on_tape = False
+            elif self.colour_sensor == FIRST_MARKER:
+                pass
+
+            elif self.colour_sensor == SECOND_MARKER:
+                pass
 
             time.sleep(0.75)
 
-    def on_white_detected(self):
+    def on_foul_detected(self):
         self.currently_foul = True
 
         timer_thread = Thread(target=timer)
@@ -54,7 +60,7 @@ class Foul_controller():
 
         # UPDATE STATE MACHINE
 
-    def timer(self):
+    def foul_timer(self):
         time.wait(FOUL_TIME)
 
         # Return to field 
