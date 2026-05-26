@@ -68,3 +68,12 @@ class Foul_controller():
         # UPDATE STATE MACHINE
         
         self.currently_foul = False
+
+
+# Plan
+
+## Detect Ground colour thread
+    # Constantly running
+    # Detects if the ground is any non green color
+    # Calls other functions to handle that change
+
