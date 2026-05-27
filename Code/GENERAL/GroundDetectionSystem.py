@@ -31,7 +31,9 @@ class Foul_controller():
 
         self.currently_foul = False
         
-        self.on_tape = False
+        self.on_border = False
+        self.on_blue = False
+        self.on_red = False
 
     def observe_ground(self):
         while True:

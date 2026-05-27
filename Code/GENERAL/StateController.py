@@ -35,12 +35,12 @@ class Request(Enum):
 class State_Controller():
     def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist, hoop_x, hoop_y):
         self.owner = owner # Local stored refrence to owner
-        self.owner_type = robot_type # Robot role: "attack" or "defence"
+        self.owner_type: str = robot_type # Robot role: "attack" or "defence"
 
-        self.hoop_position = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
+        self.hoop_position: tuple = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
 
         # This robot's state and the last know state of the other
-        self.state = State.IDLE
+        self.state: State = State.IDLE
         self.others_state: State = State.IDLE
 
         # This robots and the other's positions
@@ -60,6 +60,9 @@ class State_Controller():
         # Outgoing and latest incoming requests
         self.request: Request = Request.NONE
         self.incoming_request: Request = Request.NONE
+
+        # IR Ground detected
+        self.ground_colour: str  = None
 
     # update local robot position and heading
     def update_position(self,x,y,angle):
@@ -81,6 +84,9 @@ class State_Controller():
     # Allow foul controller to return to idle
     def set_idle_state(self):
         self.state = State.IDLE
+
+    def get_ground_colour(self, colour):
+        self.ground_colour = colour
 
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
