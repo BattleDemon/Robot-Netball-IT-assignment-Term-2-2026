@@ -63,6 +63,7 @@ class State_Controller():
 
         # IR Ground detected
         self.ground_colour: str  = None
+        self.foul_elapsed: bool = False
 
     # update local robot position and heading
     def update_position(self,x,y,angle):
@@ -80,13 +81,17 @@ class State_Controller():
     # Allow foul controller to set foul
     def set_foul_state(self):
         self.state = State.FOUL
+        self.toggle_foul_elapsed()
 
     # Allow foul controller to return to idle
     def set_idle_state(self):
         self.state = State.IDLE
 
-    def get_ground_colour(self, colour):
+    def set_ground_colour(self, colour):
         self.ground_colour = colour
+    
+    def toggle_foul_elapsed(self):
+        self.foul_elapsed = not self.foul_elapsed
 
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):

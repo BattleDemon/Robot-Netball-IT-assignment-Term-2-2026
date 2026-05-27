@@ -30,10 +30,6 @@ class Foul_controller():
         self.observed_colour = None
 
         self.currently_foul = False
-        
-        self.on_border = False
-        self.on_blue = False
-        self.on_red = False
 
     def observe_ground(self):
         while True:
@@ -42,40 +38,22 @@ class Foul_controller():
             if self.observed_colour == FOUL_COLOUR and not self.currently_foul:
                 self.on_foul_detected()
 
-            elif self.observed_colour == BORDER_COLOUR:
-                self.on_tape = True
-
-            elif self.observed_colour == FIRST_MARKER:
-                pass
-
-            elif self.observed_colour == SECOND_MARKER:
-                pass
+            self.state_controller.set_ground_colour(self.observed_colour)
 
             time.sleep(0.75)
 
     def on_foul_detected(self):
         self.currently_foul = True
+        self.state_controller.set_foul_state()
 
         timer_thread = Thread(target=timer)
         timer_thread.deamon = True
         time_thread.start()
 
-        # UPDATE STATE MACHINE
 
     def foul_timer(self):
         time.sleep(FOUL_TIME)
 
-        # Return to field 
+        self.state_controller.toggle_foul_elapsed()
 
-        # UPDATE STATE MACHINE
-        
         self.currently_foul = False
-
-
-# Plan
-
-## Detect Ground colour thread
-    # Constantly running
-    # Detects if the ground is any non green color
-    # Calls other functions to handle that change
-
