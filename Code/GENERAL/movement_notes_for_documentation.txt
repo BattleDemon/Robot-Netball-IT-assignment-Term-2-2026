@@ -1,0 +1,299 @@
+Date: 24/05/2026
+Author: Gabe
+Module: movement.py
+Location: /code/GENERAL/movement.py
+
+
+================================================================================
+1.  PURPOSE
+================================================================================
+
+movement.py is a shared navigation module used by both the Attack and Defence
+robots.  It provides a single Driver class that handles:
+
+  - Wheel odometry (dead-reckoning position tracking)
+  - Field geometry and boundary awareness
+  - Foul-box detection and automated homing after a penalty
+  - Pivot movement (required by netball rules while holding the ball)
+  - High-level helpers such as "face the hoop" and "drive to point"
+
+Both robots import the same file; the only difference is the TEAM constant in
+robot_config.py ("ATTACK" or "DEFENCE").
+
+
+================================================================================
+2.  DEPENDENCIES
+================================================================================
+
+  - pybricks-micropython libraries (EV3Brick, Motor, ColorSensor, GyroSensor)
+  - robot_config.py  --  all physical constants (field size, wheel diameters,
+    foul-box coordinates, start positions, speed defaults, etc.)
+  - state_controller.py  --  shared state machine (State, State_Controller)
+
+
+================================================================================
+3.  CONSTANTS (now live in robot_config.py)
+================================================================================
+
+Team
+  TEAM                    "ATTACK" or "DEFENCE"
+
+Chassis
+  WHEEL_DIAMETER          5.6 cm
+  TRACK_WIDTH             12.3 cm (wheel-centre to wheel-centre)
+
+Field
+  FIELD_WIDTH             158.0 cm  (short side, x-axis)
+  FIELD_LENGTH            219.0 cm  (long side,  y-axis)
+
+Hoop (centre of the relevant short side)
+  HOOP_X                  79.0 cm
+  HOOP_Y_ATTACK           0.0 cm
+  HOOP_Y_DEFENCE          219.0 cm
+
+Foul boxes (white-taped rectangles in opposite corners)
+  TOP_LEFT     : (0, 189)  to (30, 219)
+  BOTTOM_RIGHT : (128, 0)  to (158, 30)
+
+Start positions
+  ATTACK   : (79.0, 199.0)
+  DEFENCE  : (79.0,  20.0)
+
+Speed defaults
+  DEFAULT_SPEED   200 deg/s
+  SLOW_SPEED      100 deg/s
+  TURN_SPEED      150 deg/s
+
+Odometry
+  ODO_SLEEP       0.05 s   (20 Hz update rate)
+
+Foul-box homing
+  FOUL_PROBE_STEP_CM   4.0 cm
+  FOUL_PROBE_SPEED     60 deg/s
+  FOUL_PROBE_MAX_CM    35.0 cm
+  FOUL_BACKUP_CM       3.0 cm
+
+Boundary safety
+  BOUNDARY_MARGIN      5.0 cm
+
+IR ball-seeker thresholds
+  IR_BALL_CLOSE_THRESHOLD   40
+
+
+================================================================================
+4.  CLASS: Driver
+================================================================================
+
+Constructor
+-----------
+
+  Driver(ev3, left_motor, right_motor, colour_sensor,
+         team=TEAM, gyro=None)
+
+  Parameters
+    ev3            -- EV3Brick instance (for screen / sound feedback)
+    left_motor     -- Motor object on the left drive wheel
+    right_motor    -- Motor object on the right drive wheel
+    colour_sensor  -- ColorSensor (mounted facing the ground)
+    team           -- "ATTACK" or "DEFENCE"; auto-sets start pose & hoop target
+    gyro           -- Optional GyroSensor; if supplied, odometry blends in 
+                      10 % gyro readings to reduce drift. ;D
+
+  Side effects on creation
+    - Initial pose is set to the team's start position.
+    - The odometry background thread is started automatically.
+    - Encoder baselines are captured so deltas begin from zero.
+
+
+Foul-signal interface (called by Dexter's Foul_Controller)
+----------------------------------------------------------
+
+  signal_in_foul_box()
+    Record that the robot is now in the foul box.  Sets internal flags and
+    stops the motors immediately.
+
+  signal_foul_over()
+    Record that the penalty time has elapsed.  The foul-monitor background
+    thread (see start_foul_monitor) will then invoke home_from_foul_box().
+
+  signal_ground_colour(colour)
+    Push the most recent ground-colour string from the colour sensor
+    (e.g. "White", "Black", "Red", etc.).  Used by is_in_foul_area() and
+    sees_black_tape().
+
+  is_foul_active() -> bool
+    True from the moment signal_in_foul_box() is called until the robot has
+    successfully exited the foul box and returned to the field.
+
+
+External data getters / setters
+-------------------------------
+
+  set_other_robot_position(x, y, heading)
+    Feed the pose of the other robot from the comms module.
+    Used as a fallback during foul-box guessing.
+
+  get_ball_data() -> (strength, position)
+    Return the cached IR ball-seeker values.  The IR thread writes directly
+    to the internal attributes; this method is the safe read path.
+
+
+Basic movement commands
+-----------------------
+
+  move(left_speed=DEFAULT_SPEED, right_speed=DEFAULT_SPEED)
+    Open-loop motor drive.  Speeds are in deg/s.
+
+  stop(brake=True)
+    Stop both motors; apply brake if brake=True.
+
+  move_distance(distance_cm, speed=DEFAULT_SPEED)
+    Drive forward (positive) or backward (negative) the requested distance
+    using encoder feedback.  Blocks until the distance is reached.
+
+  turn_angle(angle_deg, speed=TURN_SPEED)
+    Rotate in place.  Positive angle = clockwise.  Updates the internal
+    heading estimate.
+
+  pivot(pivot_side, speed=DEFAULT_SPEED, duration_sec=None)
+    Lock one wheel and drive the other.  pivot_side must be "LEFT" or
+    "RIGHT".  If duration_sec is None the caller must call stop() later.
+    Required by netball rules when holding the ball.
+
+
+Pose queries
+------------
+
+  get_position()  -> (x, y)
+  get_heading()   -> heading in degrees (0 = +y, 90 = +x, 180 = -y, 270 = -x)
+
+  reset_position(x=0.0, y=0.0, heading=0.0)
+    Hard-reset the odometry pose.  Also re-baselines encoder counters.
+    If a gyro is attached its offset is recalibrated to match the new
+    heading.  Defaults to (0, 0, 0) if called with no arguments.
+
+
+Field awareness
+---------------
+
+  distance_to_hoop() -> float
+    Straight-line distance in cm from the robot to its target hoop.
+
+  angle_to_hoop() -> float
+    Heading the robot must adopt to point directly at the target hoop.
+
+  is_in_bounds() -> bool
+    True while the robot is at least BOUNDARY_MARGIN cm inside all four
+    field edges.
+
+  is_in_foul_area() -> bool
+    True when the ground sensor reports "White" OR the theoretical pose is
+    inside a known foul-box rectangle.
+
+  sees_black_tape() -> bool
+    True when the ground sensor reports "Black" (field border tape).
+
+
+High-level navigation helpers
+-----------------------------
+
+  face_hoop(speed=TURN_SPEED)
+    Turn in place so the robot points at the target hoop.
+
+  drive_to_point(target_x, target_y, speed=DEFAULT_SPEED)
+    Turn toward the target coordinate, then drive straight there.
+    Blocks until the motion is complete.
+
+
+================================================================================
+5.  FOUL-BOX HOMING
+================================================================================
+
+When a foul is called, Dexter's controller:
+
+  1. Calls signal_in_foul_box()  -- movement stops.
+  2. Waits for the penalty timer.
+  3. Calls signal_foul_over()    -- movement module may resume.
+
+The Driver class then runs home_from_foul_box() which should execute the following
+algorithm:
+
+  guess_foul_box()
+  ----------------
+  Determine which of the two foul boxes the robot is likely in.
+
+  Priority of evidence:
+    1. IR ball-seeker strength  (ball closer -> TOP_LEFT box)
+    2. Other robot's known position (infer opposite corner)
+    3. Last recorded y coordinate before the foul
+
+  home_from_foul_box()
+  --------------------
+  1. Probe the four sides of the box in order of likelihood.
+  2. Each probe: turn to face a side, then creep forward in
+     FOUL_PROBE_STEP_CM steps.
+  3. Sensor reads during probing:
+       "Black"  -> found the field border.  Cross it, snap heading,
+                   reset odometry to a known exit coordinate, clear foul
+                   flags, return True.
+       "White"  -> hit the inner foul-box edge.  Back up and try the
+                   next side.
+  4. If all four sides fail and the other robot's position is known,
+     drive toward that robot as a last resort.
+
+  _snap_position_after_foul_exit(box, exit_heading)
+  -------------------------------------------------
+  After the robot crosses a black border line, this method resets the
+  internal (x, y) to a coordinate just outside the foul box, based on the
+  box identity and the side that was exited.  This prevents the odometry
+  from accumulating unknown drift while the robot was being carried by hand.
+
+  start_foul_monitor()
+  --------------------
+  Spawn a background thread that watches _foul_over and _in_foul_box.
+  When both become True it automatically calls home_from_foul_box().
+  Call once during robot initialisation.
+
+
+================================================================================
+6.  BACKWARD COMPATIBILITY
+================================================================================
+
+  class MyTank(Driver)
+
+  MyTank is a thin subclass that accepts the old constructor signature used by
+  earlier Defence code.  It maps the extra ultrasonic / colour-sensor
+  arguments onto attributes so existing scripts do not break.
+
+
+================================================================================
+7.  TESTING CHECKLIST
+================================================================================
+
+  [ ] Place robot at start position, verify (x, y) on EV3 screen is
+      approximately correct.
+  [ ] Drive forward 50 cm, verify reported y changes by ~50 cm.
+  [ ] Rotate 90 deg clockwise, verify heading steps to ~90 deg.
+  [ ] Drive toward a known point on the field, verify final position.
+  [ ] Place a white sheet under the colour sensor, confirm
+      is_in_foul_area() returns True.
+  [ ] Place black tape under the sensor, confirm sees_black_tape() returns True.
+  [ ] Trigger signal_in_foul_box() and signal_foul_over(); verify the foul
+      monitor drives the robot out of the box and resets position.
+  [ ] Measure actual wheel diameter and track width; update robot_config.py
+      values if odometry drifts significantly.
+
+
+================================================================================
+8.  KNOWN LIMITATIONS & FUTURE WORK
+================================================================================
+
+  - Odometry drifts over time; wheel diameter and track width must be
+    measured on the actual robot and entered in robot_config.py.
+  - GyroSensor support exists but the sensor has not been allocated yet;
+    when added, it will automatically blend into the heading estimate.
+  - Foul-box coordinates are approximate and must be verified against the
+    physical field layout.
+  - guess_foul_box() relies on IR ball-seeker data; if the ball is off the
+    field or the sensor is unplugged, the fallback logic is less reliable.
+  - Communication / multi-robot position sharing is still TODO.
