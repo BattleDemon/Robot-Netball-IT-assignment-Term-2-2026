@@ -1,8 +1,9 @@
 #!/usr/bin/env pybricks-micropython
 
-'''
-    This file is the work of Dexter
-'''
+
+# ++++++++++++++++++++++++++++++++
+# ======== Work of Dexter ========
+# ++++++++++++++++++++++++++++++++
 
 from enum import Enum
 
@@ -87,15 +88,23 @@ class State_Controller():
     def set_idle_state(self):
         self.state = State.IDLE
 
+    # Get refrence to the state (Might be useful in main)
+    def get_state(self):
+        return self.state
+
+    # Updated the local ground colour
     def set_ground_colour(self, colour):
         self.ground_colour = colour
     
+    # toggle if foul has elapsed (so Gabe can use this to start the return to field)
     def toggle_foul_elapsed(self):
         self.foul_elapsed = not self.foul_elapsed
 
+    # Get refrence to the ground colour
     def get_ground_colour(self):
         return self.ground_colour
 
+    # get the foul elapsed
     def get_foul_elapsed(self):
         return self.foul_elapsed
 
