@@ -93,6 +93,12 @@ class State_Controller():
     def toggle_foul_elapsed(self):
         self.foul_elapsed = not self.foul_elapsed
 
+    def get_ground_colour(self):
+        return self.ground_colour
+
+    def get_foul_elapsed(self):
+        return self.foul_elapsed
+
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
 
