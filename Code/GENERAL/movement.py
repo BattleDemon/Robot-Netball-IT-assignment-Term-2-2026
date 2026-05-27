@@ -16,74 +16,28 @@
 
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import Motor, ColorSensor, GyroSensor
-from pybricks.parameters import Port, Stop, Direction, Color
+from pybricks.parameters import Port, Stop, Direction
 from pybricks.tools import wait
 
 from math import pi, sin, cos, radians, degrees, atan2, sqrt
 from threading import Thread, Lock
 import time
 
+from robot_config import (
+    TEAM, WHEEL_DIAMETER, WHEEL_RADIUS, WHEEL_CIRCUM, TRACK_WIDTH,
+    FIELD_WIDTH, FIELD_LENGTH, HOOP_X, HOOP_Y_ATTACK, HOOP_Y_DEFENCE,
+    FOUL_BOX_WIDTH, FOUL_BOX_HEIGHT,
+    FOUL_BOX_TOP_LEFT_X, FOUL_BOX_TOP_LEFT_Y,
+    FOUL_BOX_BOTTOM_RIGHT_X, FOUL_BOX_BOTTOM_RIGHT_Y,
+    START_ATTACK_X, START_ATTACK_Y, START_DEFENCE_X, START_DEFENCE_Y,
+    DEFAULT_SPEED, SLOW_SPEED, TURN_SPEED, ODO_SLEEP,
+    FOUL_PROBE_STEP_CM, FOUL_PROBE_SPEED, FOUL_PROBE_ANGLE,
+    FOUL_PROBE_MAX_CM, FOUL_BACKUP_CM, BOUNDARY_MARGIN,
+    IR_BALL_CLOSE_THRESHOLD,
+)
+
 # ─── Shared state machine (Dexter's code) ───
 from state_controller import State, State_Controller
-
-# ╔══════════════════════════════════════════════════════════════════╗
-# ║              R O B O T   C O N F I G U R A T I O N               ║
-# ╚══════════════════════════════════════════════════════════════════╝
-
-# //////// Team setting ////////
-# Change this to "DEFENCE" when running on the defender bot.
-TEAM = "ATTACK"
-
-# //////// Wheel specs (cm) ////////
-WHEEL_DIAMETER = 5.6
-WHEEL_RADIUS   = WHEEL_DIAMETER / 2.0
-WHEEL_CIRCUM   = pi * WHEEL_DIAMETER
-TRACK_WIDTH    = 12.3   # distance between wheel centres (cm)
-
-# //////// Field dimensions (cm) ////////
-FIELD_WIDTH  = 158.0   # short side (x axis)
-FIELD_LENGTH = 219.0   # long side  (y axis)
-
-# //////// Hoop position (centre of short side) ////////
-HOOP_X = FIELD_WIDTH / 2.0   # 79.0
-HOOP_Y_ATTACK = 0.0          # attack shoots toward y=0
-HOOP_Y_DEFENCE = FIELD_LENGTH  # defence shoots toward y=219
-
-# //////// Foul box dimensions (cm) ////////
-# Foul boxes are in top-left and bottom-right corners.
-# Each box is a white-taped rectangle.
-FOUL_BOX_WIDTH  = 30.0
-FOUL_BOX_HEIGHT = 30.0
-
-# Top-left foul box coords
-FOUL_BOX_TOP_LEFT_X = 0.0
-FOUL_BOX_TOP_LEFT_Y = FIELD_LENGTH - FOUL_BOX_HEIGHT   # y=189
-
-# Bottom-right foul box coords
-FOUL_BOX_BOTTOM_RIGHT_X = FIELD_WIDTH - FOUL_BOX_WIDTH   # x=128
-FOUL_BOX_BOTTOM_RIGHT_Y = 0.0
-
-# //////// Start positions ////////
-START_ATTACK_X = FIELD_WIDTH / 2.0
-START_ATTACK_Y = FIELD_LENGTH - 20.0
-
-START_DEFENCE_X = FIELD_WIDTH / 2.0
-START_DEFENCE_Y = 20.0
-
-# //////// Movement defaults ////////
-DEFAULT_SPEED = 200       # deg/s for motors
-SLOW_SPEED    = 100       # for precise approaches
-TURN_SPEED    = 150       # deg/s when rotating
-
-# //////// Odometry update rate ////////
-ODO_SLEEP = 0.05          # seconds between position updates (20 Hz)
-
-# //////// Foul box homing ////////
-FOUL_PROBE_STEP_CM = 4.0     # small steps so we dont overshoot tape
-FOUL_PROBE_SPEED = 60        # slow and careful
-FOUL_PROBE_ANGLE = 90.0      # try each side of the box
-FOUL_PROBE_MAX_CM = 35.0     # foul box is ~30cm, add margin
-FOUL_BACKUP_CM = 3.0         # retreat from white tape before turning
 
 
 # ╔══════════════════════════════════════════════════════════════════╗
@@ -149,8 +103,8 @@ class Driver:
 
         # //////// External data placeholders (filled by other modules later) ////////
         self._other_robot_pos = None      # (x, y, heading) from comms
-        self._ball_ir_strength = 0
-        self._ball_ir_position = 0
+        self.IR_strength = 0              # written by IRlocation.py thread
+        self.IR_position = 0              # written by IRlocation.py thread
 
         # //////// Threads ////////
         self._running = True
@@ -160,18 +114,13 @@ class Driver:
 
     # ─── Foul signal interface (Dexter calls these) ───
 
-    def signal_foul(self):
-        '''Dexter says: "hey you have fouled". Stop moving.'''
+    def signal_in_foul_box(self):
+        '''Dexter says: "hey you are in the foul box now". Stop moving.'''
         with self._foul_lock:
             self._foul_flag = True
-            self._in_foul_box = False
+            self._in_foul_box = True
             self._foul_over = False
         self.stop()
-
-    def signal_in_foul_box(self):
-        '''Dexter says: "hey you are in the foul box now".'''
-        with self._foul_lock:
-            self._in_foul_box = True
 
     def signal_foul_over(self):
         '''Dexter says: "hey, the foul time is over, resume play".'''
@@ -194,10 +143,9 @@ class Driver:
         '''Placeholder: comms module calls this with other robot's pose.'''
         self._other_robot_pos = (x, y, heading)
 
-    def set_ball_ir_data(self, strength, position):
-        '''Placeholder: IR thread calls this with ball seeker data.'''
-        self._ball_ir_strength = strength
-        self._ball_ir_position = position
+    def get_ball_data(self):
+        '''Return current IR ball seeker data as (strength, position).'''
+        return (self.IR_strength, self.IR_position)
 
     # ─── Internal odometry thread ───
     def _odometry_loop(self):
@@ -307,35 +255,31 @@ class Driver:
     def get_heading(self):
         return self.heading
 
-    def reset_position(self, x=None, y=None, heading=None):
-        if x is not None:
-            self.x = x
-        if y is not None:
-            self.y = y
-        if heading is not None:
-            self.heading = heading % 360.0
-            if self.gyro is not None:
-                self._gyro_offset = self.gyro.angle() - self.heading
+    def reset_position(self, x=0.0, y=0.0, heading=0.0):
+        self.x = x
+        self.y = y
+        self.heading = heading % 360.0
+        if self.gyro is not None:
+            self._gyro_offset = self.gyro.angle() - self.heading
         self._last_l = self.lm.angle()
         self._last_r = self.rm.angle()
 
     # ─── Field awareness ───
     def distance_to_hoop(self):
-        dx = self.hoop_x - self.x
-        dy = self.hoop_y - self.y
-        return sqrt(dx * dx + dy * dy)
+        hoop_dx = self.hoop_x - self.x
+        hoop_dy = self.hoop_y - self.y
+        return sqrt(hoop_dx * hoop_dx + hoop_dy * hoop_dy)
 
     def angle_to_hoop(self):
-        dx = self.hoop_x - self.x
-        dy = self.hoop_y - self.y
-        angle_from_x = degrees(atan2(dy, dx))
-        angle = (90.0 - angle_from_x) % 360.0
-        return angle
+        hoop_dx = self.hoop_x - self.x
+        hoop_dy = self.hoop_y - self.y
+        angle_from_x = degrees(atan2(hoop_dy, hoop_dx))
+        target_heading = (90.0 - angle_from_x) % 360.0
+        return target_heading
 
     def is_in_bounds(self):
-        margin = 5.0
-        return (margin <= self.x <= FIELD_WIDTH - margin and
-                margin <= self.y <= FIELD_LENGTH - margin)
+        return (BOUNDARY_MARGIN <= self.x <= FIELD_WIDTH - BOUNDARY_MARGIN and
+                BOUNDARY_MARGIN <= self.y <= FIELD_LENGTH - BOUNDARY_MARGIN)
 
     def is_in_foul_area(self):
         '''
@@ -343,7 +287,7 @@ class Driver:
         or if our theoretical position is inside a known foul box.
         '''
         with self._foul_lock:
-            if self._ground_colour == Color.WHITE:
+            if self._ground_colour == "White":
                 return True
 
         # Backup: theoretical position inside either foul box
@@ -360,23 +304,23 @@ class Driver:
     def sees_black_tape(self):
         '''True if Dexter reported black ground colour (field border).'''
         with self._foul_lock:
-            return self._ground_colour == Color.BLACK
+            return self._ground_colour == "Black"
 
     # ─── Higher-level helpers ───
     def face_hoop(self, speed=TURN_SPEED):
-        target = self.angle_to_hoop()
-        diff = (target - self.heading + 180) % 360 - 180
-        self.turn_angle(diff, speed)
+        target_heading = self.angle_to_hoop()
+        heading_error = (target_heading - self.heading + 180) % 360 - 180
+        self.turn_angle(heading_error, speed)
 
-    def drive_to_point(self, tx, ty, speed=DEFAULT_SPEED):
-        dx = tx - self.x
-        dy = ty - self.y
-        target_heading = (90.0 - degrees(atan2(dy, dx))) % 360.0
-        diff = (target_heading - self.heading + 180) % 360 - 180
+    def drive_to_point(self, target_x, target_y, speed=DEFAULT_SPEED):
+        target_dx = target_x - self.x
+        target_dy = target_y - self.y
+        target_heading = (90.0 - degrees(atan2(target_dy, target_dx))) % 360.0
+        heading_error = (target_heading - self.heading + 180) % 360 - 180
 
-        self.turn_angle(diff, TURN_SPEED)
-        dist = sqrt(dx * dx + dy * dy)
-        self.move_distance(dist, speed)
+        self.turn_angle(heading_error, TURN_SPEED)
+        distance = sqrt(target_dx * target_dx + target_dy * target_dy)
+        self.move_distance(distance, speed)
 
     # ╔══════════════════════════════════════════════════════════════════╗
     # ║              F O U L   B O X   H O M I N G                       ║
@@ -387,7 +331,7 @@ class Driver:
         Guess which foul box we are in.
 
         Uses ball IR strength if available:
-          - Strong signal (>40)  -> ball is close -> top-left box
+          - Strong signal (> IR_BALL_CLOSE_THRESHOLD) -> ball is close -> top-left box
           - Weak / no signal     -> ball is far  -> bottom-right box
 
         Falls back to checking if the other robot's position is known;
@@ -396,18 +340,20 @@ class Driver:
 
         Returns "TOP_LEFT" or "BOTTOM_RIGHT".
         '''
+        ir_strength, _ = self.get_ball_data()
+
         # Primary: IR ball strength
-        if self._ball_ir_strength > 40:
+        if ir_strength > IR_BALL_CLOSE_THRESHOLD:
             return "TOP_LEFT"
-        elif self._ball_ir_strength > 0:
+        elif ir_strength > 0:
             return "BOTTOM_RIGHT"
 
         # Fallback: other robot position (if comms is up)
         if self._other_robot_pos is not None:
-            ox, oy, _ = self._other_robot_pos
+            other_x, other_y, _ = self._other_robot_pos
             # If other robot is in the top half, we are probably bottom-right
             # If other robot is in the bottom half, we are probably top-left
-            if oy > FIELD_LENGTH / 2:
+            if other_y > FIELD_LENGTH / 2:
                 return "BOTTOM_RIGHT"
             else:
                 return "TOP_LEFT"
@@ -418,6 +364,50 @@ class Driver:
             return "TOP_LEFT"
         else:
             return "BOTTOM_RIGHT"
+
+    def _snap_position_after_foul_exit(self, box, exit_heading):
+        '''Reset odometry to a known coordinate after leaving a foul box.'''
+        # Normalise heading to cardinal direction
+        heading = round(exit_heading) % 360
+
+        if box == "TOP_LEFT":
+            if heading == 0:
+                # Exited downward (bottom edge of top-left box)
+                self.x = FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH / 2.0
+                self.y = FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT + 2.0
+            elif heading == 90:
+                # Exited rightward (right edge of top-left box)
+                self.x = FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH + 2.0
+                self.y = FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT / 2.0
+            elif heading == 180:
+                # Exited upward (top edge -- unlikely but handle it)
+                self.x = FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH / 2.0
+                self.y = FOUL_BOX_TOP_LEFT_Y - 2.0
+            else:
+                # Exited leftward (left edge)
+                self.x = FOUL_BOX_TOP_LEFT_X - 2.0
+                self.y = FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT / 2.0
+        else:
+            # BOTTOM_RIGHT box
+            if heading == 0:
+                # Exited downward (bottom edge)
+                self.x = FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH / 2.0
+                self.y = FOUL_BOX_BOTTOM_RIGHT_Y - 2.0
+            elif heading == 90:
+                # Exited rightward (right edge)
+                self.x = FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH + 2.0
+                self.y = FOUL_BOX_BOTTOM_RIGHT_Y + FOUL_BOX_HEIGHT / 2.0
+            elif heading == 180:
+                # Exited upward (top edge of bottom-right box)
+                self.x = FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH / 2.0
+                self.y = FOUL_BOX_BOTTOM_RIGHT_Y + FOUL_BOX_HEIGHT + 2.0
+            else:
+                # Exited leftward (left edge)
+                self.x = FOUL_BOX_BOTTOM_RIGHT_X - 2.0
+                self.y = FOUL_BOX_BOTTOM_RIGHT_Y + FOUL_BOX_HEIGHT / 2.0
+
+        self._last_l = self.lm.angle()
+        self._last_r = self.rm.angle()
 
     def home_from_foul_box(self):
         '''
@@ -452,8 +442,8 @@ class Driver:
             probe_angles = [180.0, 270.0, 0.0, 90.0]
 
         for target_heading in probe_angles:
-            diff = (target_heading - self.heading + 180) % 360 - 180
-            self.turn_angle(diff, TURN_SPEED)
+            heading_error = (target_heading - self.heading + 180) % 360 - 180
+            self.turn_angle(heading_error, TURN_SPEED)
 
             step_count = 0
             max_steps = int(FOUL_PROBE_MAX_CM / FOUL_PROBE_STEP_CM)
@@ -465,18 +455,20 @@ class Driver:
                 with self._foul_lock:
                     colour = self._ground_colour
 
-                if colour == Color.BLACK:
+                if colour == "Black":
                     # Found the field border. Cross it and get inside.
                     self.move_distance(FOUL_PROBE_STEP_CM, FOUL_PROBE_SPEED)
                     # Snap heading to cardinal so we are "straight"
                     self.heading = target_heading % 360.0
+                    # Reset position so we know where we are
+                    self._snap_position_after_foul_exit(box, self.heading)
                     with self._foul_lock:
                         self._foul_flag = False
                         self._in_foul_box = False
                         self._foul_over = False
                     return True
 
-                if colour == Color.WHITE:
+                if colour == "White":
                     # Hit foul box edge -- wrong way. Retreat and try next angle.
                     self.move_distance(-FOUL_BACKUP_CM, SLOW_SPEED)
                     break
@@ -487,9 +479,9 @@ class Driver:
 
         # All directions tried. Use other robot as last resort.
         if self._other_robot_pos is not None:
-            ox, oy, _ = self._other_robot_pos
+            other_x, other_y, _ = self._other_robot_pos
             # Drive toward other robot's position (it is on the field)
-            self.drive_to_point(ox, oy, SLOW_SPEED)
+            self.drive_to_point(other_x, other_y, SLOW_SPEED)
             with self._foul_lock:
                 self._foul_flag = False
                 self._in_foul_box = False
