@@ -7,11 +7,11 @@
 from math import atan2, degrees, pi
 from pybricks.ev3devices import Motor
 
-class PushAndShoot():
+class PushAndAim():
     def __init(self, push_motor: Motor):
         self.push_motor = push_motor
 
-    def aim(self,our_position: tuple, others_position: tuple):
+    def get_aim_angle(self,our_position: tuple, others_position: tuple):
 
         our_x, our_y, our_angle = our_position
         others_x, others_y, _ = others_position
@@ -28,3 +28,5 @@ class PushAndShoot():
 
     def push(self):
         pass
+        # Push motor 45 degrees 
+        # wait a min then turn back
