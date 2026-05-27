@@ -20,7 +20,7 @@ import random
 
 # Local Imports
 from GENERAL.IRlocation import irLocator
-from GENERAL.state_controller import State, State_Controller
+from GENERAL.StateController import State, State_Controller
 from GENERAL.movement import Driver
 import CatchAndThrow
 from Foul_Controller import Foul_controller
