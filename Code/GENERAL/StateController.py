@@ -1,8 +1,9 @@
 #!/usr/bin/env pybricks-micropython
 
-'''
-    This file is the work of Dexter
-'''
+
+# ++++++++++++++++++++++++++++++++
+# ======== Work of Dexter ========
+# ++++++++++++++++++++++++++++++++
 
 from enum import Enum
 
@@ -35,12 +36,12 @@ class Request(Enum):
 class State_Controller():
     def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist, hoop_x, hoop_y):
         self.owner = owner # Local stored refrence to owner
-        self.owner_type = robot_type # Robot role: "attack" or "defence"
+        self.owner_type: str = robot_type # Robot role: "attack" or "defence"
 
-        self.hoop_position = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
+        self.hoop_position: tuple = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
 
         # This robot's state and the last know state of the other
-        self.state = State.IDLE
+        self.state: State = State.IDLE
         self.others_state: State = State.IDLE
 
         # This robots and the other's positions
@@ -61,6 +62,10 @@ class State_Controller():
         self.request: Request = Request.NONE
         self.incoming_request: Request = Request.NONE
 
+        # IR Ground detected
+        self.ground_colour: str  = None
+        self.foul_elapsed: bool = False
+
     # update local robot position and heading
     def update_position(self,x,y,angle):
         self.position = (x,y,angle)
@@ -77,10 +82,31 @@ class State_Controller():
     # Allow foul controller to set foul
     def set_foul_state(self):
         self.state = State.FOUL
+        self.toggle_foul_elapsed()
 
     # Allow foul controller to return to idle
     def set_idle_state(self):
         self.state = State.IDLE
+
+    # Get refrence to the state (Might be useful in main)
+    def get_state(self):
+        return self.state
+
+    # Updated the local ground colour
+    def set_ground_colour(self, colour):
+        self.ground_colour = colour
+    
+    # toggle if foul has elapsed (so Gabe can use this to start the return to field)
+    def toggle_foul_elapsed(self):
+        self.foul_elapsed = not self.foul_elapsed
+
+    # Get refrence to the ground colour
+    def get_ground_colour(self):
+        return self.ground_colour
+
+    # get the foul elapsed
+    def get_foul_elapsed(self):
+        return self.foul_elapsed
 
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
