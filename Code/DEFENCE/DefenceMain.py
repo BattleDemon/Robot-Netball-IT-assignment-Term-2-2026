@@ -26,6 +26,7 @@ from GENERAL.state_controller import State, State_Controller
 from GENERAL.movement import Driver
 import CatchAndThrow
 from GENERAL.GroundDetectionSystem import Ground_Observer
+from GENERAL.communication import Communicator
 
 
 # Main Robot class for the defending robot
@@ -37,6 +38,10 @@ class Defender():
         self.state_controller = State_Controller()
         
         self.team = "Defence"
+
+        self.Communicator = Communicator(self.state_controller,self.team, self.ev3)
+        self.Communication_Thread= Thread(target= self.Communicator.CommunicationLoop())
+        self.Communication_Thread.start()
 
         self.left_wheel
         self.right_wheel
@@ -61,6 +66,8 @@ class Defender():
         self.IR_strength
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
         self.IR_thread.start()
+
+        
 
 
     def ball_sensing(self):
