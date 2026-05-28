@@ -27,8 +27,8 @@ from GENERAL.movement import Driver
 import CatchAndThrow
 from GENERAL.GroundDetectionSystem import Ground_Observer
 
-#rgeogeo
 
+# Main Robot class for the defending robot
 class Defender(): 
     def __init__(self):
 
@@ -60,7 +60,7 @@ class Defender():
         self.IR_position
         self.IR_strength
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
-        self.IR_thread.start()      
+        self.IR_thread.start()
 
 
     def ball_sensing(self):
