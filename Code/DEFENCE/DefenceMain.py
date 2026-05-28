@@ -1,6 +1,8 @@
 #!/usr/bin/env pybricks-micropython
 
-''' This File is a combination of Hugo and Dexter's work '''
+# ++++++++++++++++++++++++++++++++*********
+# ======== Work of Hugo and Dexter ========
+# ++++++++++++++++++++++++++++++++*********
 
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (
@@ -23,34 +25,42 @@ from GENERAL.IRlocation import irLocator
 from GENERAL.state_controller import State, State_Controller
 from GENERAL.movement import Driver
 import CatchAndThrow
-from Foul_Controller import Foul_controller
+from GENERAL.GroundDetectionSystem import Ground_Observer
 
 #rgeogeo
 
 class Defender(): 
     def __init__(self):
+
         self.ev3 = EV3Brick()
-        self.driver = "Make a Drive Base Like Class that controls motors (handles turns ect)"
+
+        self.state_controller = State_Controller()
         
-        self.has_ball = False
-        self.ball_sensor = ColorSensor() # Add Port
-        self.ball_sensor_thread = Thread(target=ball_sensing)
-        self.ball_sensor_thread.daemon = True
+        self.team = "Defence"
+
+        self.left_wheel
+        self.right_wheel
+
+        self.gyro
+
+        self.driver = Driver(self.ev3, self.left_wheel, self.right_wheel, self.team, self.gyro)
+
+        self.has_ball
+
+        self.ball_sensor = ColorSensor() # add port
+        self.colour_sensor_thread = Thread(target=ball_sensing)
         self.ball_sensor_thread.start()
 
-        self.bottom_color_sensor = ColorSensor() # Add Port
-        self.Foul_controller = Foul_controller()
+        self._ground_colour_sensor = ColorSensor() # Add port
 
-        self.stateMachine = State_Controller()
+        self.ground_observer = Ground_Observer()
 
-        self.IR_sensor = I2CDevice(Port.S2,0x08)
-        self.IR_position = None
-        self.IR_strength = None
+        self.IR_sensor = I2CDevice(Port.s2,0x08)
+
+        self.IR_position
+        self.IR_strength
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
-        self.IR_thread.daemon = True
-        self.IR_thread.start()
-        
-        
+        self.IR_thread.start()      
 
 
     def ball_sensing(self):
