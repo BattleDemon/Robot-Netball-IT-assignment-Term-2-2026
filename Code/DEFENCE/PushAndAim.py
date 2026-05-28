@@ -31,7 +31,7 @@ class PushAndAim():
         # Angle between
         angle_between = target_angle - our_angle
         # Normilise the angle 
-        angle_between = (angle_between + pi) % (2 * pi) - pi
+        angle_between = (angle_between ) % (2 * pi)
 
         return angle_between
 
