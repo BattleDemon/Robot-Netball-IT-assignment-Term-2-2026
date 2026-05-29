@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "21631cfcd9951f85",
+            "id": "8cf286639475c9ea",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "Documentation/Dexter Documentation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "Dexter Documentation"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "042b842a9363481d",
@@ -94,7 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "Documentation/Dexter Documentation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +105,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for README"
+              "title": "Backlinks for Dexter Documentation"
             }
           },
           {
@@ -113,12 +114,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "Documentation/Dexter Documentation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from README"
+              "title": "Outgoing links from Dexter Documentation"
             }
           },
           {
@@ -156,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md",
+                "file": "Documentation/Dexter Documentation.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of README"
+              "title": "Outline of Dexter Documentation"
             }
           }
         ]
@@ -183,10 +184,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "21631cfcd9951f85",
+  "active": "8cf286639475c9ea",
   "lastOpenFiles": [
-    "Documentation/Dexter Documentation.md",
     "README.md",
+    "Documentation/Dexter Documentation.md",
     "Documentation/Temp.txt",
     "Documentation",
     "Construction/Attack Robot/b6b8ea23-18b3-4544-866d-c7e679883483.jpg",
