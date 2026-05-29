@@ -38,10 +38,10 @@ class PushAndAim():
     # Push the ball
     def push(self):
         # Push the ball with the motor 
-        self.push_motor.run_angle(120,45)
+        self.push_motor.run_angle(120,85)
 
         # wait a short time
         time.sleep(0.5)
 
         # Return motor to initial place
-        self.push_motor.run_angle(-120,45)
+        self.push_motor.run_angle(-120,85)

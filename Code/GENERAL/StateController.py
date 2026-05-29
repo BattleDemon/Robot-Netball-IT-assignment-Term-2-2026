@@ -46,12 +46,12 @@ class State_Controller():
 
         # This robots and the other's positions
         self.position: tuple = (x_pos, y_pos, angle)
-        self.others_position: tuple = None
+        self.others_position: tuple = ()
 
         # Ball tracking for this robot and the other
         self.ball_position: int = ball_angle
         self.ball_distance: float = ball_dist
-        self.others_ball_position: int = None
+        self.others_ball_position: int = ()
         self.others_ball_dist: float = None
 
         # Ball posession
