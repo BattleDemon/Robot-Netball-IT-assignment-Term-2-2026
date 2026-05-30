@@ -9,36 +9,53 @@ from enum import Enum
 
 # --- Enums ---
 
+
 # All possible states a robot can be in
 class State(Enum):
-    IDLE = 0        # No tasks
-    FOUL = 1        # Robot has been fouled and is in the foul box or leaving it
-    PASSING = 2     # Passing the ball to the other robot
+    IDLE = 0  # No tasks
+    FOUL = 1  # Robot has been fouled and is in the foul box or leaving it
+    PASSING = 2  # Passing the ball to the other robot
     RETRIEVING = 3  # Moving to collect ball
-    LOCATING = 4    # Searching for ball
-    POSITIONING = 5 # Moving out of the way
-    RECEIVING = 6   # Waiting to recieve a pass
-    SHOOTING = 7    # Attempting to shoot at the hoop
-    WAITING = 8     # Waiting for the other robot to respond to a request
+    LOCATING = 4  # Searching for ball
+    POSITIONING = 5  # Moving out of the way
+    RECEIVING = 6  # Waiting to recieve a pass
+    SHOOTING = 7  # Attempting to shoot at the hoop
+    WAITING = 8  # Waiting for the other robot to respond to a request
+
 
 # Requests that can be sent between the robots
 class Request(Enum):
-    PASS = 0        # Asking the other robot to pass the ball
-    RECEIVE = 1     # Asking the other robot to recieve a pass
-    RETRIEVE = 2    # Asking the other robot to collect the ball
+    PASS = 0  # Asking the other robot to pass the ball
+    RECEIVE = 1  # Asking the other robot to recieve a pass
+    RETRIEVE = 2  # Asking the other robot to collect the ball
     REPOSITION = 3  # Ask other robot to move
-    DECLINE = 4     # Refusing the incoming request
-    NONE = 5        # No active request
+    DECLINE = 4  # Refusing the incoming request
+    NONE = 5  # No active request
 
 
 # --- State Machine ---
 
-class State_Controller():
-    def __init__(self, owner, robot_type, x_pos, y_pos, angle, ball_angle, ball_dist, hoop_x, hoop_y):
-        self.owner = owner # Local stored refrence to owner
-        self.owner_type: str = robot_type # Robot role: "attack" or "defence"
 
-        self.hoop_position: tuple = (hoop_x, hoop_y) # Fixed hoop cords on the field, taken in value because it depends on how movement works
+class State_Controller:
+    def __init__(
+        self,
+        owner,
+        robot_type,
+        x_pos,
+        y_pos,
+        angle,
+        ball_angle,
+        ball_dist,
+        hoop_x,
+        hoop_y,
+    ):
+        self.owner = owner  # Local stored refrence to owner
+        self.owner_type: str = robot_type  # Robot role: "attack" or "defence"
+
+        self.hoop_position: tuple = (
+            hoop_x,
+            hoop_y,
+        )  # Fixed hoop cords on the field, taken in value because it depends on how movement works
 
         # This robot's state and the last know state of the other
         self.state: State = State.IDLE
@@ -51,8 +68,8 @@ class State_Controller():
         # Ball tracking for this robot and the other
         self.ball_position: int = ball_angle
         self.ball_distance: float = ball_dist
-        self.others_ball_position: int = ()
-        self.others_ball_dist: float = None
+        self.others_ball_position: tuple = ()
+        self.others_ball_dist: float = 0.0
 
         # Ball posession
         self.has_ball: bool = False
@@ -63,12 +80,12 @@ class State_Controller():
         self.incoming_request: Request = Request.NONE
 
         # IR Ground detected
-        self.ground_colour: str  = None
+        self.ground_colour: str = ""
         self.foul_elapsed: bool = False
 
     # update local robot position and heading
-    def update_position(self,x,y,angle):
-        self.position = (x,y,angle)
+    def update_position(self, x, y, angle):
+        self.position = (x, y, angle)
 
     # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):
@@ -95,7 +112,7 @@ class State_Controller():
     # Updated the local ground colour
     def set_ground_colour(self, colour):
         self.ground_colour = colour
-    
+
     # toggle if foul has elapsed (so Gabe can use this to start the return to field)
     def toggle_foul_elapsed(self):
         self.foul_elapsed = not self.foul_elapsed
@@ -112,12 +129,12 @@ class State_Controller():
     def get_snapshot(self):
 
         snapshot = {
-            "state" : self.state,
-            "position" : self.position,
+            "state": self.state,
+            "position": self.position,
             "ball position": self.ball_position,
             "ball distance": self.ball_distance,
             "has ball": self.has_ball,
-            "request" : self.request
+            "request": self.request,
         }
 
         return snapshot
@@ -143,10 +160,9 @@ class State_Controller():
 
     def determine_state(self):
 
-        # --- Foul --- 
-        # Is triggered by foul controller and turned off 
+        # --- Foul ---
+        # Is triggered by foul controller and turned off
         if self.state == State.FOUL:
-
             return
 
         # --- Waiting ---
@@ -171,15 +187,14 @@ class State_Controller():
             else:
                 # No responce yet
                 return
-    
+
         # --- Handle Incoming requests from other robot ---
         if self.incoming_request != Request.NONE:
-
             if self.incoming_request == Request.PASS:
                 # Other robot wants to pass, accept if don't have ball
                 if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
                     self.state = State.RECEIVING
-                    self.request = Request.RECEIVE # Return confirmation
+                    self.request = Request.RECEIVE  # Return confirmation
 
                     return
                 else:
@@ -201,12 +216,11 @@ class State_Controller():
 
             if self.incoming_request == Request.REPOSITION:
                 # other robot need you to move from its path or reposition in some way
-                if self.state not in  (State.FOUL, State.PASSING, State.SHOOTING): 
+                if self.state not in (State.FOUL, State.PASSING, State.SHOOTING):
                     self.state = State.POSITIONING
                     self.request = Request.NONE
 
                     return
-
 
         # --- Self Determined State ---
         # Ordered in priority order
@@ -229,13 +243,13 @@ class State_Controller():
 
         # Neither robot has the ball
         if not self.has_ball and not self.others_has_ball:
-
             # The Ball has a known location
             if self.ball_distance is not None:
-
                 # This robot is closer, or the other robot is occupied
-                if self.ball_distance <= self.others_ball_dist or self.others_state in (State.FOUL, State.POSITIONING):
-
+                if self.ball_distance <= self.others_ball_dist or self.others_state in (
+                    State.FOUL,
+                    State.POSITIONING,
+                ):
                     # Attacker is near the hoop, better to hold its positon and let defence retreive
                     if self.owner_type == "attack" and self._near_hoop():
                         self.state = State.POSITIONING
@@ -245,7 +259,7 @@ class State_Controller():
                     else:
                         self.state = State.RETRIEVING
                         self.request = Request.NONE
-                
+
                 # other robot is closer, stay still and let it retrieve
                 else:
                     self.state = State.WAITING
@@ -262,4 +276,3 @@ class State_Controller():
         # My logic has failed and there is no state that fits
         self.state = State.IDLE
         self.request = Request.NONE
-        
