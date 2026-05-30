@@ -5,9 +5,9 @@
 # ++++++++++++++++++++++++++++++++
 
 # Imports
-import time # To use timer
-from threading import Thread # For the constant ground detection thread and the timer
-from pybricks.ev3devices import ColorSensor # To detect the ground colour
+import time  # To use timer
+from threading import Thread  # For the constant ground detection thread and the timer
+from pybricks.ev3devices import ColorSensor  # To detect the ground colour
 
 # Allow use to take in the state_controller and know what it is, to set a few variables
 from StateController import State, State_Controller
@@ -21,8 +21,9 @@ FIRST_MARKER = "Blue"
 SECOND_MARKER = "Red"
 BORDER_COLOUR = "White"
 
+
 # Ground Observer Class
-class Ground_Observer():
+class Ground_Observer:
     def __init__(self, state_controller: State_Controller, colour_sensor: ColorSensor):
         # Local refrence to state controller, as to allow for variable setting
         self.state_controller = state_controller
@@ -30,7 +31,7 @@ class Ground_Observer():
 
         # Allow any ports colour_sensor to work with it as an argument
         self.colour_sensor = colour_sensor
-        
+
         # Observe Ground thread set up
         self.observe_ground_thread = Thread(target=self.observe_ground)
         self.observe_ground_thread.daemon = True
@@ -73,9 +74,9 @@ class Ground_Observer():
         self.state_controller.set_foul_state()
 
         # Start a timer thread
-        timer_thread = Thread(target=timer)
-        timer_thread.deamon = True
-        time_thread.start()
+        timer_thread = Thread(target=self.foul_timer)
+        # timer_thread.deamon = True
+        timer_thread.start()
 
     # The foul timer, so we don't stay fouled forever
     def foul_timer(self):
@@ -84,4 +85,3 @@ class Ground_Observer():
 
         # Tell state controller foul is over but don't change state (Need to return to field)
         self.state_controller.toggle_foul_elapsed()
-
