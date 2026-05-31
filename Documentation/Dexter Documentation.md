@@ -23,7 +23,7 @@ The Two Robots
 	* Shoots the ball into the hoop.
 	* Responds to requests from the Defence robot.
 
-Additionally, we also considered the ideas of using another communicating EV3 as a static navigation system, which would remain in the middle of the field and have one of the IR detectors and a some ultrasonic. Its goal is to provide a secondary location for both the ball and using the ultrasonic for the moving robots, although this ideas was later struck down.
+Additionally, we also considered the ideas of using another communicating EV3 as a static navigation system, which would remain in the middle of the field and have one of the IR detectors and a some ultrasonic. Its goal is to provide a secondary location for both the ball and using the ultrasonic for the moving robots, although this ideas was later struck down, as too complex, would get in the way, and due to our lack of communicating EV3's. 
 
 This meeting also produced the ideation for the first system, that of the Defence's ball handling. The idea used two counter rotating motors which would make a soft of flywheel / suction effect that would full the ball into a chamber which would then be shut. A colour sensor would be used to detect when the ball entered the chamber and trigger its shutting, along with reversing the rotation of the flywheel. Then once the robot positions its self, the chamber would open releasing the ball which would be pushed out using the flywheels. Additionally we considered another option which instead of physically blocking the chamber we could just make it sit in the chamber until pushed out. (the first option had a ramp, which the lid would block and them be moved allowing the ball to roll to the flywheel, while this second idea would use the pushing motion to give it the intial motion to the fly wheels)
 
@@ -44,7 +44,6 @@ It is also clear this early meeting dismissed much of the attacking robot, with 
 ###### Diagrams of Designs
 
 ###### Initial Sensors and their Uses
-
 
 
 #### Flowcharts of Gameplay

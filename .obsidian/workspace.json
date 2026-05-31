@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "eeda6a4586fac74d",
+        "id": "d139f680c1ff3bd7",
         "type": "tabs",
         "children": [
           {
-            "id": "8cf286639475c9ea",
+            "id": "7f6045da3b374ab5",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "042b842a9363481d",
@@ -184,10 +183,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "8cf286639475c9ea",
+  "active": "7f6045da3b374ab5",
   "lastOpenFiles": [
-    "README.md",
     "Documentation/Dexter Documentation.md",
+    "Code/GENERAL/irsensor_facing_the_ball.py",
+    "README.md",
     "Documentation/Temp.txt",
     "Documentation",
     "Construction/Attack Robot/b6b8ea23-18b3-4544-866d-c7e679883483.jpg",
