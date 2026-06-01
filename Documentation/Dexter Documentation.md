@@ -136,6 +136,10 @@ How we dicided on the data shaired ect
 
 #### How Work Was Divided
 
+As covered before the robots were split into teams of two, and the individual sections of code were split between individuals.
+
+For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section. 
+
 #### Hugo's Contributions
 
 #### Gabe's Contributions 
