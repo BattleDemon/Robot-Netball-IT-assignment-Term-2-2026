@@ -52,6 +52,25 @@ It is also clear this early meeting dismissed much of the attacking robot, with 
 
 #### Division of Tasks and Systems
 
+In order to fulfil the requirements of equally split work, we have split into two teams of two with each designing one robot, and their individual systems, and the shared systems were split to ensure a consistent split of work.
+
+The two teams are the Attack, Gabe and Zen, and the Defence, Hugo and I. These groups primarily designed and developed their robots before moving on to programming their respective individual systems.
+
+These systems might of changed during development or who is doing them, the final division of tasks will be covered in the dedicated collaboration system.
+
+The individual systems done by each are as follows:
+Hugo
+	Communication between robots.
+	Actioning on states (IE. Connecting everyone's systems and calling the function in the main file).
+	Ball grabbing and throwing.
+Gabe 
+	Movement of the Robot (Large system and his only system)
+	Attackers Turret
+Zen 
+	IR Detection and triangulation.
+	Attack grabber.
+with the remaining been my responsibility and covered in the next section.
+
 #### My Features and Systems
 
 ###### Overview of each feature 
