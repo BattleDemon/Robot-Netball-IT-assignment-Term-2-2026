@@ -42,6 +42,10 @@ class StateActions:
         self.pushingCode = PushAndAim(self.PushMotor)
         # Variable to know if the robot was previously in the foul box so we know when to go home.
         self.wasinfoul = False
+        # create the thread for the main loop
+        ActioningStates_t = threading.Thread(target=self.MainLoop)
+        # start the thread
+        ActioningStates_t.start()
 
 
     #When foul ends
@@ -125,7 +129,4 @@ class StateActions:
                     # Drive home from the foul box
                     self.Driver.home_from_foul_box()
             # Refresh and recalculate the state.
-            self.StateController.determine_state()
-            
-            
-            
+            self.StateController.determine_state()        
