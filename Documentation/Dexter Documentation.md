@@ -307,6 +307,8 @@ Class Ground Observer
 
 ###### Overview of Aiming and Pushing
 
+My last section, and smallest is only a system used for the Defending robot. This system needs to aim towards the other robot, then push the ball out of its container with a motor. 
+
 ###### Aiming and Pushing Psuedocode 
 
 ``` Psuedocode
