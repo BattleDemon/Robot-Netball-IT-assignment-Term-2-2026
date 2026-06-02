@@ -19,4 +19,42 @@ from math import pi, tan, sin, cos
 import os
 import threading
 
-from GENERAL import movement, StateController,IRlocation
+from GENERAL import movement,IRlocation
+from GENERAL.StateController import State_Controller
+
+from DEFENCE.PushAndAim import PushAndAim
+
+
+class StateActions:
+    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver ) -> None:
+        self.PushMotor = PushMotor
+        self.State = StateController
+        self.Driver = driver
+        self.pushingCode = PushAndAim(self.PushMotor)
+
+    #When foul ends
+
+    # Passing
+    def Passing(self):
+        
+        angleToTeamMate = self.pushingCode.get_aim_angle(self.State.position, self.State.others_position)
+        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.pushingCode.push()
+    
+    # retrieving
+        #NEEDS ZENS TRIANGULATION CODE
+    # Locating
+    def Locating(self):
+        self.Driver.turn_angle(10)
+
+    # Positioning
+    def Positioning(self):
+        pass
+
+
+    # Receiving
+        # Get ready to receive the ball from your teammate
+
+    #Waiting
+
+    #Main loop
