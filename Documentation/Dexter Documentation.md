@@ -41,6 +41,7 @@ Additionally we decided for the Defending robot to be able to do everything we n
 Another system this meeting produced was the shield, which would be an arm attached to the Defending robot which would stay perpendicular to the ground and could be raised or lowered to prevent an opponents shooting.
 
 It is also clear this early meeting dismissed much of the attacking robot, with us even in this stage not envisioning it been able to move and not calculate its own local ball position. It would stay next to the hoop and wait for the defender to pass to it.
+
 ###### Diagrams of Designs
 
 ###### Initial Sensors and their Uses
@@ -252,7 +253,8 @@ Class State_controller
 ###### Aiming and Pushing Psuedocode 
 #### Additional Features Incase of Extra Time
 
-Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which I considered to made, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other. 
+Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which I considered to made, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
+
 ## Prototyping
 
 #### Designing the Defence Robot
@@ -307,6 +309,7 @@ Although due to the scale of this assignment and its limitation some of these mi
 Current idea go through each of my features justify design choices issues ect 
 Talk about the collaboration 
 How we dicided on the data shaired ect 
+
 ## Collaboration
 
 #### How Work Was Divided
