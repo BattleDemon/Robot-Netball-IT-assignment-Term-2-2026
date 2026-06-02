@@ -18,3 +18,5 @@ from pybricks.media.ev3dev import SoundFile, ImageFile, Font
 from math import pi, tan, sin, cos
 import os
 import threading
+
+from GENERAL import movement, StateController,IRlocation
