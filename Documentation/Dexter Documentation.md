@@ -79,12 +79,15 @@ To satisfy the division of labour I was tasked with completing the sections of c
 
 
 
-###### Psuedocode 
+###### State System and Controller Psuedocode
 
-###### Overview of each feature 
+###### Overview of Ground Detection and Foul Controller
 
-###### Psuedocode 
+###### Ground Detection and Foul Controller Psuedocode 
 
+###### Overview of Aiming and Pushing
+
+###### Aiming and Pushing Psuedocode 
 #### Additional Features Incase of Extra Time
 ## Prototyping
 
