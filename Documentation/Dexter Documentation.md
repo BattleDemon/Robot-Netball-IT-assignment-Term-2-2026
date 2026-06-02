@@ -42,7 +42,8 @@ Another system this meeting produced was the shield, which would be an arm attac
 
 It is also clear this early meeting dismissed much of the attacking robot, with us even in this stage not envisioning it been able to move and not calculate its own local ball position. It would stay next to the hoop and wait for the defender to pass to it.
 
-###### Diagrams of Designs
+###### Diagrams of Initial Designs
+
 
 ###### Initial Sensors and their Uses
 
@@ -67,6 +68,8 @@ Defender
 
 #### Flowcharts of Gameplay
 
+
+![[mermaid-diagram-2026-06-02-231645.png]]
 #### Flowchart of Systems
 
 The Systems we are planning to make can be roughly connected as shown.
