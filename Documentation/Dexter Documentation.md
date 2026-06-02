@@ -56,12 +56,12 @@ Attacker
     Unfortionatly i the Attacking robot wasn't as preplanned as the defending robot, causing many of its later sensors to not be planned at this point.
 
 Defender
-    2 EV3's - One Used as the main controller, communicator, and navigator, and the other purely deticated to the flywheel system.
+    2 EV3's - One Used as the main controller, communicator, and navigator, and the other purely dedicated to the flywheel system.
     2 Motors - Again used for movement and navigation.
     Another 2 Motors - Used for the ball retrieve and passing, as flywheels.
     A single motor - To release the ball from its container.
     2 Colour Sensors - Used to detect if a ball is within the container, one for each EV3.
-    Another Colour sensor - Similar to the Attaker, this colour sensor is used for ground detection.
+    Another Colour sensor - Similar to the Attacker, this colour sensor is used for ground detection.
     A Gyro - Used as a secondary navigation checker.
     Lastly an IR Sensor - Also used to locate the ball.
 
@@ -253,11 +253,88 @@ Class State_controller
 
 ###### Overview of Ground Detection and Foul Controller
 
+My next important system is the ground detection and foul controller system, as it was another of the general systems. Luckily it seemed to connect with my other system, and just directly resolved the foul state. In addition to the foul controller, it is planned to also observe the ground and provide that as a signal for Gabe's movement code, and act as a secondary navigation system using the lines on the third of the field. 
+
 ###### Ground Detection and Foul Controller Psuedocode 
+
+``` Psuedocode
+
+Import required packages
+
+Class Ground Observer
+	Init
+		state controller
+		state
+		
+		colour sensor
+		
+		observed colour
+		currently fouled
+		
+		Thread observed ground
+		start thread
+		
+	Function observe ground
+		loop
+			observed colour = colour sensor colour
+			
+			if observed colour = foul colour and not currently fouled
+				call foul detected
+				
+			if currently foul
+				if state controller state is not foul
+					current foul = false
+					
+			call state_controller set ground colour
+			
+			wait
+			
+	Function foul detected
+		currently foul = true
+		
+		call state controller set foul state
+		
+		Thread foul timer
+		start thread
+		
+	Function foul timer
+		wait foul time
+		
+		call state controller toggle foul elapsed
+		
+
+```
 
 ###### Overview of Aiming and Pushing
 
 ###### Aiming and Pushing Psuedocode 
+
+``` Psuedocode
+
+Import required packages
+
+Class Push and Aim
+	Init
+		push motor
+		
+	Function get aim angle
+		get difference in x
+		get difference in y
+		
+		get angle towards target
+		
+		localise angle with our heading
+		
+		Return angle
+		
+	Function Push
+		run motor to push ball
+		
+		wait 
+		
+		run motor to return it to its initial point
+
+```
 #### Additional Features Incase of Extra Time
 
 Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which I considered to made, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
