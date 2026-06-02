@@ -45,6 +45,24 @@ It is also clear this early meeting dismissed much of the attacking robot, with 
 
 ###### Initial Sensors and their Uses
 
+The initial sensors designed for use on our two robots were as follows:
+
+Attacker
+    2 Motors - Used for movement and navigation.
+    Colour Sensor - Used to observe the ground and check if the robot is in the foul zone and for additional navigattion checks.
+    IR Sensor - Used to locate the ball.
+    Unfortionatly i the Attacking robot wasn't as preplanned as the defending robot, causing many of its later sensors to not be planned at this point.
+
+Defender
+    2 EV3's - One Used as the main controller, communicator, and navigator, and the other purely deticated to the flywheel system.
+    2 Motors - Again used for movement and navigation.
+    Another 2 Motors - Used for the ball retrieve and passing, as flywheels.
+    A single motor - To release the ball from its container.
+    2 Colour Sensors - Used to detect if a ball is within the container, one for each EV3.
+    Another Colour sensor - Similar to the Attaker, this colour sensor is used for ground detection.
+    A Gyro - Used as a secondary navigation checker.
+    Lastly an IR Sensor - Also used to locate the ball.
+
 
 #### Flowcharts of Gameplay
 
