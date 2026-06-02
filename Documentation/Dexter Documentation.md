@@ -69,6 +69,10 @@ Defender
 
 #### Flowchart of Systems
 
+The Systems we are planning to make can be roughly connected as shown.
+
+![[mermaid-diagram-2026-06-02-211710.png]]
+
 #### Division of Tasks and Systems
 
 In order to fulfil the requirements of equally split work, we have split into two teams of two with each designing one robot, and their individual systems, and the shared systems were split to ensure a consistent split of work.
