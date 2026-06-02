@@ -73,6 +73,14 @@ with the remaining been my responsibility and covered in the next section.
 
 #### My Features and Systems
 
+To satisfy the division of labour I was tasked with completing the sections of code which i will go into more detail below, of State Controller and System, Ground detection and foul controller, and the Aiming and Pushing of the defensive robot.
+
+###### Overview of the State System and Controller
+
+
+
+###### Psuedocode 
+
 ###### Overview of each feature 
 
 ###### Psuedocode 
