@@ -77,9 +77,153 @@ To satisfy the division of labour I was tasked with completing the sections of c
 
 ###### Overview of the State System and Controller
 
+The State System and Controller is set to be my largest and most important feature in this codebase, it will control what State the robots would be in and decide the logic for transitioning between states. Along with just controlling the individual robots state, it is also going to connect with the other robot in order to decide on collaborative states.
 
+###### State Transitions Flowchart
+
+The transition of states i have envisioned can be summed up by the following flowchart
+
+![[mermaid-diagram-2026-06-02-193220.png]]
 
 ###### State System and Controller Psuedocode
+
+To help me produce this system I devised the following psuedocode.
+
+``` Psuedocode
+
+Import Required Packages
+
+Enum State
+	IDLE
+	FOUL
+	PASSING
+	RETRIEVING
+	LOCATING
+	POSITIONING
+	RECEIVING
+	SHOOTING
+	WAITING
+
+Enum Request
+	PASS
+	RECIEVE
+	RETRIEVE
+	REPOSITION
+	DECLINE
+	NONE
+	
+Class State_controller
+	INIT
+		Robot Role (Attacker / Defender)
+		Current State
+		Other Robot State
+		Position 
+		Other Position
+		Ball
+		Ball Possession
+		Request
+		Ground Colour
+		Foul timer status
+		
+	Function UpdatePosisition
+		Get movement new position
+		
+	Function UpdateBallPosition
+		Get ball position
+		
+	Function ToggleBallPossession
+		True or False Ball Possession
+		
+	Function SetFoulState
+		State = Foul
+		Set foul elapsed false
+		
+	Function SetIdleState
+		State = IDLE
+		
+	Function recieveSnapshot
+		Save communication data
+		
+	Function CreateSnapshot
+		Make communication data
+		
+	Function DetermineState
+		If State = Foul 
+			Return
+			
+		If State = Waiting
+			
+			If incoming request = Decline 
+				request = None
+			
+			If incoming request = request
+				If request = Pass 
+					state = Passing
+					
+				If request = Recieve
+					state = Recieving
+				
+				Return
+				
+			Return
+		
+		If incoming request
+			Case incoming request
+				
+				Pass
+					If can recieve ball
+						state = recieving 
+						reply recieving'
+					else
+						reply Decline
+						
+				Retrieve
+					If robot has ball or is fouled
+						reply Decline
+					else
+						state = Retrieving
+					
+				Reposition
+					If robot is free to move
+						State = positioning
+					else 
+						reply Decline
+						
+		If robot has ball is attack and is near hoop
+			
+			state = shooting
+			return
+			
+		If robot has ball
+			request = pass
+			state = waiting
+			return
+		
+		If neither has ball 
+			
+			If ball location is known
+				If this robot is closer Or other is occupied
+					If robot is attack and near hoop
+						State = positioning
+						request = retrieve
+						
+					else
+						state = retrieve
+						clear request
+						
+				else
+					state = waiting
+					request = retrieve
+			
+			If neither robot knows where ball is 
+				State = locating
+				clear request
+				return
+				
+		State = Idle
+		clear request
+
+```
 
 ###### Overview of Ground Detection and Foul Controller
 
@@ -89,6 +233,8 @@ To satisfy the division of labour I was tasked with completing the sections of c
 
 ###### Aiming and Pushing Psuedocode 
 #### Additional Features Incase of Extra Time
+
+Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which I considered to made, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other. 
 ## Prototyping
 
 #### Designing the Defence Robot
@@ -178,3 +324,9 @@ For the individual sections of code, as to not force one person to do more than 
 #### What techniques did you use to solve these issues?
 #### What changes would you make if repeating this project?
 #### What have you learnt from the project? 
+
+## References 
+
+https://mermaid.live/
+
+https://pybricks.com/ev3-micropython/ev3devices.html 
