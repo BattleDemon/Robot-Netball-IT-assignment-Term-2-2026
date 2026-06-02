@@ -22,7 +22,7 @@ import random
 
 # Local Imports
 from GENERAL.IRlocation import irLocator
-from GENERAL.state_controller import State, State_Controller
+from GENERAL.StateController import State, State_Controller
 from GENERAL.movement import Driver
 import CatchAndThrow
 from GENERAL.GroundDetectionSystem import Ground_Observer
@@ -34,36 +34,41 @@ class Defender():
     def __init__(self):
 
         self.ev3 = EV3Brick()
-
-        self.state_controller = State_Controller()
-        
         self.team = "Defence"
+        self.state_controller = State_Controller(self, self.team, 0,0,0,0,0,0,0)
+        
+        
 
         self.Communicator = Communicator(self.state_controller,self.team, self.ev3)
         self.Communication_Thread= Thread(target= self.Communicator.CommunicationLoop())
         self.Communication_Thread.start()
 
-        self.left_wheel
-        self.right_wheel
+        self.left_wheel = Motor(Port.A)# not sure if correct
+        self.right_wheel= Motor(Port.B)# not sure if correct
 
-        self.gyro
+        self.gyro = GyroSensor(Port.S1)
 
-        self.driver = Driver(self.ev3, self.left_wheel, self.right_wheel, self.team, self.gyro)
-
-        self.has_ball
-
-        self.ball_sensor = ColorSensor() # add port
-        self.colour_sensor_thread = Thread(target=ball_sensing)
+        self.ball_sensor = ColorSensor(Port.S4) # add port
+        self.ball_sensor_thread = Thread(target=self.ball_sensing)
         self.ball_sensor_thread.start()
+        self.has_ball = False
 
-        self._ground_colour_sensor = ColorSensor() # Add port
+        self.driver = Driver(self.ev3, self.left_wheel, self.right_wheel,self.ball_sensor, self.team, self.gyro)
 
-        self.ground_observer = Ground_Observer()
+        
 
-        self.IR_sensor = I2CDevice(Port.s2,0x08)
+        
 
-        self.IR_position
-        self.IR_strength
+        self._ground_colour_sensor = ColorSensor(Port.S3) # Add port
+
+        self.ground_observer = Ground_Observer(self.state_controller,self._ground_colour_sensor)
+
+        self.IR_sensor = I2CDevice(Port.S2,0x08)
+
+        irData = self.IR_sensor.read(2,2)
+
+        self.IR_position = irData[0]
+        self.IR_strength = irData[1]
         self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
         self.IR_thread.start()
 
