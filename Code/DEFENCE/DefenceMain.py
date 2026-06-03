@@ -37,7 +37,8 @@ class Defender():
         self.ev3 = EV3Brick()
         self.team = 'defence'
         self.StateController = State_Controller(self,self.team, 0,0,0,0,0,0,0)
-
+        self.has_ball = False
+        
         self.leftMotor = Motor(Port.B)
         self.rightMotor = Motor(Port.C)
         self.pushMotor = Motor(Port.D)
