@@ -70,10 +70,9 @@ class StateActions:
         self.Driver.turn_angle(10)
         
 
-    # Positioning
+    # Positioning, needs more complex code.
     def Positioning(self):
-        # Go to point 100,100 when positioning
-        self.Driver.drive_to_point(100,100)
+        pass
 
 
     # Receiving
