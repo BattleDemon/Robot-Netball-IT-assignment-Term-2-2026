@@ -72,8 +72,8 @@ class StateActions:
 
     # Positioning
     def Positioning(self):
-        # Drive to (100,100)
-        self.Driver.drive_to_point(100,100)
+        # Drive to (100,200)
+        self.Driver.drive_to_point(100,200)
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
