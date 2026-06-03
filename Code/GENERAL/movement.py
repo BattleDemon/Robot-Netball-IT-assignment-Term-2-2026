@@ -70,6 +70,52 @@ class Driver:
         self.team = team
         self.gyro = gyro
 
+        # ╔══════════════════════════════════════════════════════════════════╗
+        # ║  C O O R D I N A T E   S Y S T E M   (read this before testing!) ║
+        # ╚══════════════════════════════════════════════════════════════════╝
+        # Field is a rectangle: 0,0 at bottom-left (defence start area)
+        #   x = 0 to 158  (short side, left -> right)
+        #   y = 0 to 219  (long side,  bottom -> top)
+        #
+        #         Y=219  ┌──────────────────┐
+        #                │     ATTACK       │  <-- attack starts around (79, 199)
+        #                │    (top half)    │
+        #                │                  │
+        #         Y=0    │     DEFENCE      │  <-- defence starts around (79, 20)
+        #                └──────────────────┘
+        #               X=0                X=158
+        #
+        # Heading 0 deg  = facing +Y (toward the attack end)
+        # Heading 90 deg = facing +X (toward the right wall)
+        # Heading 180    = facing -Y (toward the defence end)
+        # Heading 270    = facing -X (toward the left wall)
+        #
+        # IMPORTANT: The EV3 brick screen shows x and y. If your robot
+        # thinks it is moving the wrong way on the field:
+        #   1. Check which motor is left and which is right.
+        #      Left motor should be on the LEFT side when looking from
+        #      the back of the robot toward the front.
+        #   2. If X increases when it should decrease, swap motor ports.
+        #   3. If the robot drives backwards when told to go forward,
+        #      reverse the motor Direction in the Motor() call:
+        #         Motor(Port.B, positive_direction=Direction.COUNTERCLOCKWISE)
+        #   4. If turning is backwards (pivots the wrong way), swap the
+        #      "LEFT" / "RIGHT" calls in pivot_angle() or check motor wiring.
+        #
+        # TWEAKING ODOMETRY:
+        #   - WHEEL_DIAMETER and TRACK_WIDTH live in robot_config.py.
+        #   - If the robot drives 30 cm but odometry says 25 cm,
+        #     your WHEEL_DIAMETER is too small -- increase it.
+        #   - If the robot turns 90 deg but odometry drifts 120 deg,
+        #     your TRACK_WIDTH is too small -- increase it.
+        #   - Gyro sensor (if plugged in) blends 10 % into heading to
+        #     reduce drift. If it makes things worse, unplug the gyro
+        #     or change the 0.9 / 0.1 blend in _odometry_loop().
+        #
+        # TIP: Run test_movement.py -- it will print positions after
+        # each action so you can see what is wrong.
+        # ═══════════════════════════════════════════════════════════════════
+
         # //////// Pose ////////
         if self.team == "ATTACK":
             self.x = START_ATTACK_X

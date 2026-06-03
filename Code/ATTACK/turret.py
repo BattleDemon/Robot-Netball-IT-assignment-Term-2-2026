@@ -69,7 +69,7 @@ class Turret:
             return False
 
         # dead zone -- if IR says 5-ish we are pretty centred
-        if 4 <= pos <= 6 and strengh > brain.IR_MIN_STRENGTH:   # typo: strengh
+        if 4 <= pos <= 6 and strength > brain.IR_MIN_STRENGTH:
             self.turret_motor.stop(Stop.BRAKE)
             return True
 

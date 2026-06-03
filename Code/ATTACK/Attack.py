@@ -7,8 +7,11 @@
 ╚══════════════════════════════════════════════════════════════════╝
 
 This file runs the state machine that ties everything together.
-Zen handles the movement + grabbing stuff.
-Gabe handles the conveyor belt, turret targeting and shooting.
+Zen handles the movement + arm/claw grabbing stuff.
+Gabe handles the turret targeting and shooting.
+
+The robot uses an arm + claw (not a conveyor belt).
+Arm code needs to be added by Zen once the build is finalised.
 
 Code commenting inspired by DoGzTheFiGhTeR, GPC Script developer for the Cronus Zen and Cronusmax.
 '''
@@ -31,8 +34,34 @@ import os
 
 # ─── Our own files ───
 from turret import Turret
-from conveyor import Conveyor
+# TODO: replace conveyor import with an arm/claw module once Zen writes it.
+# from conveyor import Conveyor   # old conveyor belt -- REMOVED 03/06
 import brain
+
+
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  A R M / C L A W   N O T E S   (03/06 update by Gabe)           ║
+# ╚══════════════════════════════════════════════════════════════════╝
+# The robot now uses a vertical arm + claw instead of a conveyor belt.
+#
+# States that need re-wiring:
+#   BALL_COLLECT  -> lower arm, open claw, grab ball, raise arm
+#   ARM_LOADING   (was CONVEYOR_BACK) -> hold ball in claw, pivot toward hoop
+#   ALIGNING      -> turret aims using IR / ultrasonic (unchanged)
+#   SHOOTING      -> open claw to drop ball into spinning flywheel (unchanged)
+#
+# Zen: create an arm.py with class Arm that has raise_arm(), lower_arm(),
+#      open_claw(), close_claw() methods, then swap it in below.
+#      If you prefer, just put the motor calls directly inside the state
+#      handlers instead of a separate module.
+#
+# Motors needed on this EV3 (or Zen's slave EV3):
+#   arm_motor   -- lifts/lowers the arm (Port.C or whichever)
+#   claw_motor  -- opens/closes the claw (Port.D or whichever)
+#
+# Until arm.py exists the CONVEYOR_BACK state will just timeout
+# and skip straight to ALIGNING.
+# ═══════════════════════════════════════════════════════════════════
 
 
 # ╔══════════════════════════════════════════════════════════════════╗
@@ -75,8 +104,12 @@ class Attacker:
         # ports left empty for now -- fill in once build is done
         self.turret_motor   = Motor(Port.A)   # spins the head left/right
         self.shooter_motor  = Motor(Port.B)   # flick / punch the ball
-        self.conveyor_motor = Motor(Port.C)   # belt that drags ball back
+        # TODO: Zen 03/06 -- arm_motor + claw_motor go here.
+        # self.arm_motor  = Motor(Port.C)   # lifts arm up/down
+        # self.claw_motor = Motor(Port.D)   # opens/closes grip
         # Port.D free for Zen's drive motors or other stuff (will need another EV3 like the defence robot)
+        # REMOVE the old conveyor_motor -- no longer used.
+        # self.conveyor_motor = Motor(Port.C)   # DEPRECATED: belt that drags ball back
 
         # ── sensors ──
         # Port.S1 is free now -- we trust timing instead of a ball sensor
@@ -94,8 +127,10 @@ class Attacker:
         self.ir_thread.start()
 
         # ── subsystems ──
-        self.turret   = Turret(self)
-        self.conveyor = Conveyor(self)
+        self.turret = Turret(self)
+        # TODO: Zen -- add Arm(self) here once arm.py is written.
+        # self.arm = Arm(self)
+        # REMOVE: Conveyor(self) -- robot uses arm + claw now, not conveyor belt
 
         # ── state machine ──
         self.controller = StateController()
@@ -168,7 +203,7 @@ class Attacker:
             elif s == State.CONVEYOR_BACK:
                 self.do_conveyor_back()
             elif s == State.ALIGNING:
-                self.do_alining(btns)   # typo -- should be do_aligning
+                self.do_aligning()   # Gabe 03/06: fixed typo from 'do_alining', removed unused btns arg
             elif s == State.SHOOTING:
                 self.do_shooting()
             elif s == State.FOUL:
@@ -231,12 +266,16 @@ class Attacker:
         self.has_ball = False
         # wait a sec then go back to idle
         if self.state_time() > 1.5:
-            self.conveyor.return_front()   # typo -- should be return_to_front()
+            # TODO: Zen -- add arm.reset() or arm.lower_arm() here
+            # if you want the arm to return to a ready position after shooting.
+            # OLD: self.conveyor.return_to_front()   # removed 03/06 -- no conveyor
             self.enter_state(State.IDLE)
 
     def do_foul(self):
         # stop everything, wait 5 seconds (foul box penalty)
-        for m in [self.turret_motor, self.shooter_motor, self.conveyor_motor]:
+        # TODO: Zen -- add self.arm_motor.stop() and self.claw_motor.stop()
+        # once those motors are wired in.
+        for m in [self.turret_motor, self.shooter_motor]:
             m.stop()
         if self.state_time() > 5.0:
             self.enter_state(State.IDLE)
