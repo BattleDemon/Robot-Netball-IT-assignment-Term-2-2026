@@ -63,6 +63,8 @@ class StateActions:
     
     # retrieving
         #NEEDS ZENS TRIANGULATION CODE
+    def Retreiving(self):
+        pass
         
     # Locating
     def Locating(self):
@@ -70,9 +72,16 @@ class StateActions:
         self.Driver.turn_angle(10)
         
 
-    # Positioning, needs more complex code.
+    # Positioning, needs more complex code. 
+    # move to home spot and turn to face partner.
     def Positioning(self):
-        pass
+        # Drive to (100,100)
+        self.Driver.drive_to_point(100,100)
+        # get the angle to our teammate
+        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
+        # pivot to face them
+        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+
 
 
     # Receiving
@@ -116,7 +125,7 @@ class StateActions:
                 pass
             # if the robot is in the retreiving state
             elif Current_state == State.RETRIEVING:
-                pass # ADD RETREIVING CODE ONCE DONE
+                self.Retreiving() # ADD RETREIVING CODE ONCE DONE
             
 
             # if the robot is not in a foul state
