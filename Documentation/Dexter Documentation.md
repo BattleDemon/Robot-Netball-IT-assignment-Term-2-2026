@@ -355,11 +355,17 @@ Although due to the scale of this assignment and its limitation some of these mi
 
 ###### Overview of System
 
+
+
 ###### Justification for System
+
+The addition of this system was nessessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaborativly using requests.
 
 ###### System Code Snippets 
 
 ###### Issues with the System
+
+While developing the state control system, the following issues were encountered: 
 
 ###### Connection With Other Systems
 
