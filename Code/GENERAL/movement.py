@@ -212,25 +212,9 @@ class Driver:
         self.stop()
 
     def turn_angle(self, angle_deg, speed=TURN_SPEED):
-        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH
-        rotations = wheel_dist / WHEEL_CIRCUM
-        target_deg = rotations * 360.0
-
-        start_l = self.lm.angle()
-        start_r = self.rm.angle()
-
-        direction = 1 if angle_deg >= 0 else -1
-        self.lm.run(-speed * direction)
-        self.rm.run(speed * direction)
-
-        while True:
-            travelled = abs(self.lm.angle() - start_l)
-            if travelled >= target_deg:
-                break
-            time.sleep(0.01)
-
-        self.stop()
-        self.heading = (self.heading + angle_deg) % 360.0
+        '''Turn by pivoting around one wheel. Positive = clockwise.'''
+        side = "LEFT" if angle_deg >= 0 else "RIGHT"
+        self.pivot_angle(side, angle_deg, speed)
 
     def pivot(self, pivot_side, speed=DEFAULT_SPEED, duration_sec=None):
         if pivot_side == "LEFT":
@@ -247,6 +231,31 @@ class Driver:
         if duration_sec is not None:
             time.sleep(duration_sec)
             self.stop()
+
+    def pivot_angle(self, pivot_side, angle_deg, speed=TURN_SPEED):
+        '''Pivot around one wheel by a precise angle (degrees).'''
+        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH * 2
+        target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
+
+        if pivot_side == "LEFT":
+            self.lm.brake()
+            direction = 1 if angle_deg >= 0 else -1
+            self.rm.run(speed * direction)
+            motor = self.rm
+        elif pivot_side == "RIGHT":
+            self.rm.brake()
+            direction = 1 if angle_deg >= 0 else -1
+            self.lm.run(-speed * direction)
+            motor = self.lm
+        else:
+            raise ValueError("pivot_side must be 'LEFT' or 'RIGHT'")
+
+        start = motor.angle()
+        while abs(motor.angle() - start) < target_deg:
+            time.sleep(0.01)
+
+        self.stop()
+        self.heading = (self.heading + angle_deg) % 360.0
 
     # ─── Position / pose getters ───
     def get_position(self):
