@@ -77,11 +77,11 @@ class Driver:
         #   x = 0 to 158  (short side, left -> right)
         #   y = 0 to 219  (long side,  bottom -> top)
         #
-        #         Y=219  ┌──────────────────┐
+        #          Y=219 ┌──────────────────┐
         #                │     ATTACK       │  <-- attack starts around (79, 199)
         #                │    (top half)    │
         #                │                  │
-        #         Y=0    │     DEFENCE      │  <-- defence starts around (79, 20)
+        #            Y=0 │     DEFENCE      │  <-- defence starts around (79, 20)
         #                └──────────────────┘
         #               X=0                X=158
         #
@@ -90,7 +90,7 @@ class Driver:
         # Heading 180    = facing -Y (toward the defence end)
         # Heading 270    = facing -X (toward the left wall)
         #
-        # IMPORTANT: The EV3 brick screen shows x and y. If your robot
+        # IMPORTANT: The EV3 brick screen shows x and y. If our robot
         # thinks it is moving the wrong way on the field:
         #   1. Check which motor is left and which is right.
         #      Left motor should be on the LEFT side when looking from
