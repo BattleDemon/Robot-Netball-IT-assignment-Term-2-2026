@@ -48,7 +48,7 @@ class State_Controller:
         ball_dist,
         hoop_x,
         hoop_y,
-    ):
+    ): # Opened in NeoVim and it did that (Cascading inputs for class)
         self.owner = owner  # Local stored refrence to owner
         self.owner_type: str = robot_type  # Robot role: "attack" or "defence"
 
@@ -65,11 +65,11 @@ class State_Controller:
         self.position: tuple = (x_pos, y_pos, angle)
         self.others_position: tuple = ()
 
-        # Ball tracking for this robot and the other
-        self.ball_position: int = ball_angle
-        self.ball_distance: float = ball_dist
-        self.others_ball_position: tuple = ()
-        self.others_ball_dist: float = 0.0
+        # Ball Tracking for this robot and others
+        self.distance_to_ball: float = ball_dist
+        self.angle_to_ball: float = ball_angle
+        self.others_distance_to_ball: float 
+        self.others_angle_to_ball: float 
 
         # Ball posession
         self.has_ball: bool = False
@@ -89,8 +89,12 @@ class State_Controller:
 
     # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):
-        self.ball_position = angle
-        self.ball_distance = distance
+        self.distance_to_ball = distance
+        self.angle_to_ball = angle
+
+    # Return a refrence to the others angle to ball
+    def get_others_ball_angle(self):
+        return self.others_angle_to_ball
 
     # toggle ball possession
     def update_have_ball(self):
@@ -131,8 +135,8 @@ class State_Controller:
         snapshot = {
             "state": self.state,
             "position": self.position,
-            "ball position": self.ball_position,
-            "ball distance": self.ball_distance,
+            "ball distance": self.distance_to_ball,
+            "ball angle": self.angle_to_ball,
             "has ball": self.has_ball,
             "request": self.request,
         }
@@ -144,8 +148,8 @@ class State_Controller:
 
         self.others_state = snapshot["state"]
         self.others_position = snapshot["position"]
-        self.others_ball_position = snapshot["ball position"]
-        self.others_ball_dist = snapshot["ball distance"]
+        self.others_distance_to_ball = snapshot["ball distance"]
+        self.others_angle_to_ball = snapshot["ball angle"]
         self.others_has_ball = snapshot["has ball"]
         self.incoming_request = snapshot["request"]
 
