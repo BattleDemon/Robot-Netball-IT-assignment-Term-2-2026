@@ -360,6 +360,8 @@ Although due to the scale of this assignment and its limitation some of these mi
 
 #### Designing the Defence Robot
 
+The designing of the defence robot was a collaborative process between Hugo and I, where I primarily focused on its chassis, making sure it could hold the weight of the other equipment as well as have enough space, while remaining in the 30cm diameter circle we are allowed. In addition to this i attached the IR sensor, colour sensors, motors (exclusing flywheel) and EV3's. While Hugo focused on building the flywheels system, and did most of its attaching to the chassis.
+
 ###### Problems During Production
 
 ###### Design Notes and Justification
@@ -481,6 +483,10 @@ For the individual sections of code, as to not force one person to do more than 
  Describe contributions of each member
  Show how decisions were made
  Explain how challenges were resolved
+
+## Evidence of Working Systems
+
+
 
 ## Reflection 
 
