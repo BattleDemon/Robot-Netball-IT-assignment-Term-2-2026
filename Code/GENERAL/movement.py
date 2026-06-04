@@ -424,12 +424,6 @@ class Driver:
 
         return False
 
-    def start_foul_monitor(self):
-        t = Thread(target=self._foul_monitor_loop)
-        t.daemon = True
-        t.start()
-
-
     def shutdown(self):
         self._running = False
         self.stop()
