@@ -107,7 +107,7 @@ class StateActions:
 
     # Positioning
     def Positioning(self):
-        # Drive to (100,200)
+        # Drive to start position
         self.Driver.drive_to_point(robot_config.START_ATTACK_X,robot_config.START_ATTACK_Y)
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
