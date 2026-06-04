@@ -266,13 +266,6 @@ class Driver:
     # ║  Use  pivot_angle() when you HAVE the ball (netball foot rule)   ║
     # ╚══════════════════════════════════════════════════════════════════╝
 
-    def turn_angle(self, angle_deg, speed=TURN_SPEED):
-        '''
-        Spin the robot in place by running wheels opposite directions.
-        This is the default turn - fast and no lateral movement.
-        For netball foot-plant rules call pivot_angle() directly.
-        '''
-        self.spin_angle(angle_deg, speed)
 
     def spin_angle(self, angle_deg, speed=TURN_SPEED):
         '''
