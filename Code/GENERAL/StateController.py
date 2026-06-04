@@ -48,7 +48,7 @@ class State_Controller:
         ball_dist,
         hoop_x,
         hoop_y,
-    ): # Opened in NeoVim and it did that (Cascading inputs for class)
+    ):  # Opened in NeoVim and it did that (Cascading inputs for class)
         self.owner = owner  # Local stored refrence to owner
         self.owner_type: str = robot_type  # Robot role: "attack" or "defence"
 
@@ -68,8 +68,8 @@ class State_Controller:
         # Ball Tracking for this robot and others
         self.distance_to_ball: float = ball_dist
         self.angle_to_ball: float = ball_angle
-        self.others_distance_to_ball: float 
-        self.others_angle_to_ball: float 
+        self.others_distance_to_ball: float
+        self.others_angle_to_ball: float
 
         # Ball posession
         self.has_ball: bool = False
@@ -85,7 +85,7 @@ class State_Controller:
 
     # update local robot position and heading
     def update_position(self, x, y, angle):
-        self.position = (x, y, angle)
+        self.position = [x, y, angle]
 
     # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):
@@ -254,11 +254,15 @@ class State_Controller:
         # Neither robot has the ball
         if not self.has_ball and not self.others_has_ball:
             # The Ball has a known location
-            if self.ball_distance is not None:
+            if self.distance_to_ball is not None:
                 # This robot is closer, or the other robot is occupied
-                if self.ball_distance <= self.others_ball_dist or self.others_state in (
-                    State.FOUL,
-                    State.POSITIONING,
+                if (
+                    self.distance_to_ball <= self.others_distance_to_ball
+                    or self.others_state
+                    in (
+                        State.FOUL,
+                        State.POSITIONING,
+                    )
                 ):
                     # Attacker is near the hoop, better to hold its positon and let defence retreive
                     if self.owner_type == "attack" and self._near_hoop():
@@ -278,7 +282,7 @@ class State_Controller:
                 return
 
             # neither robot knows where the ball is, lets find it
-            if self.others_ball_dist is None and self.others_ball_dist is None:
+            if self.distance_to_ball is None and self.others_distance_to_ball is None:
                 self.state = State.LOCATING
                 self.request = Request.NONE
                 return
