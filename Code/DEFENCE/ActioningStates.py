@@ -18,6 +18,7 @@ from pybricks.media.ev3dev import SoundFile, ImageFile, Font
 from math import pi, tan, sin, cos
 import os
 import threading
+import time
 
 from GENERAL import movement,IRlocation
 from GENERAL.StateController import State_Controller, State
@@ -137,4 +138,5 @@ class StateActions:
                     # Drive home from the foul box
                     self.Driver.home_from_foul_box()
             # Refresh and recalculate the state.
-            self.StateController.determine_state()        
+            self.StateController.determine_state()     
+            time.sleep(0.1)     
