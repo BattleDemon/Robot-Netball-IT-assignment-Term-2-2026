@@ -33,7 +33,7 @@ FIELD_WIDTH  = 158.0          # short side  (x axis) in cm
 FIELD_LENGTH = 219.0          # long side   (y axis) in cm
 
 # ╔══════════════════════════════════════════════════════════════════╗
-# ║                    F I E L D   PO S I T I O N S                  ║
+# ║                    R O B O T   PO S I T I O N S                  ║
 # ╚══════════════════════════════════════════════════════════════════╝
 
 START_ATTACK_HEADING  = 180   # facing negative Y (toward hoop)
