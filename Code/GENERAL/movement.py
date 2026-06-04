@@ -429,14 +429,6 @@ class Driver:
         t.daemon = True
         t.start()
 
-    def _foul_monitor_loop(self):
-        while self._running:
-            if self.state_controller:
-                if (self.state_controller.get_state() == State.FOUL and
-                    self.state_controller.get_foul_elapsed()):
-                    time.sleep(0.5)
-                    self.home_from_foul_box()
-            time.sleep(0.2)
 
     def shutdown(self):
         self._running = False
