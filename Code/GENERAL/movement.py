@@ -37,7 +37,7 @@ from robot_config import (
 )
 
 # ─── Shared state machine (Dexter's code) ───
-from state_controller import State, State_Controller
+from StateController import State, State_Controller
 
 
 # ╔══════════════════════════════════════════════════════════════════╗
@@ -571,15 +571,3 @@ class Driver:
         time.sleep(0.1)
 
 
-# ╔══════════════════════════════════════════════════════════════════╗
-# ║              B A C K W A R D S   C O M P A T                     ║
-# ╚══════════════════════════════════════════════════════════════════╝
-
-class MyTank(Driver):
-    '''Old name - redirects to Driver so Hugo's code keeps working.'''
-    def __init__(self, ev3, Lmotor, Rmotor, csL, usF, csR, usS):
-        super().__init__(ev3, Lmotor, Rmotor, csL, team=TEAM)
-        self.usF = usF
-        self.csR = csR
-        self.usS = usS
-        self.csL = csL
