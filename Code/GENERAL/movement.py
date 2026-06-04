@@ -131,10 +131,7 @@ class Driver:
                 self.heading += d_theta
                 self.heading %= 2 * pi   # keep in [0, 2π)
 
-                if self.gyro is not None:
-                    # Gyro returns degrees, convert to radians
-                    gyro_rad = radians(self.gyro.angle() - self._gyro_offset) % (2*pi)
-                    self.heading = (0.9 * self.heading + 0.1 * gyro_rad) % (2*pi)
+            
 
                 # Update position using current heading in radians
                 self.x += d_centre * sin(self.heading)
