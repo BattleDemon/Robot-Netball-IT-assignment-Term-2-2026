@@ -62,8 +62,8 @@ class State_Controller:
         self.others_state: State = State.IDLE
 
         # This robots and the other's positions
-        self.position: list = [x_pos, y_pos, angle]
-        self.others_position: list = []
+        self.position: tuple = (x_pos, y_pos, angle)
+        self.others_position: tuple = ()
 
         # Ball Tracking for this robot and others
         self.distance_to_ball: float = ball_dist
@@ -85,7 +85,7 @@ class State_Controller:
 
     # update local robot position and heading
     def update_position(self, x, y, angle):
-        self.position = [x, y, angle]
+        self.position = (x, y, angle)
 
     # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):

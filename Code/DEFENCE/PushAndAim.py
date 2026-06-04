@@ -17,7 +17,7 @@ class PushAndAim:
         self.push_motor = push_motor
 
     # Calculate the angle between us and the other robot
-    def get_aim_angle(self, our_position: list, others_position: list):
+    def get_aim_angle(self, our_position: tuple, others_position: tuple):
 
         # Locally assign x, y, and angle
         our_x, our_y, our_angle = our_position
