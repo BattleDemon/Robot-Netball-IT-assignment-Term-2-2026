@@ -257,12 +257,98 @@ class Driver:
 
         self.stop()
 
+    # ╔══════════════════════════════════════════════════════════════════╗
+    # ║                    T U R N I N G   M E T H O D S                 ║
+    # ║                                                                  ║
+    # ║  Positive angle = clockwise (following robot’s right‑hand rule)  ║
+    # ║                                                                  ║
+    # ║  Use  spin_angle()  when tracking the ball (fast, stays in place)║
+    # ║  Use  pivot_angle() when you HAVE the ball (netball foot rule)   ║
+    # ╚══════════════════════════════════════════════════════════════════╝
+
     def turn_angle(self, angle_deg, speed=TURN_SPEED):
-        '''Turn by pivoting around one wheel. Positive = clockwise.'''
-        side = "LEFT" if angle_deg >= 0 else "RIGHT"
-        self.pivot_angle(side, angle_deg, speed)
+        '''
+        Spin the robot in place by running wheels opposite directions.
+        This is the default turn - fast and no lateral movement.
+        For netball foot-plant rules call pivot_angle() directly.
+        '''
+        self.spin_angle(angle_deg, speed)
+
+    def spin_angle(self, angle_deg, speed=TURN_SPEED):
+        '''
+        Rotate in place (both wheels opposite).
+        Positive angle_deg = clockwise.
+        Odometry heading is forced to the exact target to avoid drift.
+        '''
+        # Distance each wheel travels when spinning about robot centre
+        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH
+        target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
+
+        # Clockwise: left forward, right backward
+        direction = 1 if angle_deg >= 0 else -1
+        self.lm.run(speed * direction)
+        self.rm.run(-speed * direction)
+
+        start_l = self.lm.angle()
+        start_r = self.rm.angle()
+
+        # Wait until both wheels have moved the required amount
+        while True:
+            done_l = abs(self.lm.angle() - start_l) >= target_deg
+            done_r = abs(self.rm.angle() - start_r) >= target_deg
+            if done_l and done_r:
+                break
+            time.sleep(0.01)
+
+        self.stop()
+        # Override heading to exactly where we should be
+        self.heading = (self.heading + angle_deg) % 360.0
+        # Reset encoder references so the odometry thread doesn't double-count
+        self._last_l = self.lm.angle()
+        self._last_r = self.rm.angle()
+
+    def pivot_angle(self, pivot_side, angle_deg, speed=TURN_SPEED):
+        '''
+        Pivot around one braked wheel (netball legal).
+        pivot_side must be "LEFT" or "RIGHT".
+        Positive angle_deg = clockwise when looking from above.
+        '''
+        # Convert angle to wheel rotation distance
+        # For a pivot about one wheel, the moving wheel travels an arc
+        # of radius = 2 * TRACK_WIDTH (full circle of diameter 2*TW).
+        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH * 2
+        target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
+
+        if pivot_side == "LEFT":
+            # Left wheel braked, right wheel moves
+            self.lm.brake()
+            # To turn clockwise (positive angle), right wheel must go BACKWARD
+            direction = -1 if angle_deg >= 0 else 1
+            self.rm.run(speed * direction)
+            motor = self.rm
+        elif pivot_side == "RIGHT":
+            # Right wheel braked, left wheel moves
+            self.rm.brake()
+            # To turn clockwise, left wheel must go FORWARD
+            direction = 1 if angle_deg >= 0 else -1
+            self.lm.run(speed * direction)
+            motor = self.lm
+        else:
+            # Invalid pivot side - silently do nothing (no crash)
+            return
+
+        start = motor.angle()
+        while abs(motor.angle() - start) < target_deg:
+            time.sleep(0.01)
+
+        self.stop()
+        self.heading = (self.heading + angle_deg) % 360.0
 
     def pivot(self, pivot_side, speed=DEFAULT_SPEED, duration_sec=None):
+        '''
+        Timed pivot (no angle control). Useful for quick emergency turns.
+        pivot_side must be "LEFT" or "RIGHT".
+        '''
         if pivot_side == "LEFT":
             self.lm.stop()
             self.lm.brake()
@@ -272,36 +358,12 @@ class Driver:
             self.rm.brake()
             self.lm.run(speed)
         else:
-            raise ValueError("pivot_side must be 'LEFT' or 'RIGHT'")
+            # Bad side string - do nothing
+            return
 
         if duration_sec is not None:
             time.sleep(duration_sec)
             self.stop()
-
-    def pivot_angle(self, pivot_side, angle_deg, speed=TURN_SPEED):
-        '''Pivot around one wheel by a precise angle (degrees).'''
-        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH * 2
-        target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
-
-        if pivot_side == "LEFT":
-            self.lm.brake()
-            direction = 1 if angle_deg >= 0 else -1
-            self.rm.run(speed * direction)
-            motor = self.rm
-        elif pivot_side == "RIGHT":
-            self.rm.brake()
-            direction = 1 if angle_deg >= 0 else -1
-            self.lm.run(-speed * direction)
-            motor = self.lm
-        else:
-            raise ValueError("pivot_side must be 'LEFT' or 'RIGHT'")
-
-        start = motor.angle()
-        while abs(motor.angle() - start) < target_deg:
-            time.sleep(0.01)
-
-        self.stop()
-        self.heading = (self.heading + angle_deg) % 360.0
 
     # ─── Position / pose getters ───
     def get_position(self):
@@ -569,5 +631,3 @@ class Driver:
         self._running = False
         self.stop()
         time.sleep(0.1)
-
-
