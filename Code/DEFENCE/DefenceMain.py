@@ -65,7 +65,8 @@ class Defender():
 
         #IR detection initialisation code goes here.
         self.irLocator = ir_controller(self.ir_sensor,self.StateController)
-
+        self.irThread = Thread(target=self.irLocator.ir_sensing)
+        self.irThread.start()
         self.Start()
         
     def ball_sensing(self):
