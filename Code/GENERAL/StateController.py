@@ -62,8 +62,8 @@ class State_Controller:
         self.others_state: State = State.IDLE
 
         # This robots and the other's positions
-        self.position: list = [x_pos, y_pos, angle]
-        self.others_position: list = []
+        self.position: tuple = (x_pos, y_pos, angle)
+        self.others_position: tuple = ()
 
         # Ball Tracking for this robot and others
         self.distance_to_ball: float = ball_dist
@@ -85,7 +85,7 @@ class State_Controller:
 
     # update local robot position and heading
     def update_position(self, x, y, angle):
-        self.position = [x, y, angle]
+        self.position = (x, y, angle)
 
     # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):
@@ -202,7 +202,7 @@ class State_Controller:
         if self.incoming_request != Request.NONE:
             if self.incoming_request == Request.PASS:
                 # Other robot wants to pass, accept if don't have ball
-                if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
+                if not self.has_ball and self.state not in [State.FOUL, State.SHOOTING]:
                     self.state = State.RECEIVING
                     self.request = Request.RECEIVE  # Return confirmation
 
@@ -226,7 +226,7 @@ class State_Controller:
 
             if self.incoming_request == Request.REPOSITION:
                 # other robot need you to move from its path or reposition in some way
-                if self.state not in (State.FOUL, State.PASSING, State.SHOOTING):
+                if self.state not in [State.FOUL, State.PASSING, State.SHOOTING]:
                     self.state = State.POSITIONING
                     self.request = Request.NONE
 
