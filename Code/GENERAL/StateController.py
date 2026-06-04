@@ -62,8 +62,8 @@ class State_Controller:
         self.others_state: State = State.IDLE
 
         # This robots and the other's positions
-        self.position: tuple = (x_pos, y_pos, angle)
-        self.others_position: tuple = ()
+        self.position: list = [x_pos, y_pos, angle]
+        self.others_position: list = []
 
         # Ball Tracking for this robot and others
         self.distance_to_ball: float = ball_dist
@@ -128,6 +128,12 @@ class State_Controller:
     # get the foul elapsed
     def get_foul_elapsed(self):
         return self.foul_elapsed
+
+    def get_our_position(self):
+        return self.position
+
+    def get_others_posiiton(self):
+        return self.others_position
 
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
