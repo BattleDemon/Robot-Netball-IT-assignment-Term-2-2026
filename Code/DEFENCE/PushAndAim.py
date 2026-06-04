@@ -5,7 +5,7 @@
 # ++++++++++++++++++++++++++++++++
 
 # Import the needed math functions and the motor
-from math import atan2, degrees, pi
+from math import atan2, pi
 from pybricks.ev3devices import Motor
 import time
 

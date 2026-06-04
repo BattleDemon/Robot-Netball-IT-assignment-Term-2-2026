@@ -1,8 +1,8 @@
 #!/usr/bin/env pybricks-micropython
 
-# ++++++++++++++++++++++++++++++++*********
-# ======== Work of Hugo and Dexter ========
-# ++++++++++++++++++++++++++++++++*********
+# ++++++++++++++++++++++++++++++++**********
+# ==== Work of Hugo (started by dexter) ====
+# ++++++++++++++++++++++++++++++++**********
 
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (
@@ -22,73 +22,62 @@ import random
 
 # Local Imports
 from GENERAL.IRlocation import irLocator
-from GENERAL.state_controller import State, State_Controller
+from GENERAL.StateController import State, State_Controller
 from GENERAL.movement import Driver
 import CatchAndThrow
 from GENERAL.GroundDetectionSystem import Ground_Observer
 from GENERAL.communication import Communicator
-
+from DEFENCE.ActioningStates import StateActions
 
 # Main Robot class for the defending robot
 class Defender(): 
     def __init__(self):
+        
 
         self.ev3 = EV3Brick()
-
-        self.state_controller = State_Controller()
+        self.team = 'defence'
+        self.StateController = State_Controller(self,self.team, 0,0,0,0,0,0,0)
+        self.has_ball = False
         
-        self.team = "Defence"
+        self.leftMotor = Motor(Port.B)
+        self.rightMotor = Motor(Port.C)
+        self.pushMotor = Motor(Port.D)
 
-        self.Communicator = Communicator(self.state_controller,self.team, self.ev3)
-        self.Communication_Thread= Thread(target= self.Communicator.CommunicationLoop())
-        self.Communication_Thread.start()
+        self.GroundDetectionSensor = ColorSensor(Port.S1)
+        self.BallSensor = ColorSensor(Port.S4)
+        self.gyro = GyroSensor(Port.S2)
 
-        self.left_wheel
-        self.right_wheel
 
-        self.gyro
+        self.communicator = Communicator(self.StateController, self.team, self.ev3)
+        self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
+        self.communicationThread.start()
 
-        self.driver = Driver(self.ev3, self.left_wheel, self.right_wheel, self.team, self.gyro)
+        self.ballSensorThread = Thread(target=self.ball_sensing)
+        self.ballSensorThread.start()
 
-        self.has_ball
+        self.Driver = Driver(self.ev3, self.leftMotor,self.rightMotor,self.GroundDetectionSensor,self.team, self.gyro)
 
-        self.ball_sensor = ColorSensor() # add port
-        self.colour_sensor_thread = Thread(target=ball_sensing)
-        self.ball_sensor_thread.start()
 
-        self._ground_colour_sensor = ColorSensor() # Add port
+        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver)
 
-        self.ground_observer = Ground_Observer()
+        self.groundObserver = Ground_Observer(self.StateController, self.GroundDetectionSensor)
 
-        self.IR_sensor = I2CDevice(Port.s2,0x08)
+        #IR detection initialisation code goes here.
 
-        self.IR_position
-        self.IR_strength
-        self.IR_thread = Thread(target=irLocator, args=(self,self.IR_sensor))
-        self.IR_thread.start()
 
+        self.Start()
         
-
-
     def ball_sensing(self):
         while True:
-            if self.ball_sensor.color() == Color.BLACK:
+            if self.BallSensor.color() == Color.BLACK:
                 self.has_ball = True
                 while True:
-                    if self.ball_sensor.color() != Color.BLACK:
+                    if self.BallSensor.color() != Color.BLACK:
                         break
                 time.sleep(0.5)
             time.sleep(0.5)
 
-    def main(self):
-        self.ev3.screen.print("EV3 TEST READY")
-        time.sleep(1)
-        self.ev3.screen.clear()
-
+    def Start(self):
         while True:
-            self.ev3.screen.print(self.IR_position) 
-
-            time.sleep(0.4)
-
-defender = Defender()
-defender.main()
+            self.ev3.screen.print("WEEEE I am defending")
+            time.sleep(0.2)
