@@ -303,59 +303,66 @@ class Driver:
     def pivot_angle(self, pivot_side, angle_deg, speed=TURN_SPEED):
         '''
         Pivot around one braked wheel (netball legal).
-        pivot_side must be "LEFT" or "RIGHT".
+        The robot's centre moves in a small arc; position and heading
+        are updated automatically by the odometry thread.
         Positive angle_deg = clockwise when looking from above.
         '''
-        # Convert angle to wheel rotation distance
-        # For a pivot about one wheel, the moving wheel travels an arc
-        # of radius = 2 * TRACK_WIDTH (full circle of diameter 2*TW).
+        # Distance the moving wheel must travel (arc of radius = 2 * TRACK_WIDTH)
         wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH * 2
         target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
 
         if pivot_side == "LEFT":
             # Left wheel braked, right wheel moves
             self.lm.brake()
-            # To turn clockwise (positive angle), right wheel must go BACKWARD
-            direction = -1 if angle_deg >= 0 else 1
+            direction = -1 if angle_deg >= 0 else 1   # clockwise = right motor backward
             self.rm.run(speed * direction)
             motor = self.rm
         elif pivot_side == "RIGHT":
             # Right wheel braked, left wheel moves
             self.rm.brake()
-            # To turn clockwise, left wheel must go FORWARD
-            direction = 1 if angle_deg >= 0 else -1
+            direction = 1 if angle_deg >= 0 else -1  # clockwise = left motor forward
             self.lm.run(speed * direction)
             motor = self.lm
         else:
-            # Invalid pivot side - silently do nothing (no crash)
             return
 
+        # Wait until the moving wheel has travelled the required distance
         start = motor.angle()
         while abs(motor.angle() - start) < target_deg:
             time.sleep(0.01)
 
         self.stop()
-        self.heading = (self.heading + angle_deg) % 360.0
+
+        # The odometry thread has already updated x, y, and heading correctly.
+        # Reset encoder references so the next thread cycle doesn't double‑count.
+        self._last_l = self.lm.angle()
+        self._last_r = self.rm.angle()
 
     def pivot(self, pivot_side, speed=DEFAULT_SPEED, duration_sec=None):
         '''
-        Timed pivot (no angle control). Useful for quick emergency turns.
-        pivot_side must be "LEFT" or "RIGHT".
+        Timed pivot, useful for quick emergency turns.
+        Position and heading are updated by the odometry thread.
         '''
         if pivot_side == "LEFT":
+            self.lm.stop()
             self.lm.brake()
-            direction = 1 if angle_deg >= 0 else -1
-            self.rm.run(speed * direction)
-            motor = self.rm
-        else:  # RIGHT
+            self.rm.run(speed)
+        elif pivot_side == "RIGHT":
+            self.rm.stop()
             self.rm.brake()
             self.lm.run(speed)
         else:
-            # Bad side string - do nothing
             return
 
-        self.stop()
-        self.heading = (self.heading + angle_deg) % 360.0
+        if duration_sec is not None:
+            time.sleep(duration_sec)
+            self.stop()
+
+    # Reset encoder bookkeeping to prevent the thread from re‑using old deltas
+    self._last_l = self.lm.angle()
+    self._last_r = self.rm.angle()
+
+
 
     # ─── Position / pose getters ───
     def get_position(self):
@@ -430,6 +437,27 @@ class Driver:
         self.turn_angle(heading_error, TURN_SPEED)
         distance = sqrt(target_dx * target_dx + target_dy * target_dy)
         self.move_distance(distance, speed)
+
+    def reverse_drive_to_point(self, target_x, target_y, speed=DEFAULT_SPEED):
+        '''
+        Drive to a point by facing 180° away from it and reversing.
+        Useful when the robot's ball-handling gear is on the back,
+        or when you want to back into a position without turning around.
+        '''
+    # Same heading calculation as drive_to_point, then flipped
+    target_dx = target_x - self.x
+    target_dy = target_y - self.y
+    forward_heading = (90.0 - degrees(atan2(target_dy, target_dx))) % 360.0
+    reverse_heading = (forward_heading + 180) % 360.0
+
+    # Spin to face *away* from the target
+    heading_error = (reverse_heading - self.heading + 180) % 360 - 180
+    self.spin_angle(heading_error, TURN_SPEED)
+
+    # Move backward the correct distance
+    distance = sqrt(target_dx * target_dx + target_dy * target_dy)
+    self.move_distance(-distance, speed)   # negative = reverse
+
 
     # ╔══════════════════════════════════════════════════════════════════╗
     # ║              F O U L   B O X   H O M I N G                       ║
