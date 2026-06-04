@@ -37,3 +37,4 @@ class ir_controller:
 
         k = d/math.sin(math.radians(d_angle))
         self.my_distance_to_ball = k * math.sin(math.radians(self.others_angle_to_ball))
+        update_ball_angle_and_distance(self.my_angle_to_ball, self.my_distance_to_ball)
