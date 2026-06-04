@@ -368,44 +368,43 @@ Although due to the scale of this assignment and its limitation some of these mi
 
 #### The State Controller
 
-###### Overview of System
+###### Overview of State controller
 
 
 
-###### Justification for System
+###### Justification for State Controller
 
 The addition of this system was nessessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaborativly using requests.
 
-###### System Code Snippets 
+###### State Controller Code Snippets 
 
-###### Issues with the System
+###### Issues with the State controller
 
 While developing the state control system, the following issues were encountered: 
 
-###### Connection With Other Systems
+###### Connection With Other Systems and Collaborators
 
 #### Foul Detection and Ground Observation
 
-###### Overview of System
+###### Overview of Foul Detection and Ground Observation
+###### Justification for Foul Detection and Ground Observation
 
-###### Justification for System
+###### Foul Detection and Ground Observation Code Snippets 
 
-###### System Code Snippets 
+###### Issues with the Foul Detection and Ground Observation
 
-###### Issues with the System
-
-###### Connection With Other Systems
+###### Connection With Other Systems and Collaborators
 
 #### Pushing Ball and Aiming
-###### Overview of System
+###### Overview of Pushing Ball and Aiming
 
-###### Justification for System
+###### Justification for Pushing Ball and Aiming
 
-###### System Code Snippets 
+###### Pushing Ball and Aiming Code Snippets 
 
-###### Issues with the System
+###### Issues with the Pushing Ball and Aiming
 
-###### Connection With Other Systems
+###### Connection With Other Systems and Collaborators
 
 
  Record multiple development stages
