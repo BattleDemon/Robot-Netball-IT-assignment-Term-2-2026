@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "7418d45e08355aac",
@@ -182,23 +183,24 @@
   },
   "active": "092aa589b1ba16ff",
   "lastOpenFiles": [
-    "Brainstorming/Defence Brainstorm/Pictures/IMG20260520133042.jpg",
-    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_015133398.jpg",
+    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-231645.png",
+    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-211710.png",
+    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-193220.png",
     "Documentation/Dexter Documetation Unique Images/_20260430_015133398.jpg",
-    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_011621695.jpg",
-    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_020519027.jpg",
     "Documentation/Dexter Documetation Unique Images/PXL_20260430_198.jpg",
     "Documentation/Dexter Documetation Unique Images/PXL_20260430_015198.jpg",
     "Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg",
-    "Documentation/Dexter Documentation.md",
-    "Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4",
-    "Documentation/PicsandVids/ThridThrower.jpg",
-    "Documentation/PicsandVids/SecondThrower.jpg",
-    "Documentation/PicsandVids/FirstThrower.jpg",
-    "Documentation/PicsandVids",
     "Documentation/Dexter Documetation Unique Images",
+    "Documentation/Dexter Documentation.md",
+    "Documentation/PicsandVids/defencerobotballpropulsionprototypefinal2.jpeg",
+    "Documentation/PicsandVids/defencerobotballpropulsionprototypefinal1.jpeg",
+    "Documentation/PicsandVids/defencerobotballpropulsionprototypediscarded3.jpeg.jpeg",
+    "Documentation/PicsandVids/defencerobotballpropulsionprototypediscarded2.jpeg.jpeg",
+    "Documentation/PicsandVids/IMG_1023.mov",
+    "Code/GENERAL/irsensor_triangulation.py",
+    "Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4",
+    "Documentation/PicsandVids",
     "Code/DEFENCE/ActioningStates.py",
-    "Code/ATTACK/ActioningStates.py",
-    "Code/GENERAL/irsensor_triangulation.py"
+    "Code/ATTACK/ActioningStates.py"
   ]
 }

@@ -436,7 +436,7 @@ Gone Wrong
 	- Didn't test
 	- Wasn't time to test
 	- Systems not been ready prevented testing
-	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up () and Gabe showed up () , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
+	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up (5:30-45 left at 7:20) and Gabe showed up (7:45) , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
 	- Member required explaination on importing from others code
 
 Things that went well 
