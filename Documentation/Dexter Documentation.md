@@ -52,7 +52,7 @@ The initial meeting gave the first rough designs of our robot, which included th
 **Ball Thrower Early Diagram**
 ![[PXL_20260430_198.jpg]]
 
-**Early EV3 Port Map **
+**Early EV3 Port Map**
 ![[Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg]]
 
 Additionally this early meeting provided an early version of the Attackers design, and although that was not my focus It can still be shown here.
