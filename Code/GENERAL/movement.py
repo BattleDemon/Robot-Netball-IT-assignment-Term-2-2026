@@ -30,22 +30,26 @@ from robot_config import (
     FOUL_BOX_TOP_LEFT_X, FOUL_BOX_TOP_LEFT_Y,
     FOUL_BOX_BOTTOM_RIGHT_X, FOUL_BOX_BOTTOM_RIGHT_Y,
     START_ATTACK_X, START_ATTACK_Y, START_DEFENCE_X, START_DEFENCE_Y,
-    START_ATTACK_HEADING, START_DEFENCE_HEADING,
+    START_ATTACK_HEADING, START_DEFENCE_HEADING,   # must be in radians!
     DEFAULT_SPEED, SLOW_SPEED, TURN_SPEED, ODO_SLEEP,
     FOUL_PROBE_STEP_CM, FOUL_PROBE_SPEED, FOUL_PROBE_ANGLE,
     FOUL_PROBE_MAX_CM, FOUL_BACKUP_CM, BOUNDARY_MARGIN,
     IR_BALL_CLOSE_THRESHOLD,
 )
 
+from StateController import State, State_Controller
+
 
 class Driver:
     '''
     Differential-drive controller with wheel odometry.
-    Tracks theoretical (x, y, heading) and knows the field layout.
+    Tracks theoretical (x, y, heading) in radians.
+    Heading 0 = +y, pi/2 = +x, pi = -y, 3pi/2 = -x.
 
     Integrates with Dexter's State_Controller:
-      - Foul state, ground colour, and position are pushed to the SC automatically.
-      - Foul signals are handled by updating the SC directly.
+      - Odometry position is pushed to the SC automatically (in radians).
+      - Foul and ground colour are ONLY read from the SC.
+      - Foul homing is triggered when the SC reports foul elapsed.
     '''
 
     def __init__(self, ev3, left_motor, right_motor, colour_sensor,
@@ -56,65 +60,19 @@ class Driver:
         self.cs = colour_sensor
         self.team = team
         self.gyro = gyro
-        self.state_controller = state_controller   # Dexter's State_Controller instance
+        self.state_controller = state_controller
 
-        # ╔══════════════════════════════════════════════════════════════════╗
-        # ║  C O O R D I N A T E   S Y S T E M   (read this before testing!) ║
-        # ╚══════════════════════════════════════════════════════════════════╝
-        # Field is a rectangle: 0,0 at bottom-left (defence start area)
-        #   x = 0 to 158  (short side, left -> right)
-        #   y = 0 to 219  (long side,  bottom -> top)
-        #
-        #          Y=219 ┌──────────────────┐
-        #                │     ATTACK       │  <-- attack starts around (79, 199)
-        #                │    (top half)    │
-        #                │                  │
-        #            Y=0 │     DEFENCE      │  <-- defence starts around (79, 20)
-        #                └──────────────────┘
-        #               X=0                X=158
-        #
-        # Heading 0 deg  = facing +Y (toward the attack end)
-        # Heading 90 deg = facing +X (toward the right wall)
-        # Heading 180    = facing -Y (toward the defence end)
-        # Heading 270    = facing -X (toward the left wall)
-        #
-        # IMPORTANT: The EV3 brick screen shows x and y. If our robot
-        # thinks it is moving the wrong way on the field:
-        #   1. Check which motor is left and which is right.
-        #      Left motor should be on the LEFT side when looking from
-        #      the back of the robot toward the front.
-        #   2. If X increases when it should decrease, swap motor ports.
-        #   3. If the robot drives backwards when told to go forward,
-        #      reverse the motor Direction in the Motor() call:
-        #         Motor(Port.B, positive_direction=Direction.COUNTERCLOCKWISE)
-        #   4. If turning is backwards (pivots the wrong way), swap the
-        #      "LEFT" / "RIGHT" calls in pivot_angle() or check motor wiring.
-        #
-        # TWEAKING ODOMETRY:
-        #   - WHEEL_DIAMETER and TRACK_WIDTH live in robot_config.py.
-        #   - If the robot drives 30 cm but odometry says 25 cm,
-        #     your WHEEL_DIAMETER is too small -- increase it.
-        #   - If the robot turns 90 deg but odometry drifts 120 deg,
-        #     your TRACK_WIDTH is too small -- increase it.
-        #   - Gyro sensor (if plugged in) blends 10 % into heading to
-        #     reduce drift. If it makes things worse, unplug the gyro
-        #     or change the 0.9 / 0.1 blend in _odometry_loop().
-        #
-        # TIP: Run test_movement.py -- it will print positions after
-        # each action so you can see what is wrong.
-        # ═══════════════════════════════════════════════════════════════════
-
-        # //////// Pose ////////
+        # //////// Pose (all in radians) ////////
         if self.team == "ATTACK":
             self.x = START_ATTACK_X
             self.y = START_ATTACK_Y
-            self.heading = START_ATTACK_HEADING
+            self.heading = START_ATTACK_HEADING   # radians
             self.hoop_x = HOOP_X
             self.hoop_y = HOOP_Y_ATTACK
         else:
             self.x = START_DEFENCE_X
             self.y = START_DEFENCE_Y
-            self.heading = START_DEFENCE_HEADING
+            self.heading = START_DEFENCE_HEADING   # radians
             self.hoop_x = HOOP_X
             self.hoop_y = HOOP_Y_DEFENCE
 
@@ -124,7 +82,8 @@ class Driver:
 
         # //////// Gyro offset ////////
         if self.gyro is not None:
-            self._gyro_offset = self.gyro.angle()
+            # Store gyro's current value (degrees) as offset to match initial heading
+            self._gyro_offset = self.gyro.angle()  # degrees
         else:
             self._gyro_offset = 0
 
@@ -139,39 +98,20 @@ class Driver:
         self._odo_thread.daemon = True
         self._odo_thread.start()
 
-    # ─── Foul signal interface (now updates State_Controller directly) ───
-
-    def signal_in_foul_box(self):
-        '''Dexter says: "you are in the foul box". Stop moving and set state.'''
-        if self.state_controller:
-            self.state_controller.set_foul_state()
-        self.stop()
-
-    def signal_foul_over(self):
-        '''Dexter says: "foul time over, resume play". Toggle elapsed flag.'''
-        if self.state_controller:
-            self.state_controller.toggle_foul_elapsed()
-
-    def signal_ground_colour(self, colour):
-        '''Dexter pushes ground colour reads here.'''
-        if self.state_controller:
-            self.state_controller.set_ground_colour(colour)
-
+    # ─── State listener helpers ───
     def is_foul_active(self):
-        '''True if the robot is currently in a foul state.'''
         if self.state_controller:
             return self.state_controller.get_state() == State.FOUL
         return False
 
     # ─── External data setters ───
-
     def set_other_robot_position(self, x, y, heading):
         self._other_robot_pos = (x, y, heading)
 
     def get_ball_data(self):
         return (self.IR_strength, self.IR_position)
 
-    # ─── Internal odometry thread ───
+    # ─── Internal odometry thread (radians) ───
     def _odometry_loop(self):
         while self._running:
             l_now = self.lm.angle()
@@ -185,23 +125,25 @@ class Driver:
                 d_right = (dr / 360.0) * WHEEL_CIRCUM
 
                 d_centre = (d_left + d_right) / 2.0
-                d_theta  = degrees((d_right - d_left) / TRACK_WIDTH)
+                # Change in heading in radians
+                d_theta = (d_right - d_left) / TRACK_WIDTH  # radians
 
                 self.heading += d_theta
-                self.heading %= 360.0
+                self.heading %= 2 * pi   # keep in [0, 2π)
 
                 if self.gyro is not None:
-                    gyro_heading = (self.gyro.angle() - self._gyro_offset) % 360
-                    self.heading = (0.9 * self.heading + 0.1 * gyro_heading) % 360
+                    # Gyro returns degrees, convert to radians
+                    gyro_rad = radians(self.gyro.angle() - self._gyro_offset) % (2*pi)
+                    self.heading = (0.9 * self.heading + 0.1 * gyro_rad) % (2*pi)
 
-                h_rad = radians(self.heading)
-                self.x += d_centre * sin(h_rad)
-                self.y += d_centre * cos(h_rad)
+                # Update position using current heading in radians
+                self.x += d_centre * sin(self.heading)
+                self.y += d_centre * cos(self.heading)
 
                 self._last_l = l_now
                 self._last_r = r_now
 
-                # Keep the State_Controller in sync with the real position
+                # Push to state controller (radians)
                 if self.state_controller:
                     self.state_controller.update_position(
                         self.x, self.y, self.heading
@@ -242,23 +184,19 @@ class Driver:
         self.stop()
 
     # ╔══════════════════════════════════════════════════════════════════╗
-    # ║                    T U R N I N G   M E T H O D S                 ║
-    # ║                                                                  ║
-    # ║  Positive angle = clockwise (following robot’s right‑hand rule)  ║
-    # ║  Use  spin_angle()  when tracking the ball (fast, stays in place)║
-    # ║  Use  pivot_angle() when you HAVE the ball (netball foot rule)   ║
+    # ║                    T U R N I N G   (radians)                     ║
     # ╚══════════════════════════════════════════════════════════════════╝
 
-    def spin_angle(self, angle_deg, speed=TURN_SPEED):
+    def spin_angle(self, angle_rad, speed=TURN_SPEED):
         '''
         Rotate in place (both wheels opposite).
-        Positive angle_deg = clockwise.
-        Odometry heading is forced to the exact target to avoid drift.
+        Positive angle_rad = clockwise.
         '''
-        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH
+        # Distance each wheel travels = angle_rad * (TRACK_WIDTH / 2)
+        wheel_dist = abs(angle_rad) * TRACK_WIDTH / 2.0
         target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
 
-        direction = 1 if angle_deg >= 0 else -1
+        direction = 1 if angle_rad >= 0 else -1
         self.lm.run(speed * direction)
         self.rm.run(-speed * direction)
 
@@ -273,27 +211,29 @@ class Driver:
             time.sleep(0.01)
 
         self.stop()
-        self.heading = (self.heading + angle_deg) % 360.0
+        # Update heading (radians)
+        self.heading = (self.heading + angle_rad) % (2*pi)
         self._last_l = self.lm.angle()
         self._last_r = self.rm.angle()
 
-    def pivot_angle(self, pivot_side, angle_deg, speed=TURN_SPEED):
+    def pivot_angle(self, pivot_side, angle_rad, speed=TURN_SPEED):
         '''
         Pivot around one braked wheel (netball legal).
-        Position and heading are tracked by the odometry thread.
-        Positive angle_deg = clockwise.
+        Position and heading tracked by odometry thread.
+        Positive angle_rad = clockwise.
         '''
-        wheel_dist = (abs(angle_deg) / 360.0) * pi * TRACK_WIDTH * 2
+        # Moving wheel travels arc length = angle_rad * TRACK_WIDTH
+        wheel_dist = abs(angle_rad) * TRACK_WIDTH
         target_deg = (wheel_dist / WHEEL_CIRCUM) * 360.0
 
         if pivot_side == "LEFT":
             self.lm.brake()
-            direction = -1 if angle_deg >= 0 else 1
+            direction = -1 if angle_rad >= 0 else 1   # clockwise = right motor backward
             self.rm.run(speed * direction)
             motor = self.rm
         elif pivot_side == "RIGHT":
             self.rm.brake()
-            direction = 1 if angle_deg >= 0 else -1
+            direction = 1 if angle_rad >= 0 else -1    # clockwise = left motor forward
             self.lm.run(speed * direction)
             motor = self.lm
         else:
@@ -307,41 +247,21 @@ class Driver:
         self._last_l = self.lm.angle()
         self._last_r = self.rm.angle()
 
-    def pivot(self, pivot_side, speed=DEFAULT_SPEED, duration_sec=None):
-        '''
-        Timed pivot (no angle control).
-        '''
-        if pivot_side == "LEFT":
-            self.lm.stop()
-            self.lm.brake()
-            self.rm.run(speed)
-        elif pivot_side == "RIGHT":
-            self.rm.stop()
-            self.rm.brake()
-            self.lm.run(speed)
-        else:
-            return
-
-        if duration_sec is not None:
-            time.sleep(duration_sec)
-            self.stop()
-
-        self._last_l = self.lm.angle()
-        self._last_r = self.rm.angle()
-
     # ─── Position / pose getters ───
     def get_position(self):
         return (self.x, self.y)
 
     def get_heading(self):
-        return self.heading
+        return self.heading   # radians
 
     def reset_position(self, x=0.0, y=0.0, heading=0.0):
+        '''heading in radians'''
         self.x = x
         self.y = y
-        self.heading = heading % 360.0
+        self.heading = heading % (2*pi)
         if self.gyro is not None:
-            self._gyro_offset = self.gyro.angle() - self.heading
+            # Store new gyro offset so blended heading matches
+            self._gyro_offset = self.gyro.angle() - degrees(self.heading)
         self._last_l = self.lm.angle()
         self._last_r = self.rm.angle()
 
@@ -352,10 +272,11 @@ class Driver:
         return sqrt(hoop_dx * hoop_dx + hoop_dy * hoop_dy)
 
     def angle_to_hoop(self):
+        '''Returns heading (radians) to hoop. 0 = +y, pi/2 = +x, etc.'''
         hoop_dx = self.hoop_x - self.x
         hoop_dy = self.hoop_y - self.y
-        angle_from_x = degrees(atan2(hoop_dy, hoop_dx))
-        target_heading = (90.0 - angle_from_x) % 360.0
+        angle_from_x = atan2(hoop_dy, hoop_dx)   # radians from +x axis
+        target_heading = (pi/2 - angle_from_x) % (2*pi)
         return target_heading
 
     def is_in_bounds(self):
@@ -363,22 +284,15 @@ class Driver:
                 BOUNDARY_MARGIN <= self.y <= FIELD_LENGTH - BOUNDARY_MARGIN)
 
     def is_in_foul_area(self):
-        '''
-        True if the State_Controller reports white ground colour
-        or if our theoretical position is inside a known foul box.
-        '''
         if self.state_controller:
             if self.state_controller.get_ground_colour() == "White":
                 return True
-
         if (FOUL_BOX_TOP_LEFT_X <= self.x <= FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH and
             FOUL_BOX_TOP_LEFT_Y <= self.y <= FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT):
             return True
-
         if (FOUL_BOX_BOTTOM_RIGHT_X <= self.x <= FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH and
             FOUL_BOX_BOTTOM_RIGHT_Y <= self.y <= FOUL_BOX_BOTTOM_RIGHT_Y + FOUL_BOX_HEIGHT):
             return True
-
         return False
 
     def sees_black_tape(self):
@@ -388,30 +302,28 @@ class Driver:
 
     # ─── Higher-level helpers ───
     def face_hoop(self, speed=TURN_SPEED):
-        target_heading = self.angle_to_hoop()
-        heading_error = (target_heading - self.heading + 180) % 360 - 180
-        self.spin_angle(heading_error, speed)
+        target = self.angle_to_hoop()   # radians
+        # shortest angular difference (radians)
+        error = (target - self.heading + pi) % (2*pi) - pi
+        self.spin_angle(error, speed)
 
     def drive_to_point(self, target_x, target_y, speed=DEFAULT_SPEED):
         target_dx = target_x - self.x
         target_dy = target_y - self.y
-        forward_heading = (90.0 - degrees(atan2(target_dy, target_dx))) % 360.0
-        heading_error = (forward_heading - self.heading + 180) % 360 - 180
-        self.spin_angle(heading_error, TURN_SPEED)
-        distance = sqrt(target_dx * target_dx + target_dy * target_dy)
+        forward_heading = (pi/2 - atan2(target_dy, target_dx)) % (2*pi)
+        error = (forward_heading - self.heading + pi) % (2*pi) - pi
+        self.spin_angle(error, TURN_SPEED)
+        distance = sqrt(target_dx*target_dx + target_dy*target_dy)
         self.move_distance(distance, speed)
 
     def reverse_drive_to_point(self, target_x, target_y, speed=DEFAULT_SPEED):
-        '''
-        Drive to a point by facing 180° away from it and reversing.
-        '''
         target_dx = target_x - self.x
         target_dy = target_y - self.y
-        forward_heading = (90.0 - degrees(atan2(target_dy, target_dx))) % 360.0
-        reverse_heading = (forward_heading + 180) % 360.0
-        heading_error = (reverse_heading - self.heading + 180) % 360 - 180
-        self.spin_angle(heading_error, TURN_SPEED)
-        distance = sqrt(target_dx * target_dx + target_dy * target_dy)
+        forward_heading = (pi/2 - atan2(target_dy, target_dx)) % (2*pi)
+        reverse_heading = (forward_heading + pi) % (2*pi)
+        error = (reverse_heading - self.heading + pi) % (2*pi) - pi
+        self.spin_angle(error, TURN_SPEED)
+        distance = sqrt(target_dx*target_dx + target_dy*target_dy)
         self.move_distance(-distance, speed)
 
     # ╔══════════════════════════════════════════════════════════════════╗
@@ -424,42 +336,42 @@ class Driver:
             return "TOP_LEFT"
         elif ir_strength > 0:
             return "BOTTOM_RIGHT"
-
         if self._other_robot_pos is not None:
             other_x, other_y, _ = self._other_robot_pos
             if other_y > FIELD_LENGTH / 2:
                 return "BOTTOM_RIGHT"
             else:
                 return "TOP_LEFT"
-
         if self.y > FIELD_LENGTH / 2:
             return "TOP_LEFT"
         else:
             return "BOTTOM_RIGHT"
 
     def _snap_position_after_foul_exit(self, box, exit_heading):
-        heading = round(exit_heading) % 360
+        '''exit_heading in radians, snapped to cardinal directions'''
+        # Convert to degrees for easy cardinal comparison, then back
+        heading_deg = round(degrees(exit_heading)) % 360
         if box == "TOP_LEFT":
-            if heading == 0:
+            if heading_deg == 0:
                 self.x = FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH / 2.0
                 self.y = FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT + 2.0
-            elif heading == 90:
+            elif heading_deg == 90:
                 self.x = FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH + 2.0
                 self.y = FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT / 2.0
-            elif heading == 180:
+            elif heading_deg == 180:
                 self.x = FOUL_BOX_TOP_LEFT_X + FOUL_BOX_WIDTH / 2.0
                 self.y = FOUL_BOX_TOP_LEFT_Y - 2.0
             else:
                 self.x = FOUL_BOX_TOP_LEFT_X - 2.0
                 self.y = FOUL_BOX_TOP_LEFT_Y + FOUL_BOX_HEIGHT / 2.0
         else:
-            if heading == 0:
+            if heading_deg == 0:
                 self.x = FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH / 2.0
                 self.y = FOUL_BOX_BOTTOM_RIGHT_Y - 2.0
-            elif heading == 90:
+            elif heading_deg == 90:
                 self.x = FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH + 2.0
                 self.y = FOUL_BOX_BOTTOM_RIGHT_Y + FOUL_BOX_HEIGHT / 2.0
-            elif heading == 180:
+            elif heading_deg == 180:
                 self.x = FOUL_BOX_BOTTOM_RIGHT_X + FOUL_BOX_WIDTH / 2.0
                 self.y = FOUL_BOX_BOTTOM_RIGHT_Y + FOUL_BOX_HEIGHT + 2.0
             else:
@@ -472,20 +384,16 @@ class Driver:
     def home_from_foul_box(self):
         if not self.state_controller:
             return False
-
         if not self.state_controller.get_foul_elapsed():
             return False
 
         box = self.guess_foul_box()
-
-        if box == "TOP_LEFT":
-            probe_angles = [0.0, 90.0, 180.0, 270.0]
-        else:
-            probe_angles = [180.0, 270.0, 0.0, 90.0]
+        # angles in radians: 0, pi/2, pi, 3pi/2
+        probe_angles = [0.0, pi/2, pi, 3*pi/2] if box == "TOP_LEFT" else [pi, 3*pi/2, 0.0, pi/2]
 
         for target_heading in probe_angles:
-            heading_error = (target_heading - self.heading + 180) % 360 - 180
-            self.spin_angle(heading_error, TURN_SPEED)
+            error = (target_heading - self.heading + pi) % (2*pi) - pi
+            self.spin_angle(error, TURN_SPEED)
 
             step_count = 0
             max_steps = int(FOUL_PROBE_MAX_CM / FOUL_PROBE_STEP_CM)
@@ -498,9 +406,8 @@ class Driver:
 
                 if colour == "Black":
                     self.move_distance(FOUL_PROBE_STEP_CM, FOUL_PROBE_SPEED)
-                    self.heading = target_heading % 360.0
+                    self.heading = target_heading % (2*pi)
                     self._snap_position_after_foul_exit(box, self.heading)
-                    # Reset foul state in the controller
                     self.state_controller.set_idle_state()
                     self.state_controller.toggle_foul_elapsed()
                     return True
@@ -508,7 +415,6 @@ class Driver:
                 if colour == "White":
                     self.move_distance(-FOUL_BACKUP_CM, SLOW_SPEED)
                     break
-
             else:
                 self.move_distance(-(step_count * FOUL_PROBE_STEP_CM), SLOW_SPEED)
 
@@ -528,9 +434,11 @@ class Driver:
 
     def _foul_monitor_loop(self):
         while self._running:
-            if self.state_controller and self.state_controller.get_foul_elapsed():
-                time.sleep(0.5)
-                self.home_from_foul_box()
+            if self.state_controller:
+                if (self.state_controller.get_state() == State.FOUL and
+                    self.state_controller.get_foul_elapsed()):
+                    time.sleep(0.5)
+                    self.home_from_foul_box()
             time.sleep(0.2)
 
     def shutdown(self):
