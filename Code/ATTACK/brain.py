@@ -45,7 +45,7 @@ def lookup_shot_time(distance_cm):
     '''Pick a flick duration based on measured distance.'''
     # round down to nearest 10
     bucket = int(distance_cm / 10) * 10
-    if buckt in SHOT_TABLE:   # typo: buckt
+    if bucket in SHOT_TABLE:   # Gabe 03/06: fixed typo from 'buckt'
         return SHOT_TABLE[bucket]
     # if we don't have a value, just use the max we have
     keys = sorted(SHOT_TABLE.keys())
