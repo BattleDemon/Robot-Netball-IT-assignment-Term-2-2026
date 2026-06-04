@@ -4,7 +4,7 @@
 
 #### Game Play Strategy 
 
-The general game play strategy, in which we based our initial development was a loop where: One Robot gets ball --> Other positions themselves --> The First Passes to Second --> Second shoots --> Repeat. 
+The strategy for game play we set out to follow, used two robots one whose primary function was that of the attacker / shooter, and that of the defender / retriever, who together would work to find the ball, position the attacker near the hoop, pass the ball to the attacker, which would then shoot and hopefully score. With this process hopefully been completed without foul or flaw until the game is called, although methods will be implemented to deal with such situations.
 
 #### General Design and Plan for Robots
 
@@ -44,6 +44,16 @@ It is also clear this early meeting dismissed much of the attacking robot, with 
 
 ###### Diagrams of Initial Designs
 
+The initial meeting gave the first rough designs of our robot, which included the ball containment chamber, its release gate, the flywheel ball catcher and thrower, along with the recognition it would require two EV3's.
+
+Early Full Diagram
+![[PXL_20260430_020519027.jpg]]
+
+Ball Thrower Early Diagram
+![[PXL_20260430_198.jpg]]
+
+Early EV3 Port Map 
+![[Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg]]
 
 ###### Initial Sensors and their Uses
 
@@ -445,7 +455,7 @@ Things that went well
 
 As covered before the robots were split into teams of two, and the individual sections of code were split between individuals.
 
-For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section. 
+For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections meaned these had to be re assigned. 
 
 #### Hugo's Contributions
 
