@@ -13,26 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Prototyping.md",
+                "file": "Reflection.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Prototyping"
-            }
-          },
-          {
-            "id": "c0337c0c405468e6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Prototyping.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Prototyping"
+              "title": "Reflection"
             }
           },
           {
@@ -213,11 +199,11 @@
   },
   "active": "8057df2b53da3f75",
   "lastOpenFiles": [
-    "Reflection.md",
     "Prototyping.md",
     "Pre-Planning.md",
-    "PicsandVids/random thoughts.jpg",
     "Collaboration.md",
+    "Reflection.md",
+    "PicsandVids/random thoughts.jpg",
     "PicsandVids/PXL_20260430_011621695.jpg",
     "PicsandVids/IMG20260520133042.jpg",
     "PicsandVids/Diagram of design.jpg",
