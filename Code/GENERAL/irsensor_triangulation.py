@@ -19,9 +19,9 @@ class ir_controller:
         self.ir_sensor = ir_sensor
         self.state_controller = state_controller
         self.getting_c = PushAndAim(claw_motor)
-        self.my_distance_to_ball
-        self.my_angle_to_ball
-        self.others_angle_to_ball
+        self.my_distance_to_ball = 0
+        self.my_angle_to_ball = 0
+        self.others_angle_to_ball = 0
 # function will be called in constantly
     def  ir_sensing (self):
 
@@ -38,6 +38,7 @@ class ir_controller:
 
         c = getting_c.get_aim_angle(my_position, their_position)
         a = c - self.my_angle_to_ball
+        a = a % (2 * math.pi) #ensuring a is between 0 and 2pi, as angles can be negative or greater than 360 degrees, but we want to work with radians
         d_angle = math.pi / 2 - a - self.others_angle_to_ball 
 
         dx = their_position[0] - my_position[0] #x2 - x1
@@ -47,4 +48,4 @@ class ir_controller:
 
         k = d/math.sin(d_angle) #law of sins, sin(a)/A = sin(b)/B = sin(c)/C, and can flip
         self.my_distance_to_ball = k * math.sin(self.others_angle_to_ball) #final distance calculation, law of sins again
-        update_ball_angle_and_distance(self.my_angle_to_ball, self.my_distance_to_ball) #updating the state controller with the new angle and distance to the ball, so that it can be used in other files
+        self.state_controllerupdate_ball_angle_and_distance(self.my_angle_to_ball, self.my_distance_to_ball) #updating the state controller with the new angle and distance to the ball, so that it can be used in other files
