@@ -76,7 +76,7 @@ class StateActions:
     # Locating
     def Locating(self):
         # turn 10 degrees
-        self.Driver.turn_angle(10)
+        self.Driver.spin_angle(10)
         
 
     # Positioning

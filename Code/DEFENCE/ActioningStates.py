@@ -54,7 +54,7 @@ class StateActions:
         # Drive to home coords
         self.Driver.home_from_foul_box()
         self.StateController.set_idle_state()
-        self.StateController.toggle_foul_elapsed()
+        
     # Passing
     def Passing(self):
         # get the angle to our teammate
@@ -72,7 +72,7 @@ class StateActions:
     # Locating
     def Locating(self):
         # turn 10 degrees
-        self.Driver.pivot_angle("LEFT", 10)
+        self.Driver.spin_angle("LEFT", 10)
         
 
     # Positioning, needs more complex code. 
