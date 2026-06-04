@@ -48,7 +48,7 @@ class State_Controller:
         ball_dist,
         hoop_x,
         hoop_y,
-    ):
+    ):  # Opened in NeoVim and it did that (Cascading inputs for class)
         self.owner = owner  # Local stored refrence to owner
         self.owner_type: str = robot_type  # Robot role: "attack" or "defence"
 
@@ -65,11 +65,11 @@ class State_Controller:
         self.position: tuple = (x_pos, y_pos, angle)
         self.others_position: tuple = ()
 
-        # Ball tracking for this robot and the other
-        self.ball_position: int = ball_angle
-        self.ball_distance: float = ball_dist
-        self.others_ball_position: tuple = ()
-        self.others_ball_dist: float = 0.0
+        # Ball Tracking for this robot and others
+        self.distance_to_ball: float = ball_dist
+        self.angle_to_ball: float = ball_angle
+        self.others_distance_to_ball: float
+        self.others_angle_to_ball: float
 
         # Ball posession
         self.has_ball: bool = False
@@ -89,8 +89,12 @@ class State_Controller:
 
     # Update the angle and distance to ball from us
     def update_ball_angle_and_dist(self, angle, distance):
-        self.ball_position = angle
-        self.ball_distance = distance
+        self.distance_to_ball = distance
+        self.angle_to_ball = angle
+
+    # Return a refrence to the others angle to ball
+    def get_others_ball_angle(self):
+        return self.others_angle_to_ball
 
     # toggle ball possession
     def update_have_ball(self):
@@ -125,14 +129,20 @@ class State_Controller:
     def get_foul_elapsed(self):
         return self.foul_elapsed
 
+    def get_our_position(self):
+        return self.position
+
+    def get_others_posiiton(self):
+        return self.others_position
+
     # Create a snapshot dictionary to send to the communication manager, which then sends to other robot
     def get_snapshot(self):
 
         snapshot = {
             "state": self.state,
             "position": self.position,
-            "ball position": self.ball_position,
-            "ball distance": self.ball_distance,
+            "ball distance": self.distance_to_ball,
+            "ball angle": self.angle_to_ball,
             "has ball": self.has_ball,
             "request": self.request,
         }
@@ -144,8 +154,8 @@ class State_Controller:
 
         self.others_state = snapshot["state"]
         self.others_position = snapshot["position"]
-        self.others_ball_position = snapshot["ball position"]
-        self.others_ball_dist = snapshot["ball distance"]
+        self.others_distance_to_ball = snapshot["ball distance"]
+        self.others_angle_to_ball = snapshot["ball angle"]
         self.others_has_ball = snapshot["has ball"]
         self.incoming_request = snapshot["request"]
 
@@ -192,7 +202,7 @@ class State_Controller:
         if self.incoming_request != Request.NONE:
             if self.incoming_request == Request.PASS:
                 # Other robot wants to pass, accept if don't have ball
-                if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
+                if not self.has_ball and self.state not in [State.FOUL, State.SHOOTING]:
                     self.state = State.RECEIVING
                     self.request = Request.RECEIVE  # Return confirmation
 
@@ -216,7 +226,7 @@ class State_Controller:
 
             if self.incoming_request == Request.REPOSITION:
                 # other robot need you to move from its path or reposition in some way
-                if self.state not in (State.FOUL, State.PASSING, State.SHOOTING):
+                if self.state not in [State.FOUL, State.PASSING, State.SHOOTING]:
                     self.state = State.POSITIONING
                     self.request = Request.NONE
 
@@ -244,11 +254,15 @@ class State_Controller:
         # Neither robot has the ball
         if not self.has_ball and not self.others_has_ball:
             # The Ball has a known location
-            if self.ball_distance is not None:
+            if self.distance_to_ball is not None:
                 # This robot is closer, or the other robot is occupied
-                if self.ball_distance <= self.others_ball_dist or self.others_state in (
-                    State.FOUL,
-                    State.POSITIONING,
+                if (
+                    self.distance_to_ball <= self.others_distance_to_ball
+                    or self.others_state
+                    in (
+                        State.FOUL,
+                        State.POSITIONING,
+                    )
                 ):
                     # Attacker is near the hoop, better to hold its positon and let defence retreive
                     if self.owner_type == "attack" and self._near_hoop():
@@ -268,7 +282,7 @@ class State_Controller:
                 return
 
             # neither robot knows where the ball is, lets find it
-            if self.others_ball_dist is None and self.others_ball_dist is None:
+            if self.distance_to_ball is None and self.others_distance_to_ball is None:
                 self.state = State.LOCATING
                 self.request = Request.NONE
                 return
