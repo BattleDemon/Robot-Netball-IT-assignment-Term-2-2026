@@ -42,7 +42,7 @@ class Communicator():
         self.team = team
 
         # If the robot is the defending robot.
-        if self.team == "Defence":
+        if self.team == "defence":
             # Initialise the bluetooth Server
             self.server = BluetoothMailboxServer()
             # Define the Mailbox for the server "# type: ignore" is appended to the end because VS code prints an error that doesnt effect the actual robot.
@@ -53,7 +53,7 @@ class Communicator():
             ev3.speaker.play_notes(['C4/8','E4/8','G4/8'])
 
         # If the robot is the attacking robot
-        if self.team == "Attack":
+        if self.team == "attack":
             # Initialise the bluetooth client
             self.client = BluetoothMailboxClient()
             # Define the Mailbox for the client "# type: ignore" is appended to the end because VS code prints an error that doesnt effect the actual robot.

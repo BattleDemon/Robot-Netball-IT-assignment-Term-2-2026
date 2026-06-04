@@ -58,7 +58,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
         # Push the ball into the spinning wheels
         self.pushingCode.push()
     
@@ -70,7 +70,7 @@ class StateActions:
     # Locating
     def Locating(self):
         # turn 10 degrees
-        self.Driver.turn_angle(10)
+        self.Driver.pivot_angle("LEFT", 10)
         
 
     # Positioning, needs more complex code. 
@@ -81,7 +81,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT",angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
 
 
@@ -91,7 +91,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them ready for a pass.
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
 
     #Waiting

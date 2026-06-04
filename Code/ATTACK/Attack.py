@@ -70,10 +70,8 @@ class Defender():
         while True:
             if self.BallSensor.color() == Color.BLACK:
                 self.has_ball = True
-                while True:
-                    if self.BallSensor.color() != Color.BLACK:
-                        break
-                time.sleep(0.5)
+            else:
+                self.has_ball = False
             time.sleep(0.5)
 
     def Start(self):
