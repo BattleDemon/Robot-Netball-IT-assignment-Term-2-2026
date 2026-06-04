@@ -438,6 +438,7 @@ Gone Wrong
 	- Systems not been ready prevented testing
 	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up (5:30-45 left at 7:20) and Gabe showed up (7:45) , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
 	- Member required explaination on importing from others code
+	- People need to change place holders to actual things when needed (My foul system wasn't connected with gabes code at all because he used local placeholders instead of connecting with mine)
 
 Things that went well 
 	- Defence design was completed well before due date and design appears to work
@@ -456,6 +457,7 @@ Things that went well
 	- People had choice in the systems they made eg. Gabe volunteered to do movement and was quite infusiastic, Dexter saw the foundational system of the state controller and thus completed it, Hugo applied the testing code well so it could be instantly applied to the final ect
 	- Commonly needed variables were easily found and updated for people
 	- Programming concepts unknown to some members were explaiend by others 
+	- 
 
 #### How Work Was Divided
 
