@@ -422,6 +422,7 @@ Gone Wrong
 	- Didn't test
 	- Wasn't time to test
 	- Systems not been ready prevented testing
+	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up () and Gabe showed up () , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
 
 Things that went well 
 	- Defence design was completed well before due date and design appears to work
