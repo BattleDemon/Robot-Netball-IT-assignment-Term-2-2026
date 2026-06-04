@@ -5,6 +5,7 @@ from pybricks.parameters import Port
 from pybricks.iodevices import I2CDevice
 import time
 
+claw_motor = Motor(Port.A) #specific motor tbd
 
 class ir_controller:
     def __init__(self,ir_sensor,state_controller):
