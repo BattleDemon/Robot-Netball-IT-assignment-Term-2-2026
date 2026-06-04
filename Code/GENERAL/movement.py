@@ -120,16 +120,16 @@ class Driver:
         if self.team == "ATTACK":
             self.x = START_ATTACK_X
             self.y = START_ATTACK_Y
+            self.heading = START_ATTACK_HEADING
             self.hoop_x = HOOP_X
             self.hoop_y = HOOP_Y_ATTACK
         else:
             self.x = START_DEFENCE_X
             self.y = START_DEFENCE_Y
+            self.heading = START_DEFENCE_HEADING
             self.hoop_x = HOOP_X
             self.hoop_y = HOOP_Y_DEFENCE
-
-        self.heading = 0.0   # 0 = +y, 90 = +x, 180 = -y, 270 = -x
-
+            
         # //////// Encoder bookkeeping ////////
         self._last_l = self.lm.angle()
         self._last_r = self.rm.angle()
