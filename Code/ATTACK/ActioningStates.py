@@ -28,6 +28,7 @@ from pybricks.iodevices import I2CDevice
 
 from GENERAL import movement,IRlocation
 from GENERAL.StateController import State_Controller, State
+from GENERAL import robot_config
 
 from DEFENCE.PushAndAim import PushAndAim
 
@@ -79,15 +80,22 @@ class StateActions:
         # CODE TO PASS BALL
     
     # retrieving
-        #NEEDS ZENS TRIANGULATION CODE
     def Retreiving(self):
+        # get the data from the IR sensor
         ball_data = self.ir_sensor.read(2,2)
+        # get the angle to the ball in radians from (-pi,pi)
         angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
+        # turn to that angle
         self.Driver.spin_angle(angle_to_ball)
+        # get the heading of the robot
         heading = self.Driver.get_heading()
+        # calculate a little step forward in the x direction
         forward_x = cos(heading)
+        # calculate a little step forward in the y direction
         forward_y = sin(heading)
+        # distance modifier
         distanceModifier = 5
+        # drive a little increment forward and wait for the next loop
         self.Driver.drive_to_point(self.Driver.x+forward_x,self.Driver.y+forward_y)
 
         
@@ -100,7 +108,7 @@ class StateActions:
     # Positioning
     def Positioning(self):
         # Drive to (100,200)
-        self.Driver.drive_to_point(100,200)
+        self.Driver.drive_to_point(robot_config.START_ATTACK_X,robot_config.START_ATTACK_Y)
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
