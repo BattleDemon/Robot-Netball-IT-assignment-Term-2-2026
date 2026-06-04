@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reflection.md",
+                "file": "Collaboration.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Reflection"
+              "title": "Collaboration"
             }
           },
           {
@@ -199,10 +199,10 @@
   },
   "active": "8057df2b53da3f75",
   "lastOpenFiles": [
-    "Prototyping.md",
     "Pre-Planning.md",
     "Collaboration.md",
     "Reflection.md",
+    "Prototyping.md",
     "PicsandVids/random thoughts.jpg",
     "PicsandVids/PXL_20260430_011621695.jpg",
     "PicsandVids/IMG20260520133042.jpg",
