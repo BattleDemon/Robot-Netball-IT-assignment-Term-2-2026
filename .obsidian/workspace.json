@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "27116ae5973b6254",
+        "id": "6daa8e68c175bd1f",
         "type": "tabs",
         "children": [
           {
-            "id": "092aa589b1ba16ff",
+            "id": "b25b875301e64728",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "7418d45e08355aac",
@@ -181,26 +180,32 @@
       "bases:Create new base": false
     }
   },
-  "active": "092aa589b1ba16ff",
+  "active": "b25b875301e64728",
   "lastOpenFiles": [
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-231645.png",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-211710.png",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-193220.png",
-    "Documentation/Dexter Documetation Unique Images/_20260430_015133398.jpg",
-    "Documentation/Dexter Documetation Unique Images/PXL_20260430_198.jpg",
-    "Documentation/Dexter Documetation Unique Images/PXL_20260430_015198.jpg",
-    "Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg",
-    "Documentation/Dexter Documetation Unique Images",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Prototyping.md",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Reflection.md",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Pre-Planning.md",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Collaboration.md",
     "Documentation/Dexter Documentation.md",
     "Documentation/PicsandVids/defencerobotballpropulsionprototypefinal2.jpeg",
     "Documentation/PicsandVids/defencerobotballpropulsionprototypefinal1.jpeg",
     "Documentation/PicsandVids/defencerobotballpropulsionprototypediscarded3.jpeg.jpeg",
     "Documentation/PicsandVids/defencerobotballpropulsionprototypediscarded2.jpeg.jpeg",
+    "Documentation/PicsandVids/defencerobotballpropulsionprototypediscarded1.jpeg",
+    "Documentation/PicsandVids/BaseAndThrower2.jpg",
     "Documentation/PicsandVids/IMG_1023.mov",
+    "Documentation/PicsandVids/attackrobottreadprototypebricks1.jpeg",
+    "Documentation/PicsandVids/attackrobottreadprototypebricks2.jpeg",
+    "Documentation/PicsandVids/attackrobotprototypeclaw1.jpeg",
+    "Documentation/PicsandVids/attackrobotprototypearm1.jpeg",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT",
+    "Documentation/Hugo",
     "Code/GENERAL/irsensor_triangulation.py",
+    "Documentation/Dexter Documetation Unique Images",
     "Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/PicsandVids",
-    "Code/DEFENCE/ActioningStates.py",
-    "Code/ATTACK/ActioningStates.py"
+    "Code/DEFENCE/ActioningStates.py"
   ]
 }

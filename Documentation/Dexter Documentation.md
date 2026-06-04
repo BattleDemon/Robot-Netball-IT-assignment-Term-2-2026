@@ -457,7 +457,7 @@ Things that went well
 	- People had choice in the systems they made eg. Gabe volunteered to do movement and was quite infusiastic, Dexter saw the foundational system of the state controller and thus completed it, Hugo applied the testing code well so it could be instantly applied to the final ect
 	- Commonly needed variables were easily found and updated for people
 	- Programming concepts unknown to some members were explaiend by others 
-	- 
+	- The large meeting from 4:30 - Bla the night before due i spent rought half of it code reviewing Gabe, Zen, and a little of Hugo's code.
 
 #### How Work Was Divided
 
