@@ -53,12 +53,18 @@ class StateActions:
     def EndOfFoul(self):
         # Drive to home coords
         self.Driver.home_from_foul_box()
+
+    # Shooting
+    def Shooting(self):
+        pass
     # Passing
     def Passing(self):
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
         self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+
+        # CODE TO PASS BALL
     
     # retrieving
         #NEEDS ZENS TRIANGULATION CODE
@@ -123,6 +129,9 @@ class StateActions:
             # if the robot is in the retreiving state
             elif Current_state == State.RETRIEVING:
                 self.Retreiving() # ADD RETREIVING CODE ONCE DONE
+            # if the robot is in the shooting state
+            elif Current_state == State.SHOOTING:
+                self.Shooting()
             
 
             # if the robot is not in a foul state
