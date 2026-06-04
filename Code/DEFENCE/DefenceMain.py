@@ -41,7 +41,7 @@ class Defender():
         
         self.leftMotor = Motor(Port.B)
         self.rightMotor = Motor(Port.C)
-        self.pushMotor = Motor(Port.D)
+        self.pushMotor = Motor(Port.C)
 
         self.GroundDetectionSensor = ColorSensor(Port.S1)
         self.BallSensor = ColorSensor(Port.S4)
