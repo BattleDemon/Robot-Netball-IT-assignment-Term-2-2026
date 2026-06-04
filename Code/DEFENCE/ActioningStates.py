@@ -53,6 +53,7 @@ class StateActions:
     def EndOfFoul(self):
         # Drive to home coords
         self.Driver.home_from_foul_box()
+        self.StateController.set_idle_state()
     # Passing
     def Passing(self):
         # get the angle to our teammate

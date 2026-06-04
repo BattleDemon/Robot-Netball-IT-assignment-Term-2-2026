@@ -53,6 +53,7 @@ class StateActions:
     def EndOfFoul(self):
         # Drive to home coords
         self.Driver.home_from_foul_box()
+        self.StateController.set_idle_state()
 
     # Shooting
     def Shooting(self):
@@ -62,7 +63,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
         # CODE TO PASS BALL
     
@@ -84,7 +85,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
 
     # Receiving
@@ -93,7 +94,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them ready for a pass.
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
 
     #Waiting
