@@ -46,14 +46,19 @@ It is also clear this early meeting dismissed much of the attacking robot, with 
 
 The initial meeting gave the first rough designs of our robot, which included the ball containment chamber, its release gate, the flywheel ball catcher and thrower, along with the recognition it would require two EV3's.
 
-Early Full Diagram
+**Early Full Diagram**
 ![[PXL_20260430_020519027.jpg]]
 
-Ball Thrower Early Diagram
+**Ball Thrower Early Diagram**
 ![[PXL_20260430_198.jpg]]
 
-Early EV3 Port Map 
+**Early EV3 Port Map **
 ![[Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg]]
+
+Additionally this early meeting provided an early version of the Attackers design, and although that was not my focus It can still be shown here.
+
+**Early Attacker Design**
+![[_20260430_015133398.jpg]]
 
 ###### Initial Sensors and their Uses
 

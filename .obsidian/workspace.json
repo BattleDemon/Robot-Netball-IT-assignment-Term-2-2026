@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "a0a146d9092dd46c",
+        "id": "27116ae5973b6254",
         "type": "tabs",
         "children": [
           {
-            "id": "93a63b59d907d8f7",
+            "id": "092aa589b1ba16ff",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -180,15 +180,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "93a63b59d907d8f7",
+  "active": "092aa589b1ba16ff",
   "lastOpenFiles": [
+    "Brainstorming/Defence Brainstorm/Pictures/IMG20260520133042.jpg",
+    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_015133398.jpg",
+    "Documentation/Dexter Documetation Unique Images/_20260430_015133398.jpg",
+    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_011621695.jpg",
+    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_020519027.jpg",
     "Documentation/Dexter Documetation Unique Images/PXL_20260430_198.jpg",
     "Documentation/Dexter Documetation Unique Images/PXL_20260430_015198.jpg",
     "Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-231645.png",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-211710.png",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-193220.png",
+    "Documentation/Dexter Documentation.md",
+    "Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4",
+    "Documentation/PicsandVids/ThridThrower.jpg",
+    "Documentation/PicsandVids/SecondThrower.jpg",
+    "Documentation/PicsandVids/FirstThrower.jpg",
+    "Documentation/PicsandVids",
     "Documentation/Dexter Documetation Unique Images",
-    "Documentation/Dexter Documentation.md"
+    "Code/DEFENCE/ActioningStates.py",
+    "Code/ATTACK/ActioningStates.py",
+    "Code/GENERAL/irsensor_triangulation.py"
   ]
 }
