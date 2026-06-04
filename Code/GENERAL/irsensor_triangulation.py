@@ -5,13 +5,10 @@ from pybricks.parameters import Port
 from pybricks.iodevices import I2CDevice
 import time
 
-ev3 = EV3Brick()
-ir_sensor = I2CDevice(Port.S4,0x08)
-
 
 class ir_controller:
     def __init__(self,ir_sensor,state_controller):
-        self.ir_sensor = ir_sensor
+        self.ir_sensor = I2CDevice(Port.S4,0x08)
         self.state_controller = state_controller
         self.getting_c = PushAndAim(claw_motor)
         self.my_distance_to_ball
@@ -19,15 +16,16 @@ class ir_controller:
         self.others_angle_to_ball
     def  ir_sensing (self):
         while True:
+            time.sleep(1)
             ball_sensor_data = ir_sensor.read(2,2)
-            self.my_distance_to_ball = ball_sensor_data[0]
+            self.my_angle_to_ball = ball_sensor_data[0] * 30
     def get_distance_to_ball(self):
         self.others_angle_to_ball = self.state_controller.get_others_ball_angle()
         my_position = self.state_controller.get_our_position()
         their_position = self.state_controller.get_their_position()
 
         c = getting_c.get_aim_angle(my_position, their_position)
-        a = c - b
+        a = c - self.my_angle_to_ball
         d_angle = 180 - a - self.others_angle_to_ball
 
         dx = their_position[0] - my_position[0]
