@@ -202,7 +202,7 @@ class State_Controller:
         if self.incoming_request != Request.NONE:
             if self.incoming_request == Request.PASS:
                 # Other robot wants to pass, accept if don't have ball
-                if not self.has_ball and self.state not in (State.FOUL, State.SHOOTING):
+                if not self.has_ball and self.state not in [State.FOUL, State.SHOOTING]:
                     self.state = State.RECEIVING
                     self.request = Request.RECEIVE  # Return confirmation
 
@@ -226,7 +226,7 @@ class State_Controller:
 
             if self.incoming_request == Request.REPOSITION:
                 # other robot need you to move from its path or reposition in some way
-                if self.state not in (State.FOUL, State.PASSING, State.SHOOTING):
+                if self.state not in [State.FOUL, State.PASSING, State.SHOOTING]:
                     self.state = State.POSITIONING
                     self.request = Request.NONE
 

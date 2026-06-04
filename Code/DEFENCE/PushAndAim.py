@@ -5,7 +5,7 @@
 # ++++++++++++++++++++++++++++++++
 
 # Import the needed math functions and the motor
-from math import atan2, degrees, pi
+from math import atan2, pi
 from pybricks.ev3devices import Motor
 import time
 
@@ -17,7 +17,7 @@ class PushAndAim:
         self.push_motor = push_motor
 
     # Calculate the angle between us and the other robot
-    def get_aim_angle(self, our_position: tuple, others_position: tuple):
+    def get_aim_angle(self, our_position: list, others_position: list):
 
         # Locally assign x, y, and angle
         our_x, our_y, our_angle = our_position
