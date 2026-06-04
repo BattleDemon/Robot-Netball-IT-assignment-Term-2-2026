@@ -63,8 +63,7 @@
               "title": "Prototyping"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -226,12 +225,19 @@
       "bases:Create new base": false
     }
   },
-  "active": "c0337c0c405468e6",
+  "active": "8057df2b53da3f75",
   "lastOpenFiles": [
+    "Prototyping.md",
+    "Collaboration.md",
     "Pre-Planning.md",
     "Reflection.md",
-    "Collaboration.md",
-    "Prototyping.md",
+    "PicsandVids/FirstThrower.jpg",
+    "PicsandVids/BaseAndThrower2.jpg",
+    "PicsandVids/baseAndThrower.jpg",
+    "PicsandVids/ThrowingAndCatchingDemo.mp4",
+    "PicsandVids/ThridThrower.jpg",
+    "PicsandVids/SecondThrower.jpg",
+    "PicsandVids",
     "Welcome.md"
   ]
 }
