@@ -40,3 +40,4 @@ def Catch_throw():
                 ballwasthere=False
             motor.run(IN)
             motor2.run(IN)
+        sleep(0.1)
