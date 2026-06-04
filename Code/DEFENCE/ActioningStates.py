@@ -1,5 +1,9 @@
 #!/usr/bin/env pybricks-micropython
 
+# +++++++++++++++++++++++++++++++++++++++++
+# ========      Work of Hugo       ========
+# +++++++++++++++++++++++++++++++++++++++++
+
 from time import sleep, time
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (
