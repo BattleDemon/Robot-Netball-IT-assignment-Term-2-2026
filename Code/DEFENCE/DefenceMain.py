@@ -46,7 +46,7 @@ class Defender():
         self.GroundDetectionSensor = ColorSensor(Port.S1)
         self.BallSensor = ColorSensor(Port.S4)
         self.gyro = GyroSensor(Port.S2)
-
+        self.ir_sensor = I2CDevice(Port.S4,0x08)
 
         self.communicator = Communicator(self.StateController, self.team, self.ev3)
         self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
@@ -58,7 +58,7 @@ class Defender():
         self.Driver = Driver(self.ev3, self.leftMotor,self.rightMotor,self.GroundDetectionSensor,self.team, self.gyro)
 
 
-        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver)
+        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver,self.ir_sensor)
 
         self.groundObserver = Ground_Observer(self.StateController, self.GroundDetectionSensor)
 

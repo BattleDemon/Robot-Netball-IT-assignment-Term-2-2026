@@ -19,6 +19,7 @@ from math import pi, tan, sin, cos
 import os
 import threading
 import time
+from pybricks.iodevices import I2CDevice
 
 from GENERAL import movement,IRlocation
 from GENERAL.StateController import State_Controller, State
@@ -32,7 +33,7 @@ class StateActions:
     Class to manage what the robot does when a specific state is on.
     """
 
-    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver ) -> None:
+    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice ) -> None:
         # get a reference to the motor Can be any random motor, will not be used
         self.PushMotor = PushMotor
         # get a refeerence to the current state controller
@@ -43,6 +44,10 @@ class StateActions:
         self.pushingCode = PushAndAim(self.PushMotor)
         # Variable to know if the robot was previously in the foul box so we know when to go home.
         self.wasinfoul = False
+
+        self.ir_sensor = ir_sensor
+
+        
         # create the thread for the main loop
         ActioningStates_t = threading.Thread(target=self.MainLoop)
         # start the thread
@@ -71,7 +76,15 @@ class StateActions:
     # retrieving
         #NEEDS ZENS TRIANGULATION CODE
     def Retreiving(self):
-        pass
+        ball_data = self.ir_sensor.read(2,2)
+        angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
+        self.Driver.spin_angle(angle_to_ball)
+        heading = self.Driver.get_heading()
+        forward_x = cos(heading)
+        forward_y = sin(heading)
+        distanceModifier = 5
+        self.Driver.drive_to_point(self.Driver.x+forward_x,self.Driver.y+forward_y)
+
         
     # Locating
     def Locating(self):
