@@ -343,20 +343,19 @@ class Driver:
         pivot_side must be "LEFT" or "RIGHT".
         '''
         if pivot_side == "LEFT":
-            self.lm.stop()
             self.lm.brake()
-            self.rm.run(speed)
-        elif pivot_side == "RIGHT":
-            self.rm.stop()
+            direction = 1 if angle_deg >= 0 else -1
+            self.rm.run(speed * direction)
+            motor = self.rm
+        else:  # RIGHT
             self.rm.brake()
             self.lm.run(speed)
         else:
             # Bad side string - do nothing
             return
 
-        if duration_sec is not None:
-            time.sleep(duration_sec)
-            self.stop()
+        self.stop()
+        self.heading = (self.heading + angle_deg) % 360.0
 
     # ─── Position / pose getters ───
     def get_position(self):
