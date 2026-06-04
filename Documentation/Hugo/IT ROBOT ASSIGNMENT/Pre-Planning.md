@@ -34,19 +34,38 @@ Main defender or attacker class:
 ```
 ## Communication
 ```
-
+Communicator class:
+	init:
+		set up mailboxes for the robot server for one of them and client for the other
+	send state:
+		turn a snapshot dictionary of the states into a json string and send it via the bluetooth mailbox
+	
+	Receive state:
+		receive the state json string, turn it back into a dictionary and then update the variables accordingly.
 ```
 ## Catch and Throw
 ```
 function "catch and throw"
-	Loop and constantly check if there is a ball 
+	Loop and constantly check if there is a ball in the hold
+	if there is (colour sensor detects black):
+		run the motor forwards
+	else there is no ball there:
+		run the motor the other way
 ```
 ## Actioning States
 ```
-
+Actioning states class:
+	init:
+		initialise variables
+	
+	define functions of what to do when each state happens.
+	
+	main loop: 
+		if statements for when certain states are triggered to run the code for that state.
 ```
 
 # Division of tasks
+To divide the tasks we created GitHub issues for all the needed tasks. We then defined some of them as major tasks and some as minor tasks. There were 4 major tasks so we gave one to each person and then equally divided up the minor tasks until there were no tasks left.
 
 # Notes
 
