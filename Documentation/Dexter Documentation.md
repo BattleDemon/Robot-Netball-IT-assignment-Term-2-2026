@@ -1,0 +1,710 @@
+# Robotic Netball
+
+## Preplanning 
+
+#### Game Play Strategy 
+
+The strategy for game play we set out to follow, used two robots one whose primary function was that of the attacker / shooter, and that of the defender / retriever, who together would work to find the ball, position the attacker near the hoop, pass the ball to the attacker, which would then shoot and hopefully score. With this process hopefully been completed without foul or flaw until the game is called, although methods will be implemented to deal with such situations.
+
+#### General Design and Plan for Robots
+
+###### Initial Meeting
+
+The Initial meeting was surprisingly productive, resulting in our general plan for the two robots and some early design choices.
+
+The Two Robots
+* Defending Robot 
+	* Locates and Retrieves the ball.
+	* Passes the ball to the other robot.
+	* Prevent Opposing Shooting, using a wall.
+	* Acts as the Main robot, with it sending requests and signals to the other.
+* Attacking Robot
+	* Receives the ball from the Defending Robot.
+	* Shoots the ball into the hoop.
+	* Responds to requests from the Defence robot.
+
+Additionally, we also considered the ideas of using another communicating EV3 as a static navigation system, which would remain in the middle of the field and have one of the IR detectors and a some ultrasonic. Its goal is to provide a secondary location for both the ball and using the ultrasonic for the moving robots, although this ideas was later struck down, as too complex, would get in the way, and due to our lack of communicating EV3's. 
+
+This meeting also produced the ideation for the first system, that of the Defence's ball handling. The idea used two counter rotating motors which would make a soft of flywheel / suction effect that would full the ball into a chamber which would then be shut. A colour sensor would be used to detect when the ball entered the chamber and trigger its shutting, along with reversing the rotation of the flywheel. Then once the robot positions its self, the chamber would open releasing the ball which would be pushed out using the flywheels. Additionally we considered another option which instead of physically blocking the chamber we could just make it sit in the chamber until pushed out. (the first option had a ramp, which the lid would block and them be moved allowing the ball to roll to the flywheel, while this second idea would use the pushing motion to give it the intial motion to the fly wheels)
+
+We also brainstormed methods for handleing the movement and aiming.
+With aiming been handled as a subsection of moving rather than its own seperate turret. With the robot needing to entirely turn to aim.
+
+The navigation would be proformed by both using the motor turns to calculate a theoretical position aswell as useing a gyro sensor to confirm our correct calculation of the angle. This would then be checked against out theoretical and then be used to estimate the true position.
+
+We also decided that moving slower would be the best option as it would incease accuracy of our reading and prevent any slip or drift.
+
+This meeting also produced some early ideas for the Attacking robot, with it possesing a turret / trebuche design, using a basket the ball would sit in before been flung towards the hoop. 
+
+Additionally we decided for the Defending robot to be able to do everything we needed, we would need to use two EV3 blocks, one would control the movement, shield, and communication, while the other would control the flywheel. 
+
+Another system this meeting produced was the shield, which would be an arm attached to the Defending robot which would stay perpendicular to the ground and could be raised or lowered to prevent an opponents shooting.
+
+It is also clear this early meeting dismissed much of the attacking robot, with us even in this stage not envisioning it been able to move and not calculate its own local ball position. It would stay next to the hoop and wait for the defender to pass to it.
+
+###### Diagrams of Initial Designs
+
+The initial meeting gave the first rough designs of our robot, which included the ball containment chamber, its release gate, the flywheel ball catcher and thrower, along with the recognition it would require two EV3's.
+
+**Early Full Diagram**
+![[PXL_20260430_020519027.jpg]]
+
+**Ball Thrower Early Diagram**
+![[PXL_20260430_198.jpg]]
+
+**Early EV3 Port Map**
+![[Documentation/Dexter Documetation Unique Images/PXL_20260430_015133398.jpg]]
+
+Additionally this early meeting provided an early version of the Attackers design, and although that was not my focus It can still be shown here.
+
+**Early Attacker Design**
+![[_20260430_015133398.jpg]]
+
+###### Initial Sensors and their Uses
+
+The initial sensors designed for use on our two robots were as follows:
+
+Attacker
+    2 Motors - Used for movement and navigation.
+    Colour Sensor - Used to observe the ground and check if the robot is in the foul zone and for additional navigattion checks.
+    IR Sensor - Used to locate the ball.
+    Unfortionatly i the Attacking robot wasn't as preplanned as the defending robot, causing many of its later sensors to not be planned at this point.
+
+Defender
+    2 EV3's - One Used as the main controller, communicator, and navigator, and the other purely dedicated to the flywheel system.
+    2 Motors - Again used for movement and navigation.
+    Another 2 Motors - Used for the ball retrieve and passing, as flywheels.
+    A single motor - To release the ball from its container.
+    2 Colour Sensors - Used to detect if a ball is within the container, one for each EV3.
+    Another Colour sensor - Similar to the Attacker, this colour sensor is used for ground detection.
+    A Gyro - Used as a secondary navigation checker.
+    Lastly an IR Sensor - Also used to locate the ball.
+
+
+#### Flowcharts of Gameplay
+
+
+![[mermaid-diagram-2026-06-02-231645.png]]
+#### Flowchart of Systems
+
+The Systems we are planning to make can be roughly connected as shown.
+
+![[mermaid-diagram-2026-06-02-211710.png]]
+
+#### Division of Tasks and Systems
+
+In order to fulfil the requirements of equally split work, we have split into two teams of two with each designing one robot, and their individual systems, and the shared systems were split to ensure a consistent split of work.
+
+The two teams are the Attack, Gabe and Zen, and the Defence, Hugo and I. These groups primarily designed and developed their robots before moving on to programming their respective individual systems.
+
+These systems might of changed during development or who is doing them, the final division of tasks will be covered in the dedicated collaboration system.
+
+The individual systems done by each are as follows:
+Hugo
+	Communication between robots.
+	Actioning on states (IE. Connecting everyone's systems and calling the function in the main file).
+	Ball grabbing and throwing.
+Gabe 
+	Movement of the Robot (Large system and his only system)
+	Attackers Turret
+Zen 
+	IR Detection and triangulation.
+	Attack grabber.
+with the remaining been my responsibility and covered in the next section.
+
+#### My Features and Systems
+
+To satisfy the division of labour I was tasked with completing the sections of code which i will go into more detail below, of State Controller and System, Ground detection and foul controller, and the Aiming and Pushing of the defensive robot.
+
+###### Overview of the State System and Controller
+
+The State System and Controller is set to be my largest and most important feature in this codebase, it will control what State the robots would be in and decide the logic for transitioning between states. Along with just controlling the individual robots state, it is also going to connect with the other robot in order to decide on collaborative states.
+
+###### State Transitions Flowchart
+
+The transition of states i have envisioned can be summed up by the following flowchart
+
+![[mermaid-diagram-2026-06-02-193220.png]]
+
+###### State System and Controller Psuedocode
+
+To help me produce this system I devised the following psuedocode.
+
+``` Psuedocode
+
+Import Required Packages
+
+Enum State
+	IDLE
+	FOUL
+	PASSING
+	RETRIEVING
+	LOCATING
+	POSITIONING
+	RECEIVING
+	SHOOTING
+	WAITING
+
+Enum Request
+	PASS
+	RECIEVE
+	RETRIEVE
+	REPOSITION
+	DECLINE
+	NONE
+	
+Class State_controller
+	INIT
+		Robot Role (Attacker / Defender)
+		Current State
+		Other Robot State
+		Position 
+		Other Position
+		Ball
+		Ball Possession
+		Request
+		Ground Colour
+		Foul timer status
+		
+	Function UpdatePosisition
+		Get movement new position
+		
+	Function UpdateBallPosition
+		Get ball position
+		
+	Function ToggleBallPossession
+		True or False Ball Possession
+		
+	Function SetFoulState
+		State = Foul
+		Set foul elapsed false
+		
+	Function SetIdleState
+		State = IDLE
+		
+	Function recieveSnapshot
+		Save communication data
+		
+	Function CreateSnapshot
+		Make communication data
+		
+	Function DetermineState
+		If State = Foul 
+			Return
+			
+		If State = Waiting
+			
+			If incoming request = Decline 
+				request = None
+			
+			If incoming request = request
+				If request = Pass 
+					state = Passing
+					
+				If request = Recieve
+					state = Recieving
+				
+				Return
+				
+			Return
+		
+		If incoming request
+			Case incoming request
+				
+				Pass
+					If can recieve ball
+						state = recieving 
+						reply recieving'
+					else
+						reply Decline
+						
+				Retrieve
+					If robot has ball or is fouled
+						reply Decline
+					else
+						state = Retrieving
+					
+				Reposition
+					If robot is free to move
+						State = positioning
+					else 
+						reply Decline
+						
+		If robot has ball is attack and is near hoop
+			
+			state = shooting
+			return
+			
+		If robot has ball
+			request = pass
+			state = waiting
+			return
+		
+		If neither has ball 
+			
+			If ball location is known
+				If this robot is closer Or other is occupied
+					If robot is attack and near hoop
+						State = positioning
+						request = retrieve
+						
+					else
+						state = retrieve
+						clear request
+						
+				else
+					state = waiting
+					request = retrieve
+			
+			If neither robot knows where ball is 
+				State = locating
+				clear request
+				return
+				
+		State = Idle
+		clear request
+
+```
+
+###### Overview of Ground Detection and Foul Controller
+
+My next important system is the ground detection and foul controller system, as it was another of the general systems. Luckily it seemed to connect with my other system, and just directly resolved the foul state. In addition to the foul controller, it is planned to also observe the ground and provide that as a signal for Gabe's movement code, and act as a secondary navigation system using the lines on the third of the field. 
+
+###### Ground Detection and Foul Controller Psuedocode 
+
+``` Psuedocode
+
+Import required packages
+
+Class Ground Observer
+	Init
+		state controller
+		state
+		
+		colour sensor
+		
+		observed colour
+		currently fouled
+		
+		Thread observed ground
+		start thread
+		
+	Function observe ground
+		loop
+			observed colour = colour sensor colour
+			
+			if observed colour = foul colour and not currently fouled
+				call foul detected
+				
+			if currently foul
+				if state controller state is not foul
+					current foul = false
+					
+			call state_controller set ground colour
+			
+			wait
+			
+	Function foul detected
+		currently foul = true
+		
+		call state controller set foul state
+		
+		Thread foul timer
+		start thread
+		
+	Function foul timer
+		wait foul time
+		
+		call state controller toggle foul elapsed
+		
+
+```
+
+###### Overview of Aiming and Pushing
+
+My last section, and smallest is only a system used for the Defending robot. This system needs to aim towards the other robot, then push the ball out of its container with a motor. 
+
+###### Aiming and Pushing Psuedocode 
+
+``` Psuedocode
+
+Import required packages
+
+Class Push and Aim
+	Init
+		push motor
+		
+	Function get aim angle
+		get difference in x
+		get difference in y
+		
+		get angle towards target
+		
+		localise angle with our heading
+		
+		Return angle
+		
+	Function Push
+		run motor to push ball
+		
+		wait 
+		
+		run motor to return it to its initial point
+
+```
+
+###### Aiming Calculation
+
+
+#### Additional Features Incase of Extra Time
+
+Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which were considered to make, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
+
+## Prototyping
+
+#### Designing the Defence Robot
+
+The designing of the defence robot was a collaborative process between Hugo and I, where I primarily focused on its chassis, making sure it could hold the weight of the other equipment as well as have enough space, while remaining in the 30cm diameter circle we are allowed. In addition to this i attached the IR sensor, colour sensors, motors (exclusing flywheel) and EV3's. While Hugo focused on building the flywheels system, and did most of its attaching to the chassis.
+
+###### Problems During Production
+
+###### Design Notes and Justification
+
+##### Final Design
+
+#### The State Controller
+
+###### Overview of State controller
+
+The state controller acts as the central system, connecting all other systems to each other, it connects heavily with the communication system, to allow the robots to collaboratively decide on what to do using the "Requests" feature, and Hugo's communication code. 
+
+###### Justification for State Controller
+
+The addition of this system was necessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaboratively using requests. It also because the central hub, where information was stored and could be accessed from. 
+
+###### State Controller Code Snippets 
+
+The initial commit where the state controller was made, showed what would later evolve into its final design, and included early steps of the features and variables that would be used later.
+
+``` Python
+# First set of the state enums
+class State(Enum):
+	IDLE = 0
+    FOUL = 1
+    PASSING = 2
+    RETRIEVING = 3
+    LOCATING = 4
+    POSITIONING = 5
+
+# Request began as only a yes, no, or none. But this was later changed to specify the request and allow.
+class Request(Enum):
+	YES = 0
+	NO = 1
+	NONE = 2
+	
+class State_Controller():
+	def __init__(self):
+		# Define our state and create a variable to house the other robot's
+		self.state = State.IDLE
+		self.other_state: State
+		
+		# local refrence to our position and heading
+		self.x_pos: float
+		self.y_pos: float
+		self.angle: float
+		
+		# others position
+		self.others_x_pos: float
+		self.others_y_pos: float
+		self.others_angle: float
+		
+		# Knows if us or the other robot has the ball
+		self.has_ball: bool
+		self.other_has_ball: bool
+		
+		# our request to the other robot and their request to us
+		self.request: Request
+		self.incoming_request: Request
+
+```
+
+The next update included much more of the substance of the State_controller and the addition of more locally stored variables, this is also where it became the defacto brain/controller for everyone else to share their data.
+
+``` Python
+
+class State(Enum):
+	# Including prior mentioned states
+	RECIEVING = 6
+	SHOOTING = 7
+	WAITING = 8
+	
+class Request(Enum):
+	# Replacing the initial version of Request
+	# This allowed the robot to specify the request been made instead of it been assumed based on their state, then it allows them to either echo that back or decline, with NONE been the default when no request is been made.
+	PASS = 0
+	RECIEVE = 1
+	RETRIEVE = 2
+	REPOSITION = 3
+	DECLINE = 4
+	NONE = 5
+	
+class State_Controller():
+# Init now allowed initialisations 
+	def __init__(self, owner, x_pos, y_pos, angle, ball_angle, ball_dist):
+	# Only showing differences since last time
+		self.owner = owner
+		
+		self.others_state: State = State.IDLE
+		
+		self.position: tuple = (x_pos, y_pos, angle)
+		
+		self.ball_angle: float = ball_angle
+		self.ball_dist: float = ball_dist
+		
+		# Same for others ball and position
+		
+		# Start both requst and incoming request as Request.NONE
+		
+	# This commit also added the helper functions to get and update the variables other systems needed to know.
+	
+	# The snapeshot system which packages the information Hugo needs to send to the other robot
+	def get_snapshot(self):
+		snapshot = {
+			"state" : self.state,
+			"position": self.position,
+			"ball_angle": self.ball_angle,
+			"ball_distance": self.ball_distance,
+			"has_ball": self.has_ball,
+			"request": self.requst
+		}
+		
+	return snapshot
+	
+	# Hugo then sent me back a snapshot with the same structure which I then re assigned the "others_" variables
+
+```
+
+The next major addition to the state controller was the actual logic behind the determining of states and the state machine.
+
+``` Python
+
+# inside state_controller
+def determine_state(self):
+	# Check if currently foul 
+	# Which has its own system for changing into and our of
+	
+	if self.state == State.FOUL:
+		return
+		
+	# Waiting for a responce to a request 
+	if self.state == State.WAITING:
+			# other robot has declined the request
+            if self.incoming_request == Request.DECLINE:
+                self.request = Request.NONE
+
+                self.state = State.IDLE
+                
+	        if self.incoming_request == self.request:
+		        if self.request == Request.PASS:
+			        self.state = State.PASSING
+			        return
+			    # Repeat for other possible requests
+	# If there is an incoming request and we are not waiting
+	if self.incoming_request != Request.NONE:
+		if self.incoming_request == Request.PASS:
+			# Check avaliability to pass 
+			if not self.has_ball and self.state not state.SHOOTING:
+				self.state = State.RECIEVING
+				self.request = Request.RECIEVE # Echo back confirmation
+				return
+			else:
+				# Decline request if it doesn't meet the requirments
+				self.request = Request.DECLINE
+				
+		# Repeat similar logic for other requests
+		
+		
+	# Now the what I call self determined state logic
+	if self.has_ball and self.owner_type == "attack":
+	# High priority state, set shooting
+		self.state = State.SHOOTING
+		self.request = Request.NONE
+		return
+	
+	# Next priority state since if you have the ball you will need to get rid of it quick
+	if self.has_ball:
+		self.request = Requst.PASS
+		self.state = State.WAITING
+		Return
+		
+	# Next if no one has ball, determine who gets it
+	if not self.has_ball and not self.others_has_ball:
+	# If your closer or the other once is moving 
+		if self.ball_sistance <= self.other_ball_dist or self.others_state == State.Positioning:
+			if self.owner_type == "attack" and self.is_near_hoop:
+			# The attacker been closer to the hoop is more important than the defence moving more.
+				self.state = State.POSITIONING
+				self.request = Request.RETREIVE
+				return
+			else:
+				self.state = State.RETRIEVING
+				self.request = Request.NONE
+				return
+				
+		# Lastly if no one has the ball and no one knows where it is we need to find it
+			self.state = State.LOCATING
+			self.request = Request.NONE
+			return
+			
+	# If none of the above is true become idle
+	self.state = State.IDLE
+	self.request = Request.NONE
+	
+```
+
+This completed the majority of the state controller, with the only additions been made after this were renaming of variables, changing their type (tuple vs list ect), and making a few small helper functions for interaction between the systems.
+
+
+###### Issues with the State controller
+
+While developing the state control system, the following issues were encountered: 
+
+###### Connection With Other Systems and Collaborators
+
+#### Foul Detection and Ground Observation
+
+###### Overview of Foul Detection and Ground Observation
+###### Justification for Foul Detection and Ground Observation
+
+###### Foul Detection and Ground Observation Code Snippets 
+
+###### Issues with the Foul Detection and Ground Observation
+
+###### Connection With Other Systems and Collaborators
+
+#### Pushing Ball and Aiming
+###### Overview of Pushing Ball and Aiming
+
+###### Justification for Pushing Ball and Aiming
+
+###### Pushing Ball and Aiming Code Snippets 
+
+###### Issues with the Pushing Ball and Aiming
+
+###### Connection With Other Systems and Collaborators
+
+
+ Record multiple development stages
+ Include code, photos, or video evidence
+ Identify issues and explain fixes
+ Justify design decisions
+
+Current idea go through each of my features justify design choices issues ect 
+Talk about the collaboration 
+How we dicided on the data shaired ect 
+
+## Collaboration
+
+Gone Wrong
+	- Task could of been divided better giving the more mathmatically complex task to the poeple nessisary ect
+	- People could of started coding earlier (Zen)
+	- Some people could of been more independent on the disision making
+	- Deadlines could of been followed (monday, then tuesday, then wednesday overshot)
+	- More team meetinfs
+	- Meets when held could of actualy if people had told or organised their other actives better
+	- Explaination of systems connection could of been better]
+	- Attackes could of spent more time designe prio to develiopment
+	- Start and finish things earlier (to allow for testing time)
+	- Could show up to meeting / show up on time
+	- Communication between people could of been better
+	- When communication / instruction of connecting systems was given that could of been followed
+	- Asked for help from Tim sooner / at all
+	- Dividing time between features and desiging
+	- Didn't test
+	- Wasn't time to test
+	- Systems not been ready prevented testing
+	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up (5:30-45 left at 7:20) and Gabe showed up (7:45) , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
+	- Member required explaination on importing from others code
+	- People need to change place holders to actual things when needed (My foul system wasn't connected with gabes code at all because he used local placeholders instead of connecting with mine)
+
+Things that went well 
+	- Defence design was completed well before due date and design appears to work
+	- Connection between State System, communication and acting on states works well and follows a logical sequence
+	- General communication between Hugo and Dexter was good when designing defence / our connected systems
+	- First few meets were fine and very informative / productive
+	- Most major system were completed early (Exception (zen))
+	- Code reviews were informative / benifical, allwowing bugs to be cought and small gaps in logic to be connected. 
+	- Hugo and Dexter able to act as leaders / mentors when other on track
+	- Github issues / project allowed for planning and assigment of systems
+	- File structure is generally good, although with some exceptions
+	- Branching / version control allowed for reduction in merge conflicts and symultaneous work 
+	- People follow general OOP structure to a good level and produce "Clean Code" although not the maximum of 4 line functions the book calls for
+	- People were creative with the problem solving of the robots
+	- Complex math was explained to less mathmatically inclined individuals allow for their completion of systems
+	- People had choice in the systems they made eg. Gabe volunteered to do movement and was quite infusiastic, Dexter saw the foundational system of the state controller and thus completed it, Hugo applied the testing code well so it could be instantly applied to the final ect
+	- Commonly needed variables were easily found and updated for people
+	- Programming concepts unknown to some members were explaiend by others 
+	- The large meeting from 4:30 - Bla the night before due i spent rought half of it code reviewing Gabe, Zen, and a little of Hugo's code.
+
+#### How Work Was Divided
+
+As covered before the robots were split into teams of two, and the individual sections of code were split between individuals.
+
+For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections, meaning these had to be re assigned. 
+
+The choice of who was responsible for a section of wasn't the most thought out process, but some systems were just expansions of the testing code so it naturally followed that those who made the test continued their development. Individuals also requested to do certain features, and for the most part we tried to keep the code that would only be used by one robot, been made by a person who build that robot. Additionally we also tried to assign an import / general feature to everyone. 
+
+#### How collaboration was handled
+
+The actual collaboration was handled using GitHub, its "Projects" feature and a repository. We all used the same git repository, and used GitHub to store in online, to view the repository (although I acknowledge it is an online and updatable source, It should be use full to see the commit history, and branch history) https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026. For each feature we worked on, we would create a branch from the main, program all our features within that branch, then request to merge our code with the repositories. This was done using pull request, which to insure we only merged good code, either Hugo or I, would look over the merger's code, with for important features we would both look over, and when we were the merger we would have the other look over it for us. This was due to us been the most knowledgeable at both GitHub, and programming in general, and allowed us to catch problems in the code and missing logic. As part of a pull request, we would comment of individuals code, pointing out the mistakes for them to fix on their own, before either confirm it was able to be merged or declining the request and asking for the issues to be fixed. 
+
+#### Hugo's Contributions
+
+
+
+#### Gabe's Contributions 
+
+Gabe ended up making the Movement and Navigation, systems 
+
+#### Zen's Contributions 
+
+Zen was responsible for the IR controller, and the "Triangulation" of the balls position, although this ended up becoming the distance to the ball, rather than an (x,y). This system was originally going to be me, but Zen offered to do it. This probably wasn't the best choice for me to agree since his mathematical ability made its development a more complex task then it was need.
+
+Zen also was responsible for the Attacking robot's  
+
+#### My Contributions 
+#### Decision Making Within the Group
+
+#### Production and Design Challenges and their Resolutions 
+
+#### Challenges of a Group Project
+
+ Explain how work was divided
+ Describe contributions of each member
+ Show how decisions were made
+ Explain how challenges were resolved
+
+## Evidence of Working Systems
+
+
+
+## Reflection 
+
+#### What do you think of the overall design?
+#### How did working in a group effect you and the project?
+#### How successful were you as part of a group?
+#### What changes would you make?
+#### What issues did you experience?
+#### What techniques did you use to solve these issues?
+#### What changes would you make if repeating this project?
+#### What have you learnt from the project? 
+
+## References 
+
+https://mermaid.live/
+
+https://pybricks.com/ev3-micropython/ev3devices.html 
+
+https://github.com/
+
+https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026

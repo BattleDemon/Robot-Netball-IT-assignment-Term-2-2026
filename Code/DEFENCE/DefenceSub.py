@@ -23,7 +23,7 @@ from GENERAL.IRlocation import irLocator
 from GENERAL.StateController import State, State_Controller
 from GENERAL.movement import Driver
 import CatchAndThrow
-from Foul_Controller import Foul_controller
+
 
 class SubDefence():
     def __init__(self) -> None:

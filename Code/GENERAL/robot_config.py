@@ -24,6 +24,8 @@ WHEEL_DIAMETER = 5.6          # cm
 WHEEL_RADIUS   = WHEEL_DIAMETER / 2.0
 WHEEL_CIRCUM   = pi * WHEEL_DIAMETER
 TRACK_WIDTH    = 12.3         # distance between wheel centres (cm)
+# Trackwidth Defence = 7.0 cm
+# Trackwidth Attack 13.8 cm
 
 # ╔══════════════════════════════════════════════════════════════════╗
 # ║                    F I E L D   D I M E N S I O N S               ║
@@ -33,12 +35,30 @@ FIELD_WIDTH  = 158.0          # short side  (x axis) in cm
 FIELD_LENGTH = 219.0          # long side   (y axis) in cm
 
 # ╔══════════════════════════════════════════════════════════════════╗
+# ║                    R O B O T   PO S I T I O N S                  ║
+# ╚══════════════════════════════════════════════════════════════════╝
+
+START_ATTACK_HEADING  = 180   # facing negative Y (toward hoop)
+START_DEFENCE_HEADING = 0     # facing positive Y (toward attack half)
+
+# ╔══════════════════════════════════════════════════════════════════╗
 # ║                      H O O P   P O S I T I O N S                 ║
 # ╚══════════════════════════════════════════════════════════════════╝
 
 HOOP_X = FIELD_WIDTH / 2.0            # 79.0  (centre of short side)
-HOOP_Y_ATTACK  = 0.0                  # attack shoots toward y = 0
-HOOP_Y_DEFENCE = FIELD_LENGTH         # defence shoots toward y = 219
+HOOP_Y_ATTACK  = 0.0          # attack scores here
+HOOP_Y_DEFENCE = 0.0          # defence guards this same hoop
+
+# Since there’s only one physical hoop, 
+# both robots must target the same actual position.
+#Attack starts at y≈199,
+#  drives forward (heading 180°, toward negative Y)
+#  to reach y=0.
+
+#Defence starts at y=20, 
+# already near the hoop, 
+# and distance_to_hoop() will be tiny
+# it knows it is right there.
 
 # ╔══════════════════════════════════════════════════════════════════╗
 # ║                    F O U L   B O X   S P E C S                   ║
