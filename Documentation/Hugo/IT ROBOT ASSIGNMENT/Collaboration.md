@@ -75,16 +75,22 @@ To divide the tasks we created GitHub issues for all the needed tasks. We then d
 - The throwing and catching code for the defence robot
 - The early skeleton of the movement code (including some of the mathematical concepts of how to track coordinates)
 - The maths behind finding the distance to the ball (with dexter)
-- Building the defence robot (with dexter)
+- Designed and built the defence robot (with dexter)
 - Reviewing pull requests and catching bugs and bad code
 - Trying to keep everyone on track (with dexter)
 - Helping others with their code (occasionally)
 ## Dexter
 
 ## Gabe
-
+ - Coded all of the movement (comparatively a lot of work)
+ - coded the main constants file
+ - Designed and built the attack robot (with zen)
+ - Navigation / tracking the movement of the robot
+ - Foul box detection
 ## Zen
-
+- coded the Infrared ball distance finder
+- Coded the shooting and catching for the attack robot
+- Designed and built the attack robot (with gabe)
 # How Decisions were made
 
 # How challenges were resolved
