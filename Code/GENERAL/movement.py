@@ -20,7 +20,7 @@ from pybricks.parameters import Port, Stop, Direction
 from pybricks.tools import wait
 
 from math import pi, sin, cos, radians, degrees, atan2, sqrt
-from threading import Thread, Lock
+from threading import Thread
 import time
 
 from robot_config import (
@@ -95,7 +95,6 @@ class Driver:
         # //////// Threads ////////
         self._running = True
         self._odo_thread = Thread(target=self._odometry_loop)
-        self._odo_thread.daemon = True
         self._odo_thread.start()
 
     # ─── State listener helpers ───
