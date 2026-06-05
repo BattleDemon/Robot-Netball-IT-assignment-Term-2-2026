@@ -72,7 +72,8 @@ class StateActions:
     # Passing
     def Passing(self):
         # get the angle to our teammate
-        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
+        #angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
+        angleToTeamMate = pi/4
         # pivot to face them
         self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
         # Push the ball into the spinning wheels
