@@ -49,9 +49,9 @@ class Defender():
         self.gyro = GyroSensor(Port.S2)
         self.ir_sensor = I2CDevice(Port.S4,0x08)
 
-        self.communicator = Communicator(self.StateController, self.team, self.ev3)
-        self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
-        self.communicationThread.start()
+        #self.communicator = Communicator(self.StateController, self.team, self.ev3)
+        #self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
+        #self.communicationThread.start()
 
         self.ballSensorThread = Thread(target=self.ball_sensing)
         self.ballSensorThread.start()
@@ -64,9 +64,9 @@ class Defender():
         self.groundObserver = Ground_Observer(self.StateController, self.GroundDetectionSensor)
 
         #IR detection initialisation code goes here.
-        self.irLocator = ir_controller(self.ir_sensor,self.StateController)
-        self.irThread = Thread(target=self.irLocator.ir_sensing)
-        self.irThread.start()
+        #self.irLocator = ir_controller(self.ir_sensor,self.StateController)
+        #self.irThread = Thread(target=self.irLocator.ir_sensing)
+        #self.irThread.start()
         self.Start()
         
     def ball_sensing(self):
