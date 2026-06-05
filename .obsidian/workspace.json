@@ -4,11 +4,29 @@
     "type": "split",
     "children": [
       {
-        "id": "524057ffee02cc31",
+        "id": "a852dd8f3e466aa2",
         "type": "tabs",
         "children": [
           {
-            "id": "2bb8f51b9738c91c",
+            "id": "edf1243ed3b76b20",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Construction/Defence Robot/IMG20260506150846.jpg"
+              },
+              "icon": "lucide-image",
+              "title": "IMG20260506150846"
+            }
+          }
+        ]
+      },
+      {
+        "id": "1d8df0d56e9e8352",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4adf392c4a5d0513",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -94,6 +112,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Documentation/Dexter Documentation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +122,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for Dexter Documentation"
             }
           },
           {
@@ -180,35 +199,35 @@
       "bases:Create new base": false
     }
   },
-  "active": "f555c9d4519c4a73",
+  "active": "4adf392c4a5d0513",
   "lastOpenFiles": [
-    "Documentation/BranchTable.png",
-    "Documentation/BranchTable.png.part",
-    "Documentation/CommitsIndividual.png",
     "Documentation/CommitsOverTime.png",
-    "Documentation/Projects.png",
+    "Construction/Defence Robot/IMG20260506150851.jpg",
+    "Brainstorming/Meetings/meeting3.mp3",
+    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_020519027.jpg",
+    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_015133398.jpg",
+    "Brainstorming/Defence Brainstorm/Pictures/IMG20260520133042.jpg",
+    "Construction/Attack Robot/20260603_150307.jpg",
+    "Construction/Attack Robot/20260603_152301.jpg",
+    "Construction/Attack Robot/20260603_152305.jpg",
+    "Construction/Attack Robot/6082409398018969345.jpg",
+    "Construction/Attack Robot/b6b8ea23-18b3-4544-866d-c7e679883483.jpg",
+    "Construction/Attack Robot/20260529_132946.jpg",
     "Documentation/Dexter Documentation.md",
-    "Documentation/Projects.png.part",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-05-181301.png",
-    "Code/DEFENCE/DefenceSub.py~",
-    "Documentation/UsInVs543.png",
-    "Documentation/UsInVC820.png",
-    "Documentation/UsInVC807.png",
-    "Documentation/UsInVC720.png",
-    "Documentation/Projects Page.png",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4",
-    "Documentation/PicsandVids/SecondThrower.jpg",
     "Documentation/PicsandVids/IMG_1023.mov",
+    "Documentation/BranchTable.png.part",
+    "Documentation/Projects.png.part",
+    "Code/DEFENCE/DefenceSub.py~",
     "Documentation/Gabe/04062026.md",
     "rules.md",
     "Code/GENERAL/robot_config.py~",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Prototyping.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Reflection.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Pre-Planning.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Collaboration.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT",
-    "Documentation/Hugo"
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT"
   ]
 }

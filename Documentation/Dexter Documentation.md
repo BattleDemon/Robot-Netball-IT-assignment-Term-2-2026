@@ -373,7 +373,10 @@ Class Push and Aim
 
 ###### Aiming Calculation
 
+The aiming angle was found, as shown in the following diagram. 
 
+![[IMG20260605185123.jpg]]
+(Sorry for image quality, this is the best my phone can do)
 #### Additional Features Incase of Extra Time
 
 Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which were considered to make, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
@@ -383,6 +386,27 @@ Although due to the scale of this assignment and its limitation some of these mi
 #### Designing the Defence Robot
 
 The designing of the defence robot was a collaborative process between Hugo and I, where I primarily focused on its chassis, making sure it could hold the weight of the other equipment as well as have enough space, while remaining in the 30cm diameter circle we are allowed. In addition to this i attached the IR sensor, colour sensors, motors (exclusing flywheel) and EV3's. While Hugo focused on building the flywheels system, and did most of its attaching to the chassis.
+
+One of the first things done during the designing was figuring out the rough layout of the wheels, to allow the fly wheel and the ball to pass through. This produced this initial layout:
+
+![[IMG20260501113020.jpg]]
+
+This was then expanded on with the first sections of the chassis,
+
+![[IMG20260501114103.jpg]]
+
+Then after, finally realising our robot needs to work with the IR ball instead of the squash, produced this next prototype.
+
+![[IMG20260501125135.jpg]]
+
+This idea of a ball container, was pushed more with the addition of sides to the ramp, walls on its plat form an a rough back stopper. Additionally, this section saw the continued design of the chassis, to allow support for the other sensors and motors. Notice the supporting beams going across, which were used to hold the weight of the future sections, along with provide a suspension. 
+
+![[Construction/Defence Robot/IMG20260506150838.jpg]]
+
+This is then where Hugo and my development aligned, with the attachment of the "ball thrower", to the chassis. 
+
+![[Documentation/PicsandVids/baseAndThrower.jpg]]
+
 
 ###### Problems During Production
 
@@ -587,6 +611,8 @@ This completed the majority of the state controller, with the only additions bee
 While developing the state control system, the following issues were encountered: 
 
 ###### Connection With Other Systems and Collaborators
+
+Due to the state controller acting as the connecting system between others systems, it was necessary to include a `get` and `update` helper function for each variable as to allow for their systems to connect with each other. 
 
 #### Foul Detection and Ground Observation
 
