@@ -79,3 +79,7 @@ class Defender():
         while True:
             self.ev3.screen.print("WEEEE I am defending")
             time.sleep(0.2)
+
+
+defender = Defender()
+defender.start()
