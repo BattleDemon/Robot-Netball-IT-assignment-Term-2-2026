@@ -70,14 +70,16 @@ class StateActions:
     # Shooting
     def Shooting(self):
         pass
+
     # Passing
     def Passing(self):
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
-        # pivot to face them
-        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
+        # pivot to face them — choose the shortest arc
+        side = "LEFT" if angleToTeamMate >= 0 else "RIGHT"
+        self.Driver.pivot_angle(side, abs(angleToTeamMate))
 
-        # CODE TO PASS BALL
+        # TODO: CODE TO PASS BALL (claw release etc.)
     
     # retrieving
     def Retreiving(self):
@@ -108,20 +110,24 @@ class StateActions:
     # Positioning
     def Positioning(self):
         # Drive to start position
-        self.Driver.drive_to_point(robot_config.START_ATTACK_X,robot_config.START_ATTACK_Y)
+        self.Driver.drive_to_point(robot_config.START_ATTACK_X,
+                                robot_config.START_ATTACK_Y)
         # get the angle to our teammate
-        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
+        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position,
+                                                        self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
+        side = "LEFT" if angleToTeamMate >= 0 else "RIGHT"
+        self.Driver.pivot_angle(side, abs(angleToTeamMate))
 
 
     # Receiving
-        # Get ready to receive the ball from your teammate
     def Receiving(self):
         # get the angle to our teammate
-        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
-        # pivot to face them ready for a pass.
-        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
+        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position,
+                                                        self.StateController.others_position)
+        # pivot to face them ready for a pass
+        side = "LEFT" if angleToTeamMate >= 0 else "RIGHT"
+        self.Driver.pivot_angle(side, abs(angleToTeamMate))
 
 
     #Waiting
@@ -150,7 +156,7 @@ class StateActions:
                 self.Positioning()
             # if the robot is in the receiving state
             elif Current_state == State.RECEIVING:
-                self.Receiving
+                self.Receiving()
             # if the robot is in the waiting or idle state
             elif Current_state == State.WAITING or Current_state == State.IDLE:
                 pass
