@@ -420,6 +420,8 @@ Another issue was the chassis been larger than the maximum 30 cm circle, which r
 
 ##### Final Design
 
+WRITE FINAL DESIGN AFTER HUGO GIVES ME IMAGES
+
 #### The State Controller
 
 ###### Overview of State controller
@@ -623,6 +625,9 @@ Due to the state controller acting as the connecting system between others syste
 #### Foul Detection and Ground Observation
 
 ###### Overview of Foul Detection and Ground Observation
+
+The aim for the "Foul Detection and Ground Observation" system, was for it to change the state to foul, after it detects it has been mover to the foul box, using its ground colour to detect. It was then originally intended to include the navigation back to the field, but Gabe did that before I could. The ground observation section, would constantly observe the ground and alert the state controller of any foul, while also saving what colour the ground is to a variable in state controller. This was then intended to be read by Gabe's movement code, allowing him to use it as a secondary navigation check, but i later on the day of submission learnt he hadn't done that despite his earlier assurance of its completion. 
+
 ###### Justification for Foul Detection and Ground Observation
 
 ###### Foul Detection and Ground Observation Code Snippets 
