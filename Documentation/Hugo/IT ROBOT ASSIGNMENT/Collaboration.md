@@ -66,7 +66,24 @@ Things that went well:
 
 # How work was divided
 
+To divide the tasks we created GitHub issues for all the needed tasks. We then defined some of them as major tasks and some as minor tasks. There were 4 major tasks so we gave one to each person and then equally divided up the minor tasks until there were no tasks left.
 # Contributions of each member
+## Hugo
+- Both the attacking and defending main files
+- Both the attacking and defending code for deciding what to do depending on the current state (including tracking and moving to the ball)
+- The communication between the two robots
+- The throwing and catching code for the defence robot
+- The early skeleton of the movement code (including some of the mathematical concepts of how to track coordinates)
+- The maths behind finding the distance to the ball (with dexter)
+- Building the defence robot (with dexter)
+- Reviewing pull requests and catching bugs and bad code
+- Trying to keep everyone on track (with dexter)
+- 
+## Dexter
+
+## Gabe
+
+## Zen
 
 # How Decisions were made
 
