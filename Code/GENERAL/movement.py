@@ -23,7 +23,7 @@ from math import pi, sin, cos, radians, degrees, atan2, sqrt
 from threading import Thread
 import time
 
-from robot_config import (
+from GENERAL.robot_config import (
     TEAM, WHEEL_DIAMETER, WHEEL_RADIUS, WHEEL_CIRCUM, TRACK_WIDTH,
     FIELD_WIDTH, FIELD_LENGTH, HOOP_X, HOOP_Y_ATTACK, HOOP_Y_DEFENCE,
     FOUL_BOX_WIDTH, FOUL_BOX_HEIGHT,
@@ -37,7 +37,7 @@ from robot_config import (
     IR_BALL_CLOSE_THRESHOLD,
 )
 
-from StateController import State, State_Controller
+from GENERAL.StateController import State, State_Controller
 
 
 class Driver:

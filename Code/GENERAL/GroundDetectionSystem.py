@@ -10,7 +10,7 @@ from threading import Thread  # For the constant ground detection thread and the
 from pybricks.ev3devices import ColorSensor  # To detect the ground colour
 
 # Allow use to take in the state_controller and know what it is, to set a few variables
-from StateController import State, State_Controller
+from GENERAL.StateController import State, State_Controller
 
 # Constant foul time, might add to Gabe's constants file
 FOUL_TIME = 5
