@@ -630,11 +630,72 @@ The aim for the "Foul Detection and Ground Observation" system, was for it to ch
 
 ###### Justification for Foul Detection and Ground Observation
 
+Due to the rules, there needed to be a solution to handling when fouls are done. The ground colour, was the natural solution to this because the foul area is a separate colour to any other section of the field, making the difference in colour the obvious tell for if your in foul.
+
 ###### Foul Detection and Ground Observation Code Snippets 
+
+The code for this section was generally simple and didn't require any changes beyond name changes or similar small things, such as removing daemon due to its non existence on micropython.
+
+The colour observation function was used as a constantly running thread, which updated the observed colour on the state controller. 
+
+``` Python
+# In class Ground_observer
+def observe_ground(self):
+	# Loop forever
+	while True:
+		# Set the observed colour
+		self.observed_colour = self.colour_sensor.color_name()
+		
+		# Start the foul detected if in foul and not fouling
+		if self.observed_colour == FOUL_COLOUR and not self.currently_foul:
+		self.on_foul_detected()
+		
+		# If fouling update if no longer
+		if self.currently_foul:
+		# Check state
+		if self.state_controller.get_state() != State.FOUL:
+		# turn currently foul off
+		self.currently_foul = False
+		
+		# Updated state contellers local ground colour (so Gabe can use that as secondary navigation checker, and foul)
+		self.state_controller.set_ground_colour(self.observed_colour)
+		
+		# Don't want to kill the CPU
+		time.sleep(0.75)****
+
+```
+
+With on foul detected, starting a timer thread for the duration of the foul, which would then update state controllers foul elapsed variable.
+
+``` Python
+
+def on_foul_detected(self):
+	# Set currently_foul local and state
+	self.currently_foul = True
+	self.state_controller.set_foul_state()
+	
+	# Start a timer thread
+	timer_thread = Thread(target=self.foul_timer)
+	# timer_thread.deamon = True
+	timer_thread.start()
+
+# The foul timer, so we don't stay fouled forever
+def foul_timer(self):
+	# Sleep for the foul time
+	time.sleep(FOUL_TIME)
+	
+	# Tell state controller foul is over but don't change state (Need to return to field)
+	self.state_controller.toggle_foul_elapsed()
+
+```
 
 ###### Issues with the Foul Detection and Ground Observation
 
+The only main issue with this system was my initial use of thread daemon, which doesn't exist on micropython and caused crashes when used.
+
 ###### Connection With Other Systems and Collaborators
+
+As mentioned before this system was meant to connect with the movement and navigation systems, but those connections didn't end up been developed. 
 
 #### Pushing Ball and Aiming
 ###### Overview of Pushing Ball and Aiming
