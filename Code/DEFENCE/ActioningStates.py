@@ -96,9 +96,9 @@ class StateActions:
         # calculate a little step forward in the y direction
         forward_y = cos(heading)
         # distance modifier
-        distanceModifier = 3
+        distanceModifier = 30
         # drive a little increment forward and wait for the next loop
-        self.Driver.Drive_angle(-pi/4)
+        self.Driver.Drive_angle(angle_to_ball, distanceModifier)
         sleep(1)
     # Locating
     def Locating(self):
