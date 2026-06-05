@@ -74,10 +74,10 @@ class StateActions:
     # Passing
     def Passing(self):
         # get the angle to our teammate
-        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
-        # pivot to face them — choose the shortest arc
-        side = "LEFT" if angleToTeamMate >= 0 else "RIGHT"
-        self.Driver.pivot_angle(side, abs(angleToTeamMate))
+        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position,
+                                                        self.StateController.others_position)
+        # pivot to face them, left foot planted (netball legal)
+        self.Driver.pivot_angle("LEFT", angleToTeamMate)
 
         # TODO: CODE TO PASS BALL (claw release etc.)
     
@@ -115,9 +115,8 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position,
                                                         self.StateController.others_position)
-        # pivot to face them
-        side = "LEFT" if angleToTeamMate >= 0 else "RIGHT"
-        self.Driver.pivot_angle(side, abs(angleToTeamMate))
+        # pivot to face them, left foot planted
+        self.Driver.pivot_angle("LEFT", angleToTeamMate)
 
 
     # Receiving
@@ -125,9 +124,8 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position,
                                                         self.StateController.others_position)
-        # pivot to face them ready for a pass
-        side = "LEFT" if angleToTeamMate >= 0 else "RIGHT"
-        self.Driver.pivot_angle(side, abs(angleToTeamMate))
+        # pivot to face them ready for a pass, left foot planted
+        self.Driver.pivot_angle("LEFT", angleToTeamMate)
 
 
     #Waiting
