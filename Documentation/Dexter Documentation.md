@@ -10,37 +10,49 @@ The strategy for game play we set out to follow, used two robots one whose prima
 
 ###### Initial Meeting
 
-The Initial meeting was surprisingly productive, resulting in our general plan for the two robots and some early design choices.
+The initial meeting was surprisingly productive, resulting in a general plan for both robots and several early design decisions.
 
-The Two Robots
-* Defending Robot 
-	* Locates and Retrieves the ball.
-	* Passes the ball to the other robot.
-	* Prevent Opposing Shooting, using a wall.
-	* Acts as the Main robot, with it sending requests and signals to the other.
-* Attacking Robot
-	* Receives the ball from the Defending Robot.
-	* Shoots the ball into the hoop.
-	* Responds to requests from the Defence robot.
+**The Two Robots**
 
-Additionally, we also considered the ideas of using another communicating EV3 as a static navigation system, which would remain in the middle of the field and have one of the IR detectors and a some ultrasonic. Its goal is to provide a secondary location for both the ball and using the ultrasonic for the moving robots, although this ideas was later struck down, as too complex, would get in the way, and due to our lack of communicating EV3's. 
+*Defending Robot*
 
-This meeting also produced the ideation for the first system, that of the Defence's ball handling. The idea used two counter rotating motors which would make a soft of flywheel / suction effect that would full the ball into a chamber which would then be shut. A colour sensor would be used to detect when the ball entered the chamber and trigger its shutting, along with reversing the rotation of the flywheel. Then once the robot positions its self, the chamber would open releasing the ball which would be pushed out using the flywheels. Additionally we considered another option which instead of physically blocking the chamber we could just make it sit in the chamber until pushed out. (the first option had a ramp, which the lid would block and them be moved allowing the ball to roll to the flywheel, while this second idea would use the pushing motion to give it the intial motion to the fly wheels)
+- Locates and retrieves the ball.
+    
+- Passes the ball to the attacking robot.
+    
+- Prevents opponents from shooting by using a shield wall.
+    
+- Acts as the primary robot, sending requests and signals to the attacking robot.
+    
 
-We also brainstormed methods for handleing the movement and aiming.
-With aiming been handled as a subsection of moving rather than its own seperate turret. With the robot needing to entirely turn to aim.
+*Attacking Robot*
 
-The navigation would be proformed by both using the motor turns to calculate a theoretical position aswell as useing a gyro sensor to confirm our correct calculation of the angle. This would then be checked against out theoretical and then be used to estimate the true position.
+- Receives the ball from the defending robot.
+    
+- Shoots the ball into the hoop.
+    
+- Responds to requests from the defending robot.
+    
 
-We also decided that moving slower would be the best option as it would incease accuracy of our reading and prevent any slip or drift.
+Additionally, we considered using another communicating EV3 as a static navigation system. This EV3 would remain in the middle of the field and contain an IR detector and several ultrasonic sensors. Its purpose would be to provide a secondary reference point for locating the ball and tracking the movement of the robots. However, this idea was later rejected as it was overly complex, would likely obstruct gameplay, and exceeded the number of communicating EV3 units available to us.
 
-This meeting also produced some early ideas for the Attacking robot, with it possesing a turret / trebuche design, using a basket the ball would sit in before been flung towards the hoop. 
+This meeting also produced the first concept for the defending robot's ball-handling system. The design used two counter-rotating motors to create a flywheel-like intake effect that would pull the ball into a holding chamber. Once the ball entered the chamber, a colour sensor would detect it and trigger the chamber to close while simultaneously reversing the flywheels. After the robot positioned itself for a pass, the chamber would open and the ball would be propelled outward by the flywheels.
 
-Additionally we decided for the Defending robot to be able to do everything we needed, we would need to use two EV3 blocks, one would control the movement, shield, and communication, while the other would control the flywheel. 
+We also considered an alternative design. Rather than physically blocking the chamber, the ball would simply remain within it until being pushed towards the flywheels. In the original concept, a ramp was blocked by a lid, which would then move to allow the ball to roll towards the flywheels. In the alternative design, the pushing mechanism itself would provide the initial motion required to feed the ball into the flywheels.
 
-Another system this meeting produced was the shield, which would be an arm attached to the Defending robot which would stay perpendicular to the ground and could be raised or lowered to prevent an opponents shooting.
+We also brainstormed methods for movement and aiming. Rather than using a separate aiming turret, aiming would be incorporated into the movement system itself, requiring the entire robot to rotate in order to aim.
 
-It is also clear this early meeting dismissed much of the attacking robot, with us even in this stage not envisioning it been able to move and not calculate its own local ball position. It would stay next to the hoop and wait for the defender to pass to it.
+Navigation would be performed using wheel rotations to calculate a theoretical position while also using a gyro sensor to verify the robot's heading. The gyro readings would be compared against the calculated position and orientation to improve the accuracy of the robot's estimated location.
+
+We also decided that slower movement would be preferable, as it would increase the accuracy of sensor readings and reduce wheel slip and positional drift.
+
+This meeting also generated some early ideas for the attacking robot. One concept involved a turret or trebuchet-style launcher, using a basket in which the ball would sit before being launched towards the hoop.
+
+Additionally, we decided that, for the defending robot to perform all of its required functions, it would need to use two EV3 bricks. One EV3 would control movement, communication, and the shield mechanism, while the second EV3 would control the flywheel system.
+
+Another system conceived during this meeting was the shield. This would consist of an arm attached to the defending robot that would remain perpendicular to the ground and could be raised or lowered to block an opponent's shot.
+
+It is also clear that this early meeting placed considerably less emphasis on the attacking robot. Even at this stage, we did not envision it being capable of moving independently or calculating its own local ball position. Instead, it would remain near the hoop and wait for the defending robot to pass the ball to it.
 
 ###### Diagrams of Initial Designs
 
