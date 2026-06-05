@@ -784,15 +784,34 @@ The actual collaboration was handled using GitHub, and its "Projects" feature wi
 This allowed us to create a visual representation of the timeline for our development, the red line marks the due date.
 ![[Projects.png]]
 
+Additionally, here is a table of the branches used during development,
+
+![[BranchTable.png|697]]
+
+Peoples contributions were also recorded within this graph here, where you can see a heavy section at the end, rather than a more spread out development.
+![[CommitsOverTime.png]]
+
+This can also be viewed individually, with me as the top contributor, although this could be due to my tendencies to over commit for every minor change. Hugo, Gabe, and Zen followed in order.   
+![[CommitsIndividual.png]]
 #### Hugo's Contributions
 
-
+Hugo was responsible for the Defending main file, which defines everything and begins the robots, and after neither Gabe nor Zen agreed to do the attacking one, Hugo also made their version. 
+Additionally, Hugo developed the actioning of states systems, which followed the plans I had set out with my state machine, and connected that to the other systems to allow for the robot to actual function.
+He developed the communication between robots, which after a quick chat we agreed I would give him a dictionary and he would return one, which we ended up doing and didn't change after that.
+During the designing of the defence robot, he made the throwing and catching code.
+Both Him and I, assisted in explanation of maths for others features.
+Designed the defence robot along with me, with him focusing on the throwing and catching system.
+Additionally, both of us attempted to keep every one on track, with us setting dead line on occasion which were then ignored by others.
+Helped Gabe with his code on the night before submission, though pull requests and comments. 
+Only real complaint is he began the last sections of his code too late, although this was more acceptable since he is a proficient enough programmer to finish in such short time. What didn't help that was his last feature relied on other systems which bottle necked his development.
 
 #### Gabe's Contributions 
 
 Gabe ended up making the Movement and Navigation systems, with him volunteering to do this system and seeming sense of ability to complete it quickly. He worked off of a template from Hugo's first term work, and expanded it to meet the necessary features, although he would constantly add back redundant sections or duplicate the same sections of code under a new function. This along with, often check in's with him to see how he was doing with implementing the response to the colour detection, with in two occasions after i had made my feature and instructed him on how to connect them by using `self.state_controller.get_ground_colour`, found him either making his own colour detection system within his movement code, or not handling it at all. Additionally while i was developing the foul detection code which originally intended to also do the returning to field, found that despite telling him in a meeting of this, that his movement code was doing that for me. 
 
 Beyond the initial confusion and troubles, the night before the assignment was due Gabe said he need to fix some things, which evolved into both Hugo, Him, and Me spending large parts of that night fixing mistakes in his code. Which was done through pull request, and leaving feed back on his code, which he would follow to fix.
+
+Additionally on the day before submission Gabe kept assuring me he was able to have a meeting, so we could fix code, with this meeting originally intended for morning tea, but with Gabe cancelling due to him forgetting about another commitment, which on its own wouldn't of been a problem. This was followed with the promise of doing the meeting during the middle period, which Gabe proceeded to miss, along with the third agreed upon time of lunch time.
 
 #### Zen's Contributions 
 
@@ -803,6 +822,8 @@ Zen also was responsible for the two of the Attacking robot's  individual featur
 Then when were were getting close to fixing the bugs with both the robots codes and it was looking like they might be able to run, Zen left after lunch instead of staying to attempt to fix any errors. But this is also somewhat acceptable due to his lack of general programming knowledge, preventing him from successfully locating bugs. Along with the complex and confusing even to Hugo and I, of Gabe's code which i don't think Zen would of been able to do anything to remedy. 
 
 #### My Contributions 
+
+In addition to my code contribution which I covered before I have contributed in the following ways.
 
 * The state_controller
 * The ground observation and foul detection
@@ -818,22 +839,15 @@ Then when were were getting close to fixing the bugs with both the robots codes 
 
 #### Attacking Design
 
-I apologies if this section is too harsh or accusatory, but both Zen and Gabe jumped straight into the building of their robot without taking much account into its design, the features it needed, and general capabilities. Which when compared 
+I apologies if this section is too harsh or accusatory, but both Zen and Gabe jumped straight into the building of their robot without taking much account into its design, the features it needed, and general capabilities. To attempt to assist with this, both Hugo and I attempted to suggest they plan certain features beforehand, as well as pointed out systems which seemed unlikely to work such as their trebuche, which they decided on following any way.
 
 #### The Night Before Due
 
 #### The Day It's Due
 
-#### Decision Making Within the Group
-
-#### Production and Design Challenges and their Resolutions 
-
 #### Challenges of a Group Project
 
- Explain how work was divided
- Describe contributions of each member
- Show how decisions were made
- Explain how challenges were resolved
+
 
 ## Evidence of Working Systems
 
