@@ -78,7 +78,7 @@ To divide the tasks we created GitHub issues for all the needed tasks. We then d
 - Building the defence robot (with dexter)
 - Reviewing pull requests and catching bugs and bad code
 - Trying to keep everyone on track (with dexter)
-- 
+- Helping others with their code (occasionally)
 ## Dexter
 
 ## Gabe
