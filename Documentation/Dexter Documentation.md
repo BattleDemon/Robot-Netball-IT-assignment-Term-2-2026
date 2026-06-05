@@ -844,9 +844,19 @@ I apologies if this section is too harsh or accusatory, but both Zen and Gabe ju
 
 #### The Night Before Due
 
-The night before the due date, we all agreed to join a discord call at 4:30, with me joining slightly early in case anyone wanted to talk, followed by Hugo at the correct time. During the time it was just us we discussed, writing of documentation and what needed fixing that night. Later, at around 5:30 Zen joined and we spend the next 1-2 hours working on his IR, though a series of him coding, us reviewing and providing feedback, until it was decided it was good enough. This was followed by Zen leaving at around 7:30. Then at 7:45, Gabe joined, then for the next 2 hours we continue working independently, with minor feedback, due to us taking breaks for dinner. But 
+The night before the due date, we all agreed to join a discord call at 4:30, with me joining slightly early in case anyone wanted to talk, followed by Hugo at the correct time. During the time it was just us we discussed, writing of documentation and what needed fixing that night. Later, at around 5:30 Zen joined and we spend the next 1-2 hours working on his IR, though a series of him coding, us reviewing and providing feedback, until it was decided it was good enough. This was followed by Zen leaving at around 7:30. Then at 7:45, Gabe joined, then for the next 2 hours we continue working independently, with minor feedback, due to us taking breaks for dinner. But after that we spend the next few hours until 1:30 AM, attempting to fix Gabe's code which had many errors, this was again done though a series of pull request and reviews. 
+
+Us at around 10:15, (Gabe added a funny little meme)
+![[UsInVs543.png]]
+Us in voice chat around 12.
+![[UsInVC720.png]]
+Us second before ending call and going to bed.
+![[UsInVC807.png]]
 
 #### The Day It's Due
+
+The day it's due, the Attackers team were still building their robot, with them not "finishing" building until around midday. This was followed by an attempt for them to finish their code, which finally allowed Hugo to make his system which was waiting on these sections of code. During this time, I was working on my documentation, if i was alerted to an error or bug i would assist, those whose code it is in with  fixing it. I also reviewed all code written on that day before allowing it to be merged to main. 
+Finally slightly before lunch me and Hugo decided to disconnect our defence robot from the others, once it was clear their robot was not going to work. This resulted in us bug fixing until 4:40 which is when we finally able to get some systems to work. These bugs occurred mostly in Gabe's code and often involved, problems between radians and degrees. 
 
 #### Challenges of a Group Project
 
