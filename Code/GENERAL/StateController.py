@@ -52,7 +52,7 @@ class State_Controller:
         self.owner = owner  # Local stored refrence to owner
         self.owner_type = robot_type  # Robot role: "attack" or "defence"
 
-        self.hoop_position: tuple = (
+        self.hoop_position = (
             hoop_x,
             hoop_y,
         )  # Fixed hoop cords on the field, taken in value because it depends on how movement works
@@ -62,26 +62,26 @@ class State_Controller:
         self.others_state = State.IDLE
 
         # This robots and the other's positions
-        self.position: tuple = (x_pos, y_pos, angle)
-        self.others_position: tuple = (0,0,0)
+        self.position = (x_pos, y_pos, angle)
+        self.others_position = (0,0,0)
 
         # Ball Tracking for this robot and others
-        self.distance_to_ball: float = ball_dist
-        self.angle_to_ball: float = ball_angle
-        self.others_distance_to_ball: float = 10000
-        self.others_angle_to_ball: float = 10000
+        self.distance_to_ball = ball_dist
+        self.angle_to_ball = ball_angle
+        self.others_distance_to_ball = 10000
+        self.others_angle_to_ball = 10000
 
         # Ball posession
-        self.has_ball: bool = False
-        self.others_has_ball: bool = False
+        self.has_ball = False
+        self.others_has_ball = False
 
         # Outgoing and latest incoming requests
         self.request = Request.NONE
         self.incoming_request = Request.NONE
 
         # IR Ground detected
-        self.ground_colour: str = ""
-        self.foul_elapsed: bool = False
+        self.ground_colour = ""
+        self.foul_elapsed = False
 
     # update local robot position and heading
     def update_position(self, x, y, angle):
