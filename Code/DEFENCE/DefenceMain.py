@@ -39,9 +39,9 @@ class Defender():
         self.StateController = State_Controller(self,self.team, 0,0,0,0,0,0,0)
         self.has_ball = False
         
-        self.leftMotor = Motor(Port.B)
-        self.rightMotor = Motor(Port.C)
-        self.pushMotor = Motor(Port.C)
+        self.leftMotor = Motor(Port.C)
+        self.rightMotor = Motor(Port.D)
+        self.pushMotor = Motor(Port.A)
 
         self.GroundDetectionSensor = ColorSensor(Port.S1)
         self.BallSensor = ColorSensor(Port.S4)
