@@ -8,18 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "b25b875301e64728",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "Documentation/UsInVC720.png"
-              },
-              "icon": "lucide-image",
-              "title": "UsInVC720"
-            }
-          },
-          {
             "id": "85473b95f7b41387",
             "type": "leaf",
             "state": {
@@ -33,8 +21,7 @@
               "title": "Dexter Documentation"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"

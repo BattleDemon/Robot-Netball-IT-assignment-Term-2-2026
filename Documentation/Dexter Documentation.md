@@ -486,6 +486,82 @@ class State_Controller():
 
 The next major addition to the state controller was the actual logic behind the determining of states and the state machine.
 
+``` Python
+
+# inside state_controller
+def determine_state(self):
+	# Check if currently foul 
+	# Which has its own system for changing into and our of
+	
+	if self.state == State.FOUL:
+		return
+		
+	# Waiting for a responce to a request 
+	if self.state == State.WAITING:
+			# other robot has declined the request
+            if self.incoming_request == Request.DECLINE:
+                self.request = Request.NONE
+
+                self.state = State.IDLE
+                
+	        if self.incoming_request == self.request:
+		        if self.request == Request.PASS:
+			        self.state = State.PASSING
+			        return
+			    # Repeat for other possible requests
+	# If there is an incoming request and we are not waiting
+	if self.incoming_request != Request.NONE:
+		if self.incoming_request == Request.PASS:
+			# Check avaliability to pass 
+			if not self.has_ball and self.state not state.SHOOTING:
+				self.state = State.RECIEVING
+				self.request = Request.RECIEVE # Echo back confirmation
+				return
+			else:
+				# Decline request if it doesn't meet the requirments
+				self.request = Request.DECLINE
+				
+		# Repeat similar logic for other requests
+		
+		
+	# Now the what I call self determined state logic
+	if self.has_ball and self.owner_type == "attack":
+	# High priority state, set shooting
+		self.state = State.SHOOTING
+		self.request = Request.NONE
+		return
+	
+	# Next priority state since if you have the ball you will need to get rid of it quick
+	if self.has_ball:
+		self.request = Requst.PASS
+		self.state = State.WAITING
+		Return
+		
+	# Next if no one has ball, determine who gets it
+	if not self.has_ball and not self.others_has_ball:
+	# If your closer or the other once is moving 
+		if self.ball_sistance <= self.other_ball_dist or self.others_state == State.Positioning:
+			if self.owner_type == "attack" and self.is_near_hoop:
+			# The attacker been closer to the hoop is more important than the defence moving more.
+				self.state = State.POSITIONING
+				self.request = Request.RETREIVE
+				return
+			else:
+				self.state = State.RETRIEVING
+				self.request = Request.NONE
+				return
+				
+		# Lastly if no one has the ball and no one knows where it is we need to find it
+			self.state = State.LOCATING
+			self.request = Request.NONE
+			return
+			
+	# If none of the above is true become idle
+	self.state = State.IDLE
+	self.request = Request.NONE
+	
+```
+
 
 
 ###### Issues with the State controller
