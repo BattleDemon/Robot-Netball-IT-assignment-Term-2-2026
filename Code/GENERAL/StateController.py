@@ -181,7 +181,7 @@ class State_Controller:
         if self.state == State.WAITING:
 
             # To test the functionality of push and the state code 
-            self.incoming_request = Request.PASSING
+            self.incoming_request = Request.RECEIVE
             # Other robot declined our request
             if self.incoming_request == Request.DECLINE:
                 # Resets our request
