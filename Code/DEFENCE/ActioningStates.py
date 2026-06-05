@@ -83,7 +83,7 @@ class StateActions:
         # get the data from the IR sensor
         ball_data = self.ir_sensor.read(2,2)
         # get the angle to the ball in radians from (-pi,pi)
-        angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
+        angle_to_ball = ((ball_data[0] * -1* pi / 6)+pi)%pi-pi
         self.ev3.screen.print(ball_data[0])
         # turn to that angle
         #self.Driver.spin_angle(angle_to_ball)
