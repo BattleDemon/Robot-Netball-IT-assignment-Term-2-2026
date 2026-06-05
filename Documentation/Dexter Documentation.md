@@ -650,7 +650,13 @@ Things that went well
 
 As covered before the robots were split into teams of two, and the individual sections of code were split between individuals.
 
-For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections meaned these had to be re assigned. 
+For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections, meaning these had to be re assigned. 
+
+The choice of who was responsible for a section of wasn't the most thought out process, but some systems were just expansions of the testing code so it naturally followed that those who made the test continued their development. Individuals also requested to do certain features, and for the most part we tried to keep the code that would only be used by one robot, been made by a person who build that robot. Additionally we also tried to assign an import / general feature to everyone. 
+
+#### How collaboration was handled
+
+The actual collaboration was handled using GitHub, its "Projects" feature and a repository. We all used the same git repository, and used GitHub to store in online, to view the repository (although i acknowledge it is an online and updatable source, It should be use full to see the commit history, and branch history) https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026. For each feature we worked on, we would create a branch from the main, program all our features within that branch, then request to merge our code with the repositories. This was done using pull request, which to insure we only merged good code, either Hugo or I, would look over the merger's code, with for important features we would both look over, and when we were the merger we would have the other look over it for us. This was due to us been the most knowledgeable at both GitHub, and programming in general, and allowed us to catch problems in the code and missing logic. As part of a pull request, we would comment of individuals code, pointing out the mistakes for them to fix on their own, before either confirm it was able to be merged or declining the request and asking for the issues to be fixed. 
 
 #### Hugo's Contributions
 
@@ -658,6 +664,9 @@ For the individual sections of code, as to not force one person to do more than 
 
 #### Zen's Contributions 
 
+ (This was originally going to be me, but Zen offered to do it. This probably wasn't the best choice for me to agree since his mathematical ability made its development a more complex task then it was need.)
+
+#### Dexter's Contributions 
 #### Decision Making Within the Group
 
 #### Production and Design Challenges and their Resolutions 
@@ -689,3 +698,5 @@ For the individual sections of code, as to not force one person to do more than 
 https://mermaid.live/
 
 https://pybricks.com/ev3-micropython/ev3devices.html 
+
+https://github.com/
