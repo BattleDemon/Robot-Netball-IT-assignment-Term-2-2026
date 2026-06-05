@@ -14,7 +14,7 @@ from pybricks.iodevices import I2CDevice
 
 # Non Ev3 Imports
 from threading import *
-
+import time
 import CatchAndThrow
 
 
@@ -22,3 +22,5 @@ class SubDefence():
     def __init__(self) -> None:
         self.CatchAndThrowThread = Thread(target=CatchAndThrow.Catch_throw)
         self.CatchAndThrowThread.start()
+        while True:
+            time.sleep(1)
