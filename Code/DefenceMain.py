@@ -43,9 +43,10 @@ class Defender():
         self.pushMotor = Motor(Port.A)
 
         self.GroundDetectionSensor = ColorSensor(Port.S1)
-        self.BallSensor = ColorSensor(Port.S4)
-        self.gyro = GyroSensor(Port.S2)
-        self.ir_sensor = I2CDevice(Port.S4,0x08)
+        self.BallSensor = ColorSensor(Port.S3)
+        self.gyro = GyroSensor(Port.S4)
+        self.ir_sensor = I2CDevice(Port.S2,0x08)
+
 
         #self.communicator = Communicator(self.StateController, self.team, self.ev3)
         #self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
@@ -57,7 +58,7 @@ class Defender():
         self.Driver = Driver(self.ev3, self.leftMotor,self.rightMotor,self.GroundDetectionSensor,self.team, self.gyro)
 
 
-        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver,self.ir_sensor)
+        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver,self.ir_sensor, self.ev3)
 
         self.groundObserver = Ground_Observer(self.StateController, self.GroundDetectionSensor)
 
@@ -71,13 +72,15 @@ class Defender():
         while True:
             if self.BallSensor.color() == Color.BLACK:
                 self.has_ball = True
+                self.ev3.speaker.beep()
+
             else:
                 self.has_ball = False
             time.sleep(0.5)
 
     def Start(self):
         while True:
-            self.ev3.screen.print("WEEEE I am defending")
+            #self.ev3.screen.print(self.StateController.get_state())
             time.sleep(0.2)
 
 

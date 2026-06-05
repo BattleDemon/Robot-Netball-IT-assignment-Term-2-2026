@@ -38,7 +38,7 @@ class StateActions:
     Class to manage what the robot does when a specific state is on.
     """
 
-    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice) -> None:
+    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice, ev3) -> None:
         # get a reference to the motor used to push the ball
         self.PushMotor = PushMotor
         # get a refeerence to the current state controller
@@ -51,6 +51,8 @@ class StateActions:
         self.wasinfoul = False
 
         self.ir_sensor = ir_sensor
+
+        self.ev3 = ev3
 
 
         # create the thread for the main loop
@@ -82,6 +84,7 @@ class StateActions:
         ball_data = self.ir_sensor.read(2,2)
         # get the angle to the ball in radians from (-pi,pi)
         angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
+        self.ev3.screen.print(ball_data[0])
         # turn to that angle
         self.Driver.spin_angle(angle_to_ball)
         # get the heading of the robot
@@ -91,7 +94,7 @@ class StateActions:
         # calculate a little step forward in the y direction
         forward_y = sin(heading)
         # distance modifier
-        distanceModifier = 5
+        distanceModifier = 500
         # drive a little increment forward and wait for the next loop
         self.Driver.drive_to_point(self.Driver.x+forward_x,self.Driver.y+forward_y)
         
