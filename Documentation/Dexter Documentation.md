@@ -562,6 +562,7 @@ def determine_state(self):
 	
 ```
 
+This completed the majority of the state controller, with the only additions been made after this were renaming of variables, changing their type (tuple vs list ect), and making a few small helper functions for interaction between the systems.
 
 
 ###### Issues with the State controller
