@@ -407,10 +407,16 @@ This is then where Hugo and my development aligned, with the attachment of the "
 
 ![[Documentation/PicsandVids/baseAndThrower.jpg]]
 
+This addition produced some issues with the sizing and staying within the 30 cm circle, and the additional weight. This meant we needed to shorten the front section and add increasing support to the overall chassis.
+With the following been the result of that process.
+
+![[IMG20260518141517.jpg]]
 
 ###### Problems During Production
 
-###### Design Notes and Justification
+One of the main problems during the building, was the throwing system when it spins, it bends outwards loosening its grip on the ball. This issue was rectified by adding the curved pieces that go from the axle to the main chassis, this prevented the majority of that moving and solved this issue.
+
+Another issue was the chassis been larger than the maximum 30 cm circle, which required both the back end and front to be shortened.
 
 ##### Final Design
 
