@@ -10,7 +10,6 @@ from pybricks.ev3devices import (
     InfraredSensor, UltrasonicSensor, GyroSensor
 )
 from pybricks.parameters import Port, Button, Color
-from pybricks.tools import wait
 
 from pybricks.iodevices import I2CDevice
 
@@ -24,8 +23,7 @@ import random
 from GENERAL.IRlocation import irLocator
 from GENERAL.StateController import State, State_Controller
 from GENERAL.movement import Driver
-from GENERAL.irsensor_triangulation import ir_controller
-import CatchAndThrow
+
 from GENERAL.GroundDetectionSystem import Ground_Observer
 from GENERAL.communication import Communicator
 from DEFENCE.ActioningStates import StateActions
@@ -40,18 +38,19 @@ class Defender():
         self.StateController = State_Controller(self,self.team, 0,0,0,0,0,0,0)
         self.has_ball = False
         
-        self.leftMotor = Motor(Port.B)
-        self.rightMotor = Motor(Port.C)
-        self.pushMotor = Motor(Port.C)
+        self.leftMotor = Motor(Port.C)
+        self.rightMotor = Motor(Port.D)
+        self.pushMotor = Motor(Port.A)
 
         self.GroundDetectionSensor = ColorSensor(Port.S1)
-        self.BallSensor = ColorSensor(Port.S4)
-        self.gyro = GyroSensor(Port.S2)
-        self.ir_sensor = I2CDevice(Port.S4,0x08)
+        self.BallSensor = ColorSensor(Port.S3)
+        self.gyro = GyroSensor(Port.S4)
+        self.ir_sensor = I2CDevice(Port.S2,0x08)
 
-        self.communicator = Communicator(self.StateController, self.team, self.ev3)
-        self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
-        self.communicationThread.start()
+
+        #self.communicator = Communicator(self.StateController, self.team, self.ev3)
+        #self.communicationThread = Thread(target=self.communicator.CommunicationLoop)
+        #self.communicationThread.start()
 
         self.ballSensorThread = Thread(target=self.ball_sensing)
         self.ballSensorThread.start()
@@ -59,25 +58,34 @@ class Defender():
         self.Driver = Driver(self.ev3, self.leftMotor,self.rightMotor,self.GroundDetectionSensor,self.team, self.gyro)
 
 
-        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver,self.ir_sensor)
+        self.stateActioner = StateActions(self.pushMotor, self.StateController, self.Driver,self.ir_sensor, self.ev3)
 
         self.groundObserver = Ground_Observer(self.StateController, self.GroundDetectionSensor)
 
         #IR detection initialisation code goes here.
-        self.irLocator = ir_controller(self.ir_sensor,self.StateController)
-        self.irThread = Thread(target=self.irLocator.ir_sensing)
-        self.irThread.start()
+        #self.irLocator = ir_controller(self.ir_sensor,self.StateController)
+        #self.irThread = Thread(target=self.irLocator.ir_sensing)
+        #self.irThread.start()
         self.Start()
         
     def ball_sensing(self):
         while True:
             if self.BallSensor.color() == Color.BLACK:
                 self.has_ball = True
+                self.StateController.update_have_ball()
+                self.ev3.speaker.beep()
+
             else:
+                if self.has_ball:
+                    self.StateController.update_have_ball()
                 self.has_ball = False
             time.sleep(0.5)
 
     def Start(self):
         while True:
-            self.ev3.screen.print("WEEEE I am defending")
+            #self.ev3.screen.print(self.StateController.get_state())
             time.sleep(0.2)
+
+
+defender = Defender()
+defender.start()

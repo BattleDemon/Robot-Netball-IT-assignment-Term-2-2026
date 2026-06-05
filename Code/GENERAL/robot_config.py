@@ -23,8 +23,8 @@ TEAM = "ATTACK"   # Change to "DEFENCE" on the defender bot
 WHEEL_DIAMETER = 5.6          # cm
 WHEEL_RADIUS   = WHEEL_DIAMETER / 2.0
 WHEEL_CIRCUM   = pi * WHEEL_DIAMETER
-TRACK_WIDTH    = 12.3         # distance between wheel centres (cm)
-# Trackwidth Defence = 7.0 cm
+TRACK_WIDTH    = 17.0        # distance between wheel centres (cm)
+# Trackwidth Defence = 17.0 cm
 # Trackwidth Attack 13.8 cm
 
 # ╔══════════════════════════════════════════════════════════════════╗

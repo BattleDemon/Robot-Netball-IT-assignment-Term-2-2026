@@ -38,7 +38,7 @@ class StateActions:
     Class to manage what the robot does when a specific state is on.
     """
 
-    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice) -> None:
+    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice, ev3) -> None:
         # get a reference to the motor used to push the ball
         self.PushMotor = PushMotor
         # get a refeerence to the current state controller
@@ -51,6 +51,8 @@ class StateActions:
         self.wasinfoul = False
 
         self.ir_sensor = ir_sensor
+
+        self.ev3 = ev3
 
 
         # create the thread for the main loop
@@ -70,7 +72,8 @@ class StateActions:
     # Passing
     def Passing(self):
         # get the angle to our teammate
-        angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
+        #angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
+        angleToTeamMate = pi/4
         # pivot to face them
         self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
         # Push the ball into the spinning wheels
@@ -81,20 +84,23 @@ class StateActions:
         # get the data from the IR sensor
         ball_data = self.ir_sensor.read(2,2)
         # get the angle to the ball in radians from (-pi,pi)
-        angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
+        angle_to_ball = ((ball_data[0] * -1* pi / 6)+pi)%pi-pi
+        if 11>= ball_data[0]>=7:
+            angle_to_ball = angle_to_ball*-1 
+        self.ev3.screen.print(ball_data[0])
         # turn to that angle
-        self.Driver.spin_angle(angle_to_ball)
+        #self.Driver.spin_angle(angle_to_ball)
         # get the heading of the robot
-        heading = self.Driver.get_heading()
+        heading = self.Driver.get_heading() + angle_to_ball
         # calculate a little step forward in the x direction
-        forward_x = cos(heading)
+        forward_x = sin(heading)
         # calculate a little step forward in the y direction
-        forward_y = sin(heading)
+        forward_y = cos(heading)
         # distance modifier
-        distanceModifier = 5
+        distanceModifier = 30
         # drive a little increment forward and wait for the next loop
-        self.Driver.drive_to_point(self.Driver.x+forward_x,self.Driver.y+forward_y)
-        
+        self.Driver.Drive_angle(angle_to_ball, distanceModifier)
+        sleep(1)
     # Locating
     def Locating(self):
         # turn 10 degrees

@@ -25,7 +25,7 @@ class State():
 
 # Requests that can be sent between the robots
 class Request():
-    PASS = 0  # Asking the other robot to pass the ball
+    PASSING = 0  # Asking the other robot to pass the ball
     RECEIVE = 1  # Asking the other robot to recieve a pass
     RETRIEVE = 2  # Asking the other robot to collect the ball
     REPOSITION = 3  # Ask other robot to move
@@ -179,11 +179,15 @@ class State_Controller:
         # Stays waiting until the other robot responsd to our request
 
         if self.state == State.WAITING:
+
+            # To test the functionality of push and the state code 
+            self.incoming_request = Request.RECEIVE
             # Other robot declined our request
             if self.incoming_request == Request.DECLINE:
                 # Resets our request
                 self.request = Request.NONE
 
+                
                 # Does not return so it can redetermine state
 
             # Confirmed request and assing state
