@@ -5,13 +5,13 @@
 # ======== Work of Dexter ========
 # ++++++++++++++++++++++++++++++++
 
-from enum import Enum
+# from enum import Enum ----- don;y need enum with micropython
 
 # --- Enums ---
 
 
 # All possible states a robot can be in
-class State(Enum):
+class State():
     IDLE = 0  # No tasks
     FOUL = 1  # Robot has been fouled and is in the foul box or leaving it
     PASSING = 2  # Passing the ball to the other robot
@@ -24,7 +24,7 @@ class State(Enum):
 
 
 # Requests that can be sent between the robots
-class Request(Enum):
+class Request():
     PASS = 0  # Asking the other robot to pass the ball
     RECEIVE = 1  # Asking the other robot to recieve a pass
     RETRIEVE = 2  # Asking the other robot to collect the ball
