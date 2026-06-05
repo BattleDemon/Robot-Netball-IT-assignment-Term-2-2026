@@ -11,13 +11,11 @@
             "id": "31146798c727bc0f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "pdf",
               "state": {
-                "file": "Documentation/Dexter Robot Netball Documentation.md",
-                "mode": "source",
-                "source": false
+                "file": "Documentation/Dexter Robot Netball Documentation.pdf"
               },
-              "icon": "lucide-file",
+              "icon": "lucide-file-text",
               "title": "Dexter Robot Netball Documentation"
             }
           }
@@ -181,10 +179,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "31146798c727bc0f",
+  "active": "f555c9d4519c4a73",
   "lastOpenFiles": [
-    "Documentation/Work not work.md",
+    "Documentation/PicsandVids/note.txt~",
+    "Documentation/PicsandVids/note.txt",
     "Documentation/Dexter Robot Netball Documentation.md",
+    "Documentation/Dexter Robot Netball Documentation.pdf",
+    "Documentation/Work not work.md",
     "Documentation/CommitsOverTime.png",
     "Documentation/BranchTable.png",
     "Documentation/IMG20260605185123.jpg",
@@ -205,9 +206,7 @@
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/BranchTable.png.part",
     "Documentation/Projects.png.part",
-    "Code/DEFENCE/DefenceSub.py~",
     "Documentation/Gabe/04062026.md",
-    "Code/GENERAL/robot_config.py~",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Reflection.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Pre-Planning.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Collaboration.md"
