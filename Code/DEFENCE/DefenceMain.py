@@ -10,7 +10,6 @@ from pybricks.ev3devices import (
     InfraredSensor, UltrasonicSensor, GyroSensor
 )
 from pybricks.parameters import Port, Button, Color
-from pybricks.tools import wait
 
 from pybricks.iodevices import I2CDevice
 
