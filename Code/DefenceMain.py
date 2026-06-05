@@ -72,9 +72,12 @@ class Defender():
         while True:
             if self.BallSensor.color() == Color.BLACK:
                 self.has_ball = True
+                self.StateController.update_have_ball()
                 self.ev3.speaker.beep()
 
             else:
+                if self.has_ball:
+                    self.StateController.update_have_ball()
                 self.has_ball = False
             time.sleep(0.5)
 
