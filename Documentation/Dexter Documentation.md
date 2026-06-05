@@ -376,13 +376,117 @@ The designing of the defence robot was a collaborative process between Hugo and 
 
 ###### Overview of State controller
 
-
+The state controller acts as the central system, connecting all other systems to each other, it connects heavily with the communication system, to allow the robots to collaboratively decide on what to do using the "Requests" feature, and Hugo's communication code. 
 
 ###### Justification for State Controller
 
-The addition of this system was nessessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaborativly using requests.
+The addition of this system was necessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaboratively using requests. It also because the central hub, where information was stored and could be accessed from. 
 
 ###### State Controller Code Snippets 
+
+The initial commit where the state controller was made, showed what would later evolve into its final design, and included early steps of the features and variables that would be used later.
+
+``` Python
+# First set of the state enums
+class State(Enum):
+	IDLE = 0
+    FOUL = 1
+    PASSING = 2
+    RETRIEVING = 3
+    LOCATING = 4
+    POSITIONING = 5
+
+# Request began as only a yes, no, or none. But this was later changed to specify the request and allow.
+class Request(Enum):
+	YES = 0
+	NO = 1
+	NONE = 2
+	
+class State_Controller():
+	def __init__(self):
+		# Define our state and create a variable to house the other robot's
+		self.state = State.IDLE
+		self.other_state: State
+		
+		# local refrence to our position and heading
+		self.x_pos: float
+		self.y_pos: float
+		self.angle: float
+		
+		# others position
+		self.others_x_pos: float
+		self.others_y_pos: float
+		self.others_angle: float
+		
+		# Knows if us or the other robot has the ball
+		self.has_ball: bool
+		self.other_has_ball: bool
+		
+		# our request to the other robot and their request to us
+		self.request: Request
+		self.incoming_request: Request
+
+```
+
+The next update included much more of the substance of the State_controller and the addition of more locally stored variables, this is also where it became the defacto brain/controller for everyone else to share their data.
+
+``` Python
+
+class State(Enum):
+	# Including prior mentioned states
+	RECIEVING = 6
+	SHOOTING = 7
+	WAITING = 8
+	
+class Request(Enum):
+	# Replacing the initial version of Request
+	# This allowed the robot to specify the request been made instead of it been assumed based on their state, then it allows them to either echo that back or decline, with NONE been the default when no request is been made.
+	PASS = 0
+	RECIEVE = 1
+	RETRIEVE = 2
+	REPOSITION = 3
+	DECLINE = 4
+	NONE = 5
+	
+class State_Controller():
+# Init now allowed initialisations 
+	def __init__(self, owner, x_pos, y_pos, angle, ball_angle, ball_dist):
+	# Only showing differences since last time
+		self.owner = owner
+		
+		self.others_state: State = State.IDLE
+		
+		self.position: tuple = (x_pos, y_pos, angle)
+		
+		self.ball_angle: float = ball_angle
+		self.ball_dist: float = ball_dist
+		
+		# Same for others ball and position
+		
+		# Start both requst and incoming request as Request.NONE
+		
+	# This commit also added the helper functions to get and update the variables other systems needed to know.
+	
+	# The snapeshot system which packages the information Hugo needs to send to the other robot
+	def get_snapshot(self):
+		snapshot = {
+			"state" : self.state,
+			"position": self.position,
+			"ball_angle": self.ball_angle,
+			"ball_distance": self.ball_distance,
+			"has_ball": self.has_ball,
+			"request": self.requst
+		}
+		
+	return snapshot
+	
+	# Hugo then sent me back a snapshot with the same structure which I then re assigned the "others_" variables
+
+```
+
+The next major addition to the state controller was the actual logic behind the determining of states and the state machine.
+
+
 
 ###### Issues with the State controller
 

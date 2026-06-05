@@ -91,7 +91,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "7418d45e08355aac",
@@ -195,8 +196,8 @@
   },
   "active": "85473b95f7b41387",
   "lastOpenFiles": [
-    "Documentation/UsInVC820.png",
     "Documentation/Projects Page.png",
+    "Documentation/UsInVC820.png",
     "Documentation/UsInVC807.png",
     "Documentation/UsInVC720.png",
     "Documentation/UsInVs543.png",
