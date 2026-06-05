@@ -1,4 +1,4 @@
-# What do i think of the overall design
+# What do I think of the overall design
 
 # How did working in a group effect me and the project
 
