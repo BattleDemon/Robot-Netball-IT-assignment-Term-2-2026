@@ -352,9 +352,13 @@ Class Push and Aim
 		run motor to return it to its initial point
 
 ```
+
+###### Aiming Calculation
+
+
 #### Additional Features Incase of Extra Time
 
-Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which I considered to made, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
+Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which were considered to make, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
 
 ## Prototyping
 
