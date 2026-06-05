@@ -24,3 +24,6 @@ class SubDefence():
         self.CatchAndThrowThread.start()
         while True:
             time.sleep(1)
+
+
+SubDefence()
