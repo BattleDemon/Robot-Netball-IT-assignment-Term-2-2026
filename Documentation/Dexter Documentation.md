@@ -891,20 +891,36 @@ Also apologies, additional working systems which have videos are not loading for
 ## Reflection 
 
 #### What do you think of the overall design?
+
+The overall physical design of the Defence robot, in my possibly biased opinion is that it handled the features it needed to, along with been structural sound. 
+While the attacking robot's design, was generally flawed with a lack of preplanning and constant changing of design, up until and including the final day.
 #### How did working in a group effect you and the project?
+
+Working in a ground greatly diminished the coherence of the code, and prevented more ambitious individual from activating that ambition. I also believe working in a group project could of gone much better given it was just me and Hugo, as we often work together quite well. 
+The working in a group problems with bottle necks when people don't do what is necessary, on time.
 #### How successful were you as part of a group?
+
+I believe that i was successful in completing my parts of the group, I strived to plan and organised meeting and events, in order to elevated the overall success of the group.
+
 #### What changes would you make?
+
+Either this wouldn't of been a group project and instead a semester long project, or just a pair project with Hugo and I. 
 #### What issues did you experience?
+
+Most of my issues stemmed from other people, and can be seen in the collaboration section.
 #### What techniques did you use to solve these issues?
-#### What changes would you make if repeating this project?
+
+Attempted to schedule meetings, and coach peers though their problems.
 #### What have you learnt from the project? 
+
+Group projects can be both a project in the assignment its self, along with micromanaging other individuals and attempting to fix their problems. 
 
 ## References 
 
-https://mermaid.live/
+BattleDemon (2025). _GitHub - BattleDemon/Robot-Netball-IT-assignment-Term-2-2026: Group project for year 12 IT semester 1 term 2. Using EV3 robots to play a modified game of netball._ [online] GitHub. Available at: https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026 [Accessed 5 Jun. 2026].
 
-https://pybricks.com/ev3-micropython/ev3devices.html 
+GitHub (2025). _GitHub_. [online] GitHub. Available at: https://github.com/ [Accessed 5 Jun. 2026].
 
-https://github.com/
+Mermaid (n.d.). _Online FlowChart & Diagrams Editor - Mermaid Live Editor_. [online] mermaid.live. Available at: https://mermaid.live/ [Accessed 5 Jun. 2026].
 
-https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026
+Pybricks (n.d.). _ev3devices – EV3 Devices — ev3-micropython 2.0.0 documentation_. [online] pybricks.com. Available at: https://pybricks.com/ev3-micropython/ev3devices.html [Accessed 5 Jun. 2026].** 
