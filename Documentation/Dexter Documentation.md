@@ -708,16 +708,7 @@ As mentioned before this system was meant to connect with the movement and navig
 
 ###### Connection With Other Systems and Collaborators
 
-
- Record multiple development stages
- Include code, photos, or video evidence
- Identify issues and explain fixes
- Justify design decisions
-
-Current idea go through each of my features justify design choices issues ect 
-Talk about the collaboration 
-How we dicided on the data shaired ect 
-
+A good unintentional connection my system did, was this idea of aiming at the other robot / getting the angle to the other robot was a common idea and useful for many things, causing my `get_aim_angle` function to be used throughout the entire project. 
 ## Collaboration
 
 Gone Wrong
