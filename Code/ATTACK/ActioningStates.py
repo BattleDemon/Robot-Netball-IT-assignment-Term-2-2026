@@ -1,5 +1,10 @@
 #!/usr/bin/env pybricks-micropython
 
+# +++++++++++++++++++++++++++++++++++++++++
+# ========      Work of Hugo       ========
+# +++++++++++++++++++++++++++++++++++++++++
+
+
 from time import sleep, time
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (
@@ -19,9 +24,11 @@ from math import pi, tan, sin, cos
 import os
 import threading
 import time
+from pybricks.iodevices import I2CDevice
 
 from GENERAL import movement,IRlocation
 from GENERAL.StateController import State_Controller, State
+from GENERAL import robot_config
 
 from DEFENCE.PushAndAim import PushAndAim
 
@@ -32,7 +39,7 @@ class StateActions:
     Class to manage what the robot does when a specific state is on.
     """
 
-    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver ) -> None:
+    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice ) -> None:
         # get a reference to the motor Can be any random motor, will not be used
         self.PushMotor = PushMotor
         # get a refeerence to the current state controller
@@ -43,6 +50,10 @@ class StateActions:
         self.pushingCode = PushAndAim(self.PushMotor)
         # Variable to know if the robot was previously in the foul box so we know when to go home.
         self.wasinfoul = False
+
+        self.ir_sensor = ir_sensor
+
+        
         # create the thread for the main loop
         ActioningStates_t = threading.Thread(target=self.MainLoop)
         # start the thread
@@ -53,6 +64,8 @@ class StateActions:
     def EndOfFoul(self):
         # Drive to home coords
         self.Driver.home_from_foul_box()
+        self.StateController.set_idle_state()
+        
 
     # Shooting
     def Shooting(self):
@@ -62,29 +75,44 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
         # CODE TO PASS BALL
     
     # retrieving
-        #NEEDS ZENS TRIANGULATION CODE
     def Retreiving(self):
-        pass
+        # get the data from the IR sensor
+        ball_data = self.ir_sensor.read(2,2)
+        # get the angle to the ball in radians from (-pi,pi)
+        angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
+        # turn to that angle
+        self.Driver.spin_angle(angle_to_ball)
+        # get the heading of the robot
+        heading = self.Driver.get_heading()
+        # calculate a little step forward in the x direction
+        forward_x = cos(heading)
+        # calculate a little step forward in the y direction
+        forward_y = sin(heading)
+        # distance modifier
+        distanceModifier = 5
+        # drive a little increment forward and wait for the next loop
+        self.Driver.drive_to_point(self.Driver.x+forward_x,self.Driver.y+forward_y)
+
         
     # Locating
     def Locating(self):
         # turn 10 degrees
-        self.Driver.turn_angle(10)
+        self.Driver.spin_angle(10)
         
 
     # Positioning
     def Positioning(self):
-        # Drive to (100,200)
-        self.Driver.drive_to_point(100,200)
+        # Drive to start position
+        self.Driver.drive_to_point(robot_config.START_ATTACK_X,robot_config.START_ATTACK_Y)
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
 
     # Receiving
@@ -93,7 +121,7 @@ class StateActions:
         # get the angle to our teammate
         angleToTeamMate = self.pushingCode.get_aim_angle(self.StateController.position, self.StateController.others_position)
         # pivot to face them ready for a pass.
-        self.Driver.pivot("LEFT") # NEED GABE TO CODE A PIVOT BY ANGLE
+        self.Driver.pivot_angle("LEFT", angleToTeamMate) # NEED GABE TO CODE A PIVOT BY ANGLE
 
 
     #Waiting
