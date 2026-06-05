@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentation/Dexter Documentation.md",
+                "file": "Documentation/Dexter Robot Netball Documentation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Dexter Documentation"
+              "title": "Dexter Robot Netball Documentation"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Documentation/Dexter Documentation.md",
+                "file": "Documentation/Dexter Robot Netball Documentation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Dexter Documentation"
+              "title": "Backlinks for Dexter Robot Netball Documentation"
             }
           },
           {
@@ -184,7 +184,7 @@
   "active": "31146798c727bc0f",
   "lastOpenFiles": [
     "Documentation/Work not work.md",
-    "Documentation/Dexter Documentation.md",
+    "Documentation/Dexter Robot Netball Documentation.md",
     "Documentation/CommitsOverTime.png",
     "Documentation/BranchTable.png",
     "Documentation/IMG20260605185123.jpg",

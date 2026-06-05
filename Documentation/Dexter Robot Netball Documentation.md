@@ -892,28 +892,35 @@ Also apologies, additional working systems which have videos are not loading for
 
 #### What do you think of the overall design?
 
-The overall physical design of the Defence robot, in my possibly biased opinion is that it handled the features it needed to, along with been structural sound. 
-While the attacking robot's design, was generally flawed with a lack of preplanning and constant changing of design, up until and including the final day.
+The overall physical design of the Defence robot, in my possibly biased opinion is that it handled the features it needed to, along with been structural sound.
+
+The Attacking robot was less successful from a design perspective. Much of its development occurred before a complete plan had been established, resulting in frequent design changes and uncertainty about how some systems would function.
 #### How did working in a group effect you and the project?
 
-Working in a ground greatly diminished the coherence of the code, and prevented more ambitious individual from activating that ambition. I also believe working in a group project could of gone much better given it was just me and Hugo, as we often work together quite well. 
-The working in a group problems with bottle necks when people don't do what is necessary, on time.
+Working in a group allowed a much larger and more ambitious project to be attempted than would have been possible individually. The workload could be divided between multiple people, allowing different systems to be developed simultaneously.
+
+However, it also introduced dependencies between people. If one system was unfinished, it often prevented another person from testing or completing their own work. This made delays far more impactful than they would have been in an individual project. I also found that a significant amount of time was spent coordinating people, reviewing code, and explaining concepts rather than directly working on my own assigned features.
 #### How successful were you as part of a group?
 
-I believe that i was successful in completing my parts of the group, I strived to plan and organised meeting and events, in order to elevated the overall success of the group.
+I believe I was successful as a member of the group. I completed the systems assigned to me and contributed to the design and construction of the Defence robot. Beyond my own work, I also reviewed pull requests, assisted with debugging, explained programming concepts, and helped organise meetings.
+
+I attempted to ensure the project continued progressing, particularly when development began falling behind schedule. While there are certainly areas where I could have improved, particularly in communicating some systems more clearly, I believe I contributed positively to both the technical and organisational aspects of the project.
 
 #### What changes would you make?
 
 Either this wouldn't of been a group project and instead a semester long project, or just a pair project with Hugo and I. 
+
+Other than that I would of pushed for stricter deadlines among members, so we could of had code done last week or even the week before, allowing a week or two for testing and bug fixing.
 #### What issues did you experience?
 
-Most of my issues stemmed from other people, and can be seen in the collaboration section.
-#### What techniques did you use to solve these issues?
+The largest issue was coordinating systems developed by different people. Individual components often depended on other features being completed, meaning delays in one area affected everyone else. This reduced the amount of time available for testing.
 
-Attempted to schedule meetings, and coach peers though their problems.
+Another issue was communication. There were occasions where systems were expected to connect in a certain way but had instead been implemented differently. This sometimes resulted in duplicate work or additional modifications being required later. Time management was also a challenge, particularly near the due date when several important systems were still incomplete.
 #### What have you learnt from the project? 
 
 Group projects can be both a project in the assignment its self, along with micromanaging other individuals and attempting to fix their problems. 
+
+On more personal growth point, I learnt how to use some of Git and GitHub's features I hadn't touch much in the past, such as pull request and code review. 
 
 ## References 
 
