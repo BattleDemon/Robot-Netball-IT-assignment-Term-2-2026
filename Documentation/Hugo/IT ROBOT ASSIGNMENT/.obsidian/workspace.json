@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Collaboration.md",
+                "file": "Pre-Planning.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Collaboration"
+              "title": "Pre-Planning"
             }
           },
           {
@@ -35,7 +35,8 @@
               "title": "Collaboration"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -197,7 +198,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "8057df2b53da3f75",
+  "active": "c19d443bf5f0e99d",
   "lastOpenFiles": [
     "Pre-Planning.md",
     "Collaboration.md",

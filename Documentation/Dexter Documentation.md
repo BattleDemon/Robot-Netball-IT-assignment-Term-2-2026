@@ -352,13 +352,19 @@ Class Push and Aim
 		run motor to return it to its initial point
 
 ```
+
+###### Aiming Calculation
+
+
 #### Additional Features Incase of Extra Time
 
-Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which I considered to made, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
+Although due to the scale of this assignment and its limitation some of these might not be practical or cause too much extra work. Some additional features which were considered to make, were that of the team system where the robots would stop communication and each be attempting to win, use separate hoops and attempt to block each other.
 
 ## Prototyping
 
 #### Designing the Defence Robot
+
+The designing of the defence robot was a collaborative process between Hugo and I, where I primarily focused on its chassis, making sure it could hold the weight of the other equipment as well as have enough space, while remaining in the 30cm diameter circle we are allowed. In addition to this i attached the IR sensor, colour sensors, motors (exclusing flywheel) and EV3's. While Hugo focused on building the flywheels system, and did most of its attaching to the chassis.
 
 ###### Problems During Production
 
@@ -370,13 +376,194 @@ Although due to the scale of this assignment and its limitation some of these mi
 
 ###### Overview of State controller
 
-
+The state controller acts as the central system, connecting all other systems to each other, it connects heavily with the communication system, to allow the robots to collaboratively decide on what to do using the "Requests" feature, and Hugo's communication code. 
 
 ###### Justification for State Controller
 
-The addition of this system was nessessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaborativly using requests.
+The addition of this system was necessary to control, the activities of the robot and ensure it maintained priority when deciding its next function. It also provided the systems for the robots to work collaboratively using requests. It also because the central hub, where information was stored and could be accessed from. 
 
 ###### State Controller Code Snippets 
+
+The initial commit where the state controller was made, showed what would later evolve into its final design, and included early steps of the features and variables that would be used later.
+
+``` Python
+# First set of the state enums
+class State(Enum):
+	IDLE = 0
+    FOUL = 1
+    PASSING = 2
+    RETRIEVING = 3
+    LOCATING = 4
+    POSITIONING = 5
+
+# Request began as only a yes, no, or none. But this was later changed to specify the request and allow.
+class Request(Enum):
+	YES = 0
+	NO = 1
+	NONE = 2
+	
+class State_Controller():
+	def __init__(self):
+		# Define our state and create a variable to house the other robot's
+		self.state = State.IDLE
+		self.other_state: State
+		
+		# local refrence to our position and heading
+		self.x_pos: float
+		self.y_pos: float
+		self.angle: float
+		
+		# others position
+		self.others_x_pos: float
+		self.others_y_pos: float
+		self.others_angle: float
+		
+		# Knows if us or the other robot has the ball
+		self.has_ball: bool
+		self.other_has_ball: bool
+		
+		# our request to the other robot and their request to us
+		self.request: Request
+		self.incoming_request: Request
+
+```
+
+The next update included much more of the substance of the State_controller and the addition of more locally stored variables, this is also where it became the defacto brain/controller for everyone else to share their data.
+
+``` Python
+
+class State(Enum):
+	# Including prior mentioned states
+	RECIEVING = 6
+	SHOOTING = 7
+	WAITING = 8
+	
+class Request(Enum):
+	# Replacing the initial version of Request
+	# This allowed the robot to specify the request been made instead of it been assumed based on their state, then it allows them to either echo that back or decline, with NONE been the default when no request is been made.
+	PASS = 0
+	RECIEVE = 1
+	RETRIEVE = 2
+	REPOSITION = 3
+	DECLINE = 4
+	NONE = 5
+	
+class State_Controller():
+# Init now allowed initialisations 
+	def __init__(self, owner, x_pos, y_pos, angle, ball_angle, ball_dist):
+	# Only showing differences since last time
+		self.owner = owner
+		
+		self.others_state: State = State.IDLE
+		
+		self.position: tuple = (x_pos, y_pos, angle)
+		
+		self.ball_angle: float = ball_angle
+		self.ball_dist: float = ball_dist
+		
+		# Same for others ball and position
+		
+		# Start both requst and incoming request as Request.NONE
+		
+	# This commit also added the helper functions to get and update the variables other systems needed to know.
+	
+	# The snapeshot system which packages the information Hugo needs to send to the other robot
+	def get_snapshot(self):
+		snapshot = {
+			"state" : self.state,
+			"position": self.position,
+			"ball_angle": self.ball_angle,
+			"ball_distance": self.ball_distance,
+			"has_ball": self.has_ball,
+			"request": self.requst
+		}
+		
+	return snapshot
+	
+	# Hugo then sent me back a snapshot with the same structure which I then re assigned the "others_" variables
+
+```
+
+The next major addition to the state controller was the actual logic behind the determining of states and the state machine.
+
+``` Python
+
+# inside state_controller
+def determine_state(self):
+	# Check if currently foul 
+	# Which has its own system for changing into and our of
+	
+	if self.state == State.FOUL:
+		return
+		
+	# Waiting for a responce to a request 
+	if self.state == State.WAITING:
+			# other robot has declined the request
+            if self.incoming_request == Request.DECLINE:
+                self.request = Request.NONE
+
+                self.state = State.IDLE
+                
+	        if self.incoming_request == self.request:
+		        if self.request == Request.PASS:
+			        self.state = State.PASSING
+			        return
+			    # Repeat for other possible requests
+	# If there is an incoming request and we are not waiting
+	if self.incoming_request != Request.NONE:
+		if self.incoming_request == Request.PASS:
+			# Check avaliability to pass 
+			if not self.has_ball and self.state not state.SHOOTING:
+				self.state = State.RECIEVING
+				self.request = Request.RECIEVE # Echo back confirmation
+				return
+			else:
+				# Decline request if it doesn't meet the requirments
+				self.request = Request.DECLINE
+				
+		# Repeat similar logic for other requests
+		
+		
+	# Now the what I call self determined state logic
+	if self.has_ball and self.owner_type == "attack":
+	# High priority state, set shooting
+		self.state = State.SHOOTING
+		self.request = Request.NONE
+		return
+	
+	# Next priority state since if you have the ball you will need to get rid of it quick
+	if self.has_ball:
+		self.request = Requst.PASS
+		self.state = State.WAITING
+		Return
+		
+	# Next if no one has ball, determine who gets it
+	if not self.has_ball and not self.others_has_ball:
+	# If your closer or the other once is moving 
+		if self.ball_sistance <= self.other_ball_dist or self.others_state == State.Positioning:
+			if self.owner_type == "attack" and self.is_near_hoop:
+			# The attacker been closer to the hoop is more important than the defence moving more.
+				self.state = State.POSITIONING
+				self.request = Request.RETREIVE
+				return
+			else:
+				self.state = State.RETRIEVING
+				self.request = Request.NONE
+				return
+				
+		# Lastly if no one has the ball and no one knows where it is we need to find it
+			self.state = State.LOCATING
+			self.request = Request.NONE
+			return
+			
+	# If none of the above is true become idle
+	self.state = State.IDLE
+	self.request = Request.NONE
+	
+```
+
+This completed the majority of the state controller, with the only additions been made after this were renaming of variables, changing their type (tuple vs list ect), and making a few small helper functions for interaction between the systems.
+
 
 ###### Issues with the State controller
 
@@ -438,6 +625,7 @@ Gone Wrong
 	- Systems not been ready prevented testing
 	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up (5:30-45 left at 7:20) and Gabe showed up (7:45) , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
 	- Member required explaination on importing from others code
+	- People need to change place holders to actual things when needed (My foul system wasn't connected with gabes code at all because he used local placeholders instead of connecting with mine)
 
 Things that went well 
 	- Defence design was completed well before due date and design appears to work
@@ -456,19 +644,35 @@ Things that went well
 	- People had choice in the systems they made eg. Gabe volunteered to do movement and was quite infusiastic, Dexter saw the foundational system of the state controller and thus completed it, Hugo applied the testing code well so it could be instantly applied to the final ect
 	- Commonly needed variables were easily found and updated for people
 	- Programming concepts unknown to some members were explaiend by others 
+	- The large meeting from 4:30 - Bla the night before due i spent rought half of it code reviewing Gabe, Zen, and a little of Hugo's code.
 
 #### How Work Was Divided
 
 As covered before the robots were split into teams of two, and the individual sections of code were split between individuals.
 
-For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections meaned these had to be re assigned. 
+For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections, meaning these had to be re assigned. 
+
+The choice of who was responsible for a section of wasn't the most thought out process, but some systems were just expansions of the testing code so it naturally followed that those who made the test continued their development. Individuals also requested to do certain features, and for the most part we tried to keep the code that would only be used by one robot, been made by a person who build that robot. Additionally we also tried to assign an import / general feature to everyone. 
+
+#### How collaboration was handled
+
+The actual collaboration was handled using GitHub, its "Projects" feature and a repository. We all used the same git repository, and used GitHub to store in online, to view the repository (although I acknowledge it is an online and updatable source, It should be use full to see the commit history, and branch history) https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026. For each feature we worked on, we would create a branch from the main, program all our features within that branch, then request to merge our code with the repositories. This was done using pull request, which to insure we only merged good code, either Hugo or I, would look over the merger's code, with for important features we would both look over, and when we were the merger we would have the other look over it for us. This was due to us been the most knowledgeable at both GitHub, and programming in general, and allowed us to catch problems in the code and missing logic. As part of a pull request, we would comment of individuals code, pointing out the mistakes for them to fix on their own, before either confirm it was able to be merged or declining the request and asking for the issues to be fixed. 
 
 #### Hugo's Contributions
 
+
+
 #### Gabe's Contributions 
+
+Gabe ended up making the Movement and Navigation, systems 
 
 #### Zen's Contributions 
 
+Zen was responsible for the IR controller, and the "Triangulation" of the balls position, although this ended up becoming the distance to the ball, rather than an (x,y). This system was originally going to be me, but Zen offered to do it. This probably wasn't the best choice for me to agree since his mathematical ability made its development a more complex task then it was need.
+
+Zen also was responsible for the Attacking robot's  
+
+#### My Contributions 
 #### Decision Making Within the Group
 
 #### Production and Design Challenges and their Resolutions 
@@ -479,6 +683,10 @@ For the individual sections of code, as to not force one person to do more than 
  Describe contributions of each member
  Show how decisions were made
  Explain how challenges were resolved
+
+## Evidence of Working Systems
+
+
 
 ## Reflection 
 
@@ -496,3 +704,7 @@ For the individual sections of code, as to not force one person to do more than 
 https://mermaid.live/
 
 https://pybricks.com/ev3-micropython/ev3devices.html 
+
+https://github.com/
+
+https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026
