@@ -420,7 +420,17 @@ Another issue was the chassis been larger than the maximum 30 cm circle, which r
 
 ##### Final Design
 
-WRITE FINAL DESIGN AFTER HUGO GIVES ME IMAGES
+The final design used can be seen in its sizing circle, and from many angles.
+
+![[sizephoto2.jpg]]
+
+![[sizephoto4.jpg]]
+
+![[sizephoto6.jpg]]
+
+![[sizephoto8.jpg]]
+
+![[sizephoto9.jpg]]
 
 #### The State Controller
 
