@@ -710,7 +710,11 @@ As mentioned before this system was meant to connect with the movement and navig
 #### Pushing Ball and Aiming
 ###### Overview of Pushing Ball and Aiming
 
+The pushing ball and aiming system is a defence unique system that runs when the robot intends to pass the ball to the other robot. It calculated the aim angle, which is passed through a `movement.pivot`, to rotate the robot before using `push` to push the ball out of its container and down the ramp to the thrower. This motor is then returned to its original position.
+ 
 ###### Justification for Pushing Ball and Aiming
+
+This system was need to allow the passing to work, since otherwise the ball would stay within the container indefinitely. 
 
 ###### Pushing Ball and Aiming Code Snippets 
 
