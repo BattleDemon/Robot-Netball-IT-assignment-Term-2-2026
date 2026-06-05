@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "6daa8e68c175bd1f",
+        "id": "524057ffee02cc31",
         "type": "tabs",
         "children": [
           {
-            "id": "85473b95f7b41387",
+            "id": "2bb8f51b9738c91c",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -180,8 +180,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "85473b95f7b41387",
+  "active": "f555c9d4519c4a73",
   "lastOpenFiles": [
+    "Documentation/BranchTable.png",
+    "Documentation/BranchTable.png.part",
+    "Documentation/CommitsIndividual.png",
+    "Documentation/CommitsOverTime.png",
+    "Documentation/Projects.png",
+    "Documentation/Dexter Documentation.md",
+    "Documentation/Projects.png.part",
+    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-05-181301.png",
     "Code/DEFENCE/DefenceSub.py~",
     "Documentation/UsInVs543.png",
     "Documentation/UsInVC820.png",
@@ -192,12 +200,7 @@
     "Documentation/PicsandVids/SecondThrower.jpg",
     "Documentation/PicsandVids/IMG_1023.mov",
     "Documentation/Gabe/04062026.md",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-193220.png",
-    "Documentation/Dexter Documetation Unique Images/_20260430_015133398.jpg",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-211710.png",
-    "Documentation/Dexter Documetation Unique Images/mermaid-diagram-2026-06-02-231645.png",
     "rules.md",
-    "Documentation/Dexter Documentation.md",
     "Code/GENERAL/robot_config.py~",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Prototyping.md",
@@ -206,9 +209,6 @@
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Collaboration.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT",
-    "Documentation/Hugo",
-    "Code/GENERAL/irsensor_triangulation.py",
-    "Documentation/Dexter Documetation Unique Images",
-    "Documentation/PicsandVids"
+    "Documentation/Hugo"
   ]
 }

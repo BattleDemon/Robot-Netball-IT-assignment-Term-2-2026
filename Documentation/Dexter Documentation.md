@@ -126,17 +126,23 @@ with the remaining been my responsibility and covered in the next section.
 
 #### My Features and Systems
 
-To satisfy the division of labour I was tasked with completing the sections of code which i will go into more detail below, of State Controller and System, Ground detection and foul controller, and the Aiming and Pushing of the defensive robot.
+To satisfy the division of labour, I was tasked with completing the sections of code which i will go into more detail below, of the State Controller and state system, ground detection and the foul controller, as well as the aiming and pushing for the defensive robot.
 
 ###### Overview of the State System and Controller
 
-The State System and Controller is set to be my largest and most important feature in this codebase, it will control what State the robots would be in and decide the logic for transitioning between states. Along with just controlling the individual robots state, it is also going to connect with the other robot in order to decide on collaborative states.
+The State System and Controller is set to be my largest and most important feature in this assignment, it will control what `State` the robots will be in and decide the logic for transitioning between states. Along with just controlling the individual robots state, it is also going to connect with the other robot in order to decide on their states collaboratively.
 
 ###### State Transitions Flowchart
 
-The transition of states i have envisioned can be summed up by the following flowchart
+The transition of states I have envisioned can be summed up by the following flowchart, although this also had the potential to change during development. 
 
 ![[mermaid-diagram-2026-06-02-193220.png]]
+
+###### Transfer of information flowchart
+
+With the State controller acting as the central information storage, I though it necessary to display how these are spread and read.
+
+![[mermaid-diagram-2026-06-05-181301.png]]
 
 ###### State System and Controller Psuedocode
 
@@ -575,7 +581,6 @@ def determine_state(self):
 ```
 
 This completed the majority of the state controller, with the only additions been made after this were renaming of variables, changing their type (tuple vs list ect), and making a few small helper functions for interaction between the systems.
-
 
 ###### Issues with the State controller
 
