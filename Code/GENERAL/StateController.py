@@ -58,8 +58,8 @@ class State_Controller:
         )  # Fixed hoop cords on the field, taken in value because it depends on how movement works
 
         # This robot's state and the last know state of the other
-        self.state: State = State.IDLE
-        self.others_state: State = State.IDLE
+        self.state = State.IDLE
+        self.others_state = State.IDLE
 
         # This robots and the other's positions
         self.position: tuple = (x_pos, y_pos, angle)
@@ -76,8 +76,8 @@ class State_Controller:
         self.others_has_ball: bool = False
 
         # Outgoing and latest incoming requests
-        self.request: Request = Request.NONE
-        self.incoming_request: Request = Request.NONE
+        self.request = Request.NONE
+        self.incoming_request = Request.NONE
 
         # IR Ground detected
         self.ground_colour: str = ""
