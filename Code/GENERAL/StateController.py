@@ -68,8 +68,8 @@ class State_Controller:
         # Ball Tracking for this robot and others
         self.distance_to_ball: float = ball_dist
         self.angle_to_ball: float = ball_angle
-        self.others_distance_to_ball: float = 100000
-        self.others_angle_to_ball: float  = 0
+        self.others_distance_to_ball: float = 10000
+        self.others_angle_to_ball: float = 10000
 
         # Ball posession
         self.has_ball: bool = False
