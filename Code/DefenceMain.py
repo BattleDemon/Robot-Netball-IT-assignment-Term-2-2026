@@ -23,8 +23,7 @@ import random
 from GENERAL.IRlocation import irLocator
 from GENERAL.StateController import State, State_Controller
 from GENERAL.movement import Driver
-from GENERAL.irsensor_triangulation import ir_controller
-import CatchAndThrow
+
 from GENERAL.GroundDetectionSystem import Ground_Observer
 from GENERAL.communication import Communicator
 from DEFENCE.ActioningStates import StateActions
