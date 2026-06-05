@@ -718,53 +718,54 @@ This system was need to allow the passing to work, since otherwise the ball woul
 
 ###### Pushing Ball and Aiming Code Snippets 
 
-###### Issues with the Pushing Ball and Aiming
+This code was again generally simple, and didn't require any changes beyond fine tuning the amount the push motor turns.
+
+```Python
+
+class PushAndAim:
+    def __init__(self, push_motor: Motor):
+        # Locally store the inputed motor
+        self.push_motor = push_motor
+
+    # Calculate the angle between us and the other robot
+    def get_aim_angle(self, our_position: tuple, others_position: tuple):
+
+        # Locally assign x, y, and angle
+        our_x, our_y, our_angle = our_position
+        others_x, others_y, _ = others_position
+
+        # Difference between theirs and ours
+        dx = others_x - our_x
+        dy = others_y - our_y
+
+        # The tangen (with both y and x to find its quadrant)
+        target_angle = atan2(dy, dx)
+
+        # Angle between
+        angle_between = target_angle - our_angle
+
+        # Normilise the angle
+        angle_between = (angle_between) % (2 * pi)
+
+        return angle_between
+
+    # Push the ball
+    def push(self):
+        # Push the ball with the motor
+        self.push_motor.run_angle(120, 85)
+
+        # wait a short time
+        time.sleep(0.5)
+
+        # Return motor to initial place
+        self.push_motor.run_angle(-120, 85)
+```
 
 ###### Connection With Other Systems and Collaborators
 
 A good unintentional connection my system did, was this idea of aiming at the other robot / getting the angle to the other robot was a common idea and useful for many things, causing my `get_aim_angle` function to be used throughout the entire project. 
+
 ## Collaboration
-
-Gone Wrong
-	- Task could of been divided better giving the more mathmatically complex task to the poeple nessisary ect
-	- People could of started coding earlier (Zen)
-	- Some people could of been more independent on the disision making
-	- Deadlines could of been followed (monday, then tuesday, then wednesday overshot)
-	- More team meetinfs
-	- Meets when held could of actualy if people had told or organised their other actives better
-	- Explaination of systems connection could of been better]
-	- Attackes could of spent more time designe prio to develiopment
-	- Start and finish things earlier (to allow for testing time)
-	- Could show up to meeting / show up on time
-	- Communication between people could of been better
-	- When communication / instruction of connecting systems was given that could of been followed
-	- Asked for help from Tim sooner / at all
-	- Dividing time between features and desiging
-	- Didn't test
-	- Wasn't time to test
-	- Systems not been ready prevented testing
-	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up (5:30-45 left at 7:20) and Gabe showed up (7:45) , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
-	- Member required explaination on importing from others code
-	- People need to change place holders to actual things when needed (My foul system wasn't connected with gabes code at all because he used local placeholders instead of connecting with mine)
-
-Things that went well 
-	- Defence design was completed well before due date and design appears to work
-	- Connection between State System, communication and acting on states works well and follows a logical sequence
-	- General communication between Hugo and Dexter was good when designing defence / our connected systems
-	- First few meets were fine and very informative / productive
-	- Most major system were completed early (Exception (zen))
-	- Code reviews were informative / benifical, allwowing bugs to be cought and small gaps in logic to be connected. 
-	- Hugo and Dexter able to act as leaders / mentors when other on track
-	- Github issues / project allowed for planning and assigment of systems
-	- File structure is generally good, although with some exceptions
-	- Branching / version control allowed for reduction in merge conflicts and symultaneous work 
-	- People follow general OOP structure to a good level and produce "Clean Code" although not the maximum of 4 line functions the book calls for
-	- People were creative with the problem solving of the robots
-	- Complex math was explained to less mathmatically inclined individuals allow for their completion of systems
-	- People had choice in the systems they made eg. Gabe volunteered to do movement and was quite infusiastic, Dexter saw the foundational system of the state controller and thus completed it, Hugo applied the testing code well so it could be instantly applied to the final ect
-	- Commonly needed variables were easily found and updated for people
-	- Programming concepts unknown to some members were explaiend by others 
-	- The large meeting from 4:30 - Bla the night before due i spent rought half of it code reviewing Gabe, Zen, and a little of Hugo's code.
 
 #### How Work Was Divided
 
@@ -772,11 +773,16 @@ As covered before the robots were split into teams of two, and the individual se
 
 For the individual sections of code, as to not force one person to do more than their fair share of work we set a rough 400 lines of code limit per person, which seemed to split the systems quite evenly among us, but did require some shifting around of responsibilities, as at that point Gabe had already produced his movement code which was at the 400 line section, and he was planned to complete one or two other sections, meaning these had to be re assigned. 
 
-The choice of who was responsible for a section of wasn't the most thought out process, but some systems were just expansions of the testing code so it naturally followed that those who made the test continued their development. Individuals also requested to do certain features, and for the most part we tried to keep the code that would only be used by one robot, been made by a person who build that robot. Additionally we also tried to assign an import / general feature to everyone. 
+The choice of who was responsible for a section of wasn't the most thought out process, but some systems were just expansions of the testing code so it naturally followed that those who made the test continued their development. Individuals also requested to do certain features, such as the State Controller in my case, and the movement in Gabe's. We also for the most part we tried to keep the code that would only be used by one robot, been made by a person who build that robot. We also tried to assign a major / important system to everyone. 
+
+This meant Hugo, developed the communication system, I did the state controller, Gabe did the movement, and Zen the IR triangulation. With any other systems, been assigned using the rules stated prior.
 
 #### How collaboration was handled
 
-The actual collaboration was handled using GitHub, its "Projects" feature and a repository. We all used the same git repository, and used GitHub to store in online, to view the repository (although I acknowledge it is an online and updatable source, It should be use full to see the commit history, and branch history) https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026. For each feature we worked on, we would create a branch from the main, program all our features within that branch, then request to merge our code with the repositories. This was done using pull request, which to insure we only merged good code, either Hugo or I, would look over the merger's code, with for important features we would both look over, and when we were the merger we would have the other look over it for us. This was due to us been the most knowledgeable at both GitHub, and programming in general, and allowed us to catch problems in the code and missing logic. As part of a pull request, we would comment of individuals code, pointing out the mistakes for them to fix on their own, before either confirm it was able to be merged or declining the request and asking for the issues to be fixed. 
+The actual collaboration was handled using GitHub, and its "Projects" feature within a repository. We all used the same git repository, and used GitHub to store in online, to view the repository (although I acknowledge it is an online and updatable source, It should be use full to see the commit history, and branch history) https://github.com/BattleDemon/Robot-Netball-IT-assignment-Term-2-2026. For each feature we worked on, we would create a branch from the main, program all our features within that branch, then request to merge our code with the repositories. This was done using pull request, which to insure we only merged good code, either Hugo or I, would look over the merger's code, with for important features we would both look over, and when we were the merger we would have the other look over it for us. This was due to us been the most knowledgeable at both GitHub, and programming in general, and allowed us to catch problems in the code and missing logic. As part of a pull request, we would comment of individuals code, pointing out the mistakes for them to fix on their own, before either confirm it was able to be merged or declining the request and asking for the issues to be fixed. 
+
+This allowed us to create a visual representation of the timeline for our development, the red line marks the due date.
+![[Projects.png]]
 
 #### Hugo's Contributions
 
@@ -784,15 +790,40 @@ The actual collaboration was handled using GitHub, its "Projects" feature and a 
 
 #### Gabe's Contributions 
 
-Gabe ended up making the Movement and Navigation, systems 
+Gabe ended up making the Movement and Navigation systems, with him volunteering to do this system and seeming sense of ability to complete it quickly. He worked off of a template from Hugo's first term work, and expanded it to meet the necessary features, although he would constantly add back redundant sections or duplicate the same sections of code under a new function. This along with, often check in's with him to see how he was doing with implementing the response to the colour detection, with in two occasions after i had made my feature and instructed him on how to connect them by using `self.state_controller.get_ground_colour`, found him either making his own colour detection system within his movement code, or not handling it at all. Additionally while i was developing the foul detection code which originally intended to also do the returning to field, found that despite telling him in a meeting of this, that his movement code was doing that for me. 
+
+Beyond the initial confusion and troubles, the night before the assignment was due Gabe said he need to fix some things, which evolved into both Hugo, Him, and Me spending large parts of that night fixing mistakes in his code. Which was done through pull request, and leaving feed back on his code, which he would follow to fix.
 
 #### Zen's Contributions 
 
-Zen was responsible for the IR controller, and the "Triangulation" of the balls position, although this ended up becoming the distance to the ball, rather than an (x,y). This system was originally going to be me, but Zen offered to do it. This probably wasn't the best choice for me to agree since his mathematical ability made its development a more complex task then it was need.
+Zen was responsible for the IR controller, and the "Triangulation" of the balls position, although this ended up becoming the distance to the ball, rather than an (x,y). This system was originally going to be me, but Zen offered to do it. This probably wasn't the best choice for me to agree since his mathematical ability made its development a more complex task then it was need. That slight problem compounded by him not starting programming until, at most Tuesday of the week it was due, and not completing it until the night prior. 
 
-Zen also was responsible for the Attacking robot's  
+Zen also was responsible for the two of the Attacking robot's  individual features, with those been the `Grabbing ball with claw`, and the `Ball throwing`. These from my knowledge were not started until the day of submission, and not completed until lunch time. This i believe is due to the major lack of general plan put into the design of the attacking robot, which prevented the systems he was responsible for to be properly defined long enough before the due date (and time), to allow time for development.
+
+Then when were were getting close to fixing the bugs with both the robots codes and it was looking like they might be able to run, Zen left after lunch instead of staying to attempt to fix any errors. But this is also somewhat acceptable due to his lack of general programming knowledge, preventing him from successfully locating bugs. Along with the complex and confusing even to Hugo and I, of Gabe's code which i don't think Zen would of been able to do anything to remedy. 
 
 #### My Contributions 
+
+* The state_controller
+* The ground observation and foul detection
+* The pushing and aim
+* Explained how to use my state controller as the "central" information point, this included attempting to get people to connect their systems properly.
+* Explained maths behind finding the distance to ball for the Ir sensor along with Hugo
+* Designed and built the defence robot
+* Helping others with code
+* Explained OOP and helped teach basics on its uses and implementation
+* Attempting to keep people on track, by setting dead lines and checking in with others
+* Reviewed the pull requests in an attempt to catch problematic code and bugs, with this been what i spent most of the 8 hour meeting doing
+* First section of 8 hour meeting, essential coaching Zen through development of the IR controller
+
+#### Attacking Design
+
+I apologies if this section is too harsh or accusatory, but both Zen and Gabe jumped straight into the building of their robot without taking much account into its design, the features it needed, and general capabilities. Which when compared 
+
+#### The Night Before Due
+
+#### The Day It's Due
+
 #### Decision Making Within the Group
 
 #### Production and Design Challenges and their Resolutions 

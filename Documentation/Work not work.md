@@ -1,0 +1,41 @@
+
+Gone Wrong
+	- Task could of been divided better giving the more mathmatically complex task to the poeple nessisary ect
+	- People could of started coding earlier (Zen)
+	- Some people could of been more independent on the disision making
+	- Deadlines could of been followed (monday, then tuesday, then wednesday overshot)
+	- More team meetinfs
+	- Meets when held could of actualy if people had told or organised their other actives better
+	- Explaination of systems connection could of been better]
+	- Attackes could of spent more time designe prio to develiopment
+	- Start and finish things earlier (to allow for testing time)
+	- Could show up to meeting / show up on time
+	- Communication between people could of been better
+	- When communication / instruction of connecting systems was given that could of been followed
+	- Asked for help from Tim sooner / at all
+	- Dividing time between features and desiging
+	- Didn't test
+	- Wasn't time to test
+	- Systems not been ready prevented testing
+	- Call on day before due date intended to fix all mistakes ect, people (Zen showed up (5:30-45 left at 7:20) and Gabe showed up (7:45) , Dexter Hugo Showed up on time : 4:30 (agreed upon time))
+	- Member required explaination on importing from others code
+	- People need to change place holders to actual things when needed (My foul system wasn't connected with gabes code at all because he used local placeholders instead of connecting with mine)
+
+Things that went well 
+	- Defence design was completed well before due date and design appears to work
+	- Connection between State System, communication and acting on states works well and follows a logical sequence
+	- General communication between Hugo and Dexter was good when designing defence / our connected systems
+	- First few meets were fine and very informative / productive
+	- Most major system were completed early (Exception (zen))
+	- Code reviews were informative / benifical, allwowing bugs to be cought and small gaps in logic to be connected. 
+	- Hugo and Dexter able to act as leaders / mentors when other on track
+	- Github issues / project allowed for planning and assigment of systems
+	- File structure is generally good, although with some exceptions
+	- Branching / version control allowed for reduction in merge conflicts and symultaneous work 
+	- People follow general OOP structure to a good level and produce "Clean Code" although not the maximum of 4 line functions the book calls for
+	- People were creative with the problem solving of the robots
+	- Complex math was explained to less mathmatically inclined individuals allow for their completion of systems
+	- People had choice in the systems they made eg. Gabe volunteered to do movement and was quite infusiastic, Dexter saw the foundational system of the state controller and thus completed it, Hugo applied the testing code well so it could be instantly applied to the final ect
+	- Commonly needed variables were easily found and updated for people
+	- Programming concepts unknown to some members were explaiend by others 
+	- The large meeting from 4:30 - Bla the night before due i spent rought half of it code reviewing Gabe, Zen, and a little of Hugo's code.
