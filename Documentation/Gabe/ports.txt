@@ -1,0 +1,15 @@
+Left wheel: Port B 
+
+Right wheel: Port A 
+
+Arm motor: Port 3 
+
+Arm claw motor: Port C 
+
+Claw Ball colour sensor: Port 2 
+
+Ground colour sensor: Port 1 
+
+Catapolt wind-up motor: Port 4 
+
+IR: Port D 
