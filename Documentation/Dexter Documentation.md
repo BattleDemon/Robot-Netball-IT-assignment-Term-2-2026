@@ -803,7 +803,8 @@ Both Him and I, assisted in explanation of maths for others features.
 Designed the defence robot along with me, with him focusing on the throwing and catching system.
 Additionally, both of us attempted to keep every one on track, with us setting dead line on occasion which were then ignored by others.
 Helped Gabe with his code on the night before submission, though pull requests and comments. 
-Only real complaint is he began the last sections of his code too late, although this was more acceptable since he is a proficient enough programmer to finish in such short time. What didn't help that was his last feature relied on other systems which bottle necked his development.
+Only real complaint is he began the last sections of his code too late, although this was more acceptable since he is a proficient enough programmer to finish in such short time. What didn't help that was his last feature relied on other systems which bottle necked his development. 
+Another, small complaint was on the due day, in times where we could of been bug fixing, Hugo was scrolling reels, luckily this was short lived and he stepped up soon after. 
 
 #### Gabe's Contributions 
 
@@ -843,15 +844,39 @@ I apologies if this section is too harsh or accusatory, but both Zen and Gabe ju
 
 #### The Night Before Due
 
+The night before the due date, we all agreed to join a discord call at 4:30, with me joining slightly early in case anyone wanted to talk, followed by Hugo at the correct time. During the time it was just us we discussed, writing of documentation and what needed fixing that night. Later, at around 5:30 Zen joined and we spend the next 1-2 hours working on his IR, though a series of him coding, us reviewing and providing feedback, until it was decided it was good enough. This was followed by Zen leaving at around 7:30. Then at 7:45, Gabe joined, then for the next 2 hours we continue working independently, with minor feedback, due to us taking breaks for dinner. But 
+
 #### The Day It's Due
 
 #### Challenges of a Group Project
 
-
-
+* Tasks could have been divided better, giving the more mathematically complex tasks to the people necessary, etc.
+- People could have started coding earlier (Zen).
+- Some people could have been more independent in the decision-making.
+- Deadlines could have been followed (Monday, then Tuesday, then Wednesday overshot).
+- More team meetings.
+- Meetings, when held, could have actually occurred if people had told or organised their other activities better.
+- Explanation of systems connection could have been better.
+- Attackers could have spent more time designing prior to development.
+- Start and finish things earlier (to allow for testing time).
+- Could show up to meetings / show up on time.
+- Communication between people could have been better.
+- When communication / instruction on connecting systems was given, that could have been followed.
+- Asked for help from Tim sooner / at all.
+- Dividing time between features and designing.
+- Didn't test.
+- Wasn't time to test.
+- Systems not being ready prevented testing.
+- Call on the day before the due date intended to fix all mistakes, etc. People: Zen showed up (5:30-5:45, left at 7:20) and Gabe showed up (7:45), Dexter and Hugo showed up on time: 4:30 (agreed-upon time).
+- Member required explanation on importing from others' code.
+- People need to change placeholders to actual things when needed (my foul system wasn't connected with Gabe's code at all because he used local placeholders instead of connecting with mine).
 ## Evidence of Working Systems
 
+Here we can see the throwing system working.
 
+![[Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4]]
+
+Also apologies, additional working systems which have videos are not loading for me, instead appearing as sound files still with `.mp4`. I attempted to have Hugo send them to me though other means, but they are too large for any we have tried. So if possible please refer to the video's of working systems on Hugo's documentation.
 
 ## Reflection 
 
