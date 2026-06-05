@@ -34,7 +34,7 @@ class Ground_Observer:
 
         # Observe Ground thread set up
         self.observe_ground_thread = Thread(target=self.observe_ground)
-        self.observe_ground_thread.daemon = True
+        # self.observe_ground_thread.daemon = True
         self.observe_ground_thread.start()
 
         # The currently observed colour
