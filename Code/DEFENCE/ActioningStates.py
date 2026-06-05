@@ -86,18 +86,18 @@ class StateActions:
         angle_to_ball = ((ball_data[0] * pi / 6)+pi)%pi-pi
         self.ev3.screen.print(ball_data[0])
         # turn to that angle
-        self.Driver.spin_angle(angle_to_ball)
+        #self.Driver.spin_angle(angle_to_ball)
         # get the heading of the robot
-        heading = self.Driver.get_heading()
+        heading = self.Driver.get_heading() + angle_to_ball
         # calculate a little step forward in the x direction
-        forward_x = cos(heading)
+        forward_x = sin(heading)
         # calculate a little step forward in the y direction
-        forward_y = sin(heading)
+        forward_y = cos(heading)
         # distance modifier
-        distanceModifier = 500
+        distanceModifier = 3
         # drive a little increment forward and wait for the next loop
-        self.Driver.drive_to_point(self.Driver.x+forward_x,self.Driver.y+forward_y)
-        
+        self.Driver.Drive_angle(-pi/4)
+        sleep(1)
     # Locating
     def Locating(self):
         # turn 10 degrees

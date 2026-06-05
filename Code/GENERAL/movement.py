@@ -311,6 +311,11 @@ class Driver:
         self.spin_angle(error, TURN_SPEED)
         distance = sqrt(target_dx*target_dx + target_dy*target_dy)
         self.move_distance(distance, speed)
+    
+    def Drive_angle(self, angle):
+        self.spin_angle(angle)
+        self.move_distance(5)
+
 
     def reverse_drive_to_point(self, target_x, target_y, speed=DEFAULT_SPEED):
         target_dx = target_x - self.x
