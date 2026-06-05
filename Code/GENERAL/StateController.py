@@ -50,7 +50,7 @@ class State_Controller:
         hoop_y,
     ):  # Opened in NeoVim and it did that (Cascading inputs for class)
         self.owner = owner  # Local stored refrence to owner
-        self.owner_type: str = robot_type  # Robot role: "attack" or "defence"
+        self.owner_type = robot_type  # Robot role: "attack" or "defence"
 
         self.hoop_position: tuple = (
             hoop_x,
