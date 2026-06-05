@@ -35,7 +35,7 @@ ev3 = EV3Brick()
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.A)
 ground_sensor = ColorSensor(Port.S1)   # not used for IR tracking, but required by Driver
-ir_sensor = I2CDevice(Port.D, 0x08)    # HiTechnic IR seeker
+ir_sensor = I2CDevice(Port.S3, 0x08)    # HiTechnic IR seeker
 
 # Optional gyro (unplug if not used)
 try:
