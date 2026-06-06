@@ -4,21 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "a852dd8f3e466aa2",
+        "id": "cfde76d8aed52419",
         "type": "tabs",
         "children": [
           {
-            "id": "edf1243ed3b76b20",
+            "id": "31146798c727bc0f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "pdf",
               "state": {
-                "file": "Documentation/Dexter Documentation.md",
-                "mode": "source",
-                "source": false
+                "file": "Documentation/Dexter Robot Netball Documentation.pdf"
               },
-              "icon": "lucide-file",
-              "title": "Dexter Documentation"
+              "icon": "lucide-file-text",
+              "title": "Dexter Robot Netball Documentation"
             }
           }
         ]
@@ -94,7 +92,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Documentation/Dexter Documentation.md",
+                "file": "Documentation/Dexter Robot Netball Documentation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +102,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Dexter Documentation"
+              "title": "Backlinks for Dexter Robot Netball Documentation"
             }
           },
           {
@@ -181,34 +179,36 @@
       "bases:Create new base": false
     }
   },
-  "active": "edf1243ed3b76b20",
+  "active": "f555c9d4519c4a73",
   "lastOpenFiles": [
-    "Construction/Defence Robot/IMG20260518141517.jpg",
-    "Construction/Defence Robot/IMG20260518141512.jpg",
-    "Documentation/Dexter Documentation.md",
-    "Documentation/IMG20260605185123.jpg",
-    "Construction/Defence Robot/Photos-3-001 (5)/IMG20260506150846.jpg",
-    "Construction/Defence Robot/Photos-3-001 (5)/IMG20260506150841.jpg",
-    "Construction/Defence Robot/IMG20260506150851.jpg",
-    "Construction/Defence Robot/IMG20260506150846.jpg",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Prototyping.md",
+    "Documentation/PicsandVids/note.txt~",
+    "Documentation/PicsandVids/note.txt",
+    "Documentation/Dexter Robot Netball Documentation.md",
+    "Documentation/Dexter Robot Netball Documentation.pdf",
+    "Documentation/Work not work.md",
     "Documentation/CommitsOverTime.png",
-    "Brainstorming/Meetings/meeting3.mp3",
-    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_020519027.jpg",
-    "Brainstorming/Defence Brainstorm/Pictures/PXL_20260430_015133398.jpg",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
+    "Documentation/BranchTable.png",
+    "Documentation/IMG20260605185123.jpg",
+    "Documentation/Projects.png",
+    "Documentation/Projects Page.png",
+    "Documentation/CommitsIndividual.png",
+    "Documentation/UsInVs543.png",
+    "Documentation/UsInVC807.png",
+    "Documentation/UsInVC720.png",
+    "rules.md",
+    "Documentation/PicsandVids/sizephoto8.jpg",
+    "Documentation/PicsandVids/working pickup.mp4",
     "Documentation/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/PicsandVids/IMG_1023.mov",
+    "Documentation/PicsandVids/not working pickup.mp4",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Prototyping.md",
+    "Brainstorming/Meetings/meeting3.mp3",
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids/ThrowingAndCatchingDemo.mp4",
     "Documentation/BranchTable.png.part",
     "Documentation/Projects.png.part",
-    "Code/DEFENCE/DefenceSub.py~",
     "Documentation/Gabe/04062026.md",
-    "rules.md",
-    "Code/GENERAL/robot_config.py~",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Reflection.md",
     "Documentation/Hugo/IT ROBOT ASSIGNMENT/Pre-Planning.md",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Collaboration.md",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT/PicsandVids",
-    "Documentation/Hugo/IT ROBOT ASSIGNMENT"
+    "Documentation/Hugo/IT ROBOT ASSIGNMENT/Collaboration.md"
   ]
 }
