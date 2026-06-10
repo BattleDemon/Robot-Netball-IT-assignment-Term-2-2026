@@ -39,7 +39,7 @@ class StateActions:
     Class to manage what the robot does when a specific state is on.
     """
 
-    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice ) -> None:
+    def __init__(self, PushMotor: Motor, StateController: State_Controller, driver: movement.Driver, ir_sensor:I2CDevice, ev3, grabber=None ) -> None:
         # get a reference to the motor Can be any random motor, will not be used
         self.PushMotor = PushMotor
         # get a refeerence to the current state controller
@@ -52,11 +52,14 @@ class StateActions:
         self.wasinfoul = False
 
         self.ir_sensor = ir_sensor
+        self.ev3 = ev3
+        self.grabber = grabber
 
         
         # create the thread for the main loop
         ActioningStates_t = threading.Thread(target=self.MainLoop)
         # start the thread
+        ActioningStates_t.daemon = True
         ActioningStates_t.start()
 
 
@@ -69,7 +72,16 @@ class StateActions:
 
     # Shooting
     def Shooting(self):
-        pass
+        if self.grabber is None:
+            return
+
+        if self.grabber.shoot_once():
+            self.StateController.has_ball = False
+            self.StateController.set_idle_state()
+            try:
+                self.ev3.speaker.beep()
+            except Exception:
+                pass
 
     # Passing
     def Passing(self):

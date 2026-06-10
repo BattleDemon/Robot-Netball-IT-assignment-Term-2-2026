@@ -1,15 +1,23 @@
+*Brick 1 Ports(main):*
+
 Left wheel: Port B 
 
 Right wheel: Port A 
 
-Arm motor: Port 3 
+Arm motor: Port C
 
-Arm claw motor: Port C 
+Arm claw motor: Port D
 
 Claw Ball colour sensor: Port 2 
 
-Ground colour sensor: Port 1 
+Ground colour sensor: Port 4
 
-Catapolt wind-up motor: Port 4 
+IR: Port 3
 
-IR: Port D 
+
+
+*Brick 2 Ports:*
+
+Catapolt wind-up motor: Port D
+
+Communication motor (detects movement from arm claw motor): Port A
