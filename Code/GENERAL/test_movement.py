@@ -2,222 +2,158 @@
 
 '''
 ╔══════════════════════════════════════════════════════════════════╗
-║                T E S T _ M O V E M E N T . P Y                   ║
-║   Manual test suite for movement.py.  Run on the EV3 brick.      ║
-║   Results are printed to the EV3 screen and to the console.      ║
+║                M O V E M E N T   T E S T . P Y                   ║
+║                                                                  ║
+║  Tests movement.py and robot_config without shooting / catching. ║
+║                                                                  ║
+║  1. Spins until IR ball is detected.                             ║
+║  2. Drives toward the ball in small steps.                       ║
+║  3. When close → ball dance (wiggle + beep).                     ║
+║  4. Faces the hoop → hoop dance.                                 ║
+║  5. Repeats.                                                     ║
 ╚══════════════════════════════════════════════════════════════════╝
 '''
 
 from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor, ColorSensor
-from pybricks.parameters import Port, Direction
+from pybricks.ev3devices import Motor, ColorSensor, GyroSensor
+from pybricks.iodevices import I2CDevice
+from pybricks.parameters import Port, Stop, Button
 from pybricks.tools import wait
-from movement import Driver, TEAM
+from threading import Thread
+import time
+from math import pi
 
-# ═══════════════════════════════════════════════════════════════════
-# Setup
-# ═══════════════════════════════════════════════════════════════════
+# Our own files
+from robot_config import *
+from movement import Driver
+from IRlocation import irLocator
 
+
+# ---------- Hardware setup ----------
+# Adjust ports to match robot :)
 ev3 = EV3Brick()
+left_motor = Motor(Port.B)
+right_motor = Motor(Port.A)
+ground_sensor = ColorSensor(Port.S1)   # not used for IR tracking, but required by Driver
+ir_sensor = I2CDevice(Port.S3, 0x08)    # HiTechnic IR seeker
 
-left_motor = Motor(Port.B, positive_direction=Direction.CLOCKWISE)
-right_motor = Motor(Port.C, positive_direction=Direction.CLOCKWISE)
-colour_sensor = ColorSensor(Port.S3)
+# Optional gyro (unplug if not used)
+try:
+    gyro = GyroSensor(Port.S2)
+except:
+    gyro = None
 
-driver = Driver(ev3, left_motor, right_motor, colour_sensor, team=TEAM)
+# ---------- Create the Driver ----------
+# Team can be "ATTACK" or "DEFENCE" – we use attack so it faces the correct hoop.
+robot = Driver(ev3, left_motor, right_motor, ground_sensor, team="ATTACK", gyro=gyro)
 
-# Helper to draw text on screen without clobbering previous lines
-def draw(y, text):
-    ev3.screen.draw_text(0, y, str(text))
+# ---------- Start IR locator in background ----------
+# This thread writes robot.IR_position (0‑9) and robot.IR_strength (0‑255) continuously.
+ir_thread = Thread(target=irLocator, args=(robot, ir_sensor))
+ir_thread.daemon = True
+ir_thread.start()
 
-def clear():
-    ev3.screen.clear()
+# Give sensors a moment to initialise
+wait(500)
 
-def pause(seconds=2):
-    wait(seconds * 1000)
 
-# ═══════════════════════════════════════════════════════════════════
-# Test 1 -- Initial position dump
-# ═══════════════════════════════════════════════════════════════════
+# ---------- Little dance functions ----------
+def ball_dance():
+    """Celebrate finding the ball – wiggle and beep."""
+    ev3.speaker.beep(880, 200)  # high beep
+    for _ in range(3):
+        robot.spin_angle(0.3)   # turn ~17° clockwise
+        wait(200)
+        robot.spin_angle(-0.3)  # turn back
+        wait(200)
+    ev3.speaker.beep(440, 400)  # lower beep
 
-clear()
-draw(0, "TEST 1: Start pose")
-x, y = driver.get_position()
-h = driver.get_heading()
-draw(20, "X:  {}".format(x))
-draw(40, "Y:  {}".format(y))
-draw(60, "H:  {}".format(h))
-draw(90, "Expected:")
-draw(110, "ATTACK ~79,199,0")
-draw(130, "DEFENCE ~79,20,0")
-pause(4)
+def hoop_dance():
+    """Celebrate facing the hoop – spin 360° and beep twice."""
+    ev3.speaker.beep(1000, 100)
+    robot.spin_angle(2 * pi)    # full turn
+    ev3.speaker.beep(1200, 100)
+    wait(300)
+    ev3.speaker.beep(1000, 100)
 
-# ═══════════════════════════════════════════════════════════════════
-# Test 2 -- Drive forward 30 cm, watch Y change
-# ═══════════════════════════════════════════════════════════════════
 
-clear()
-draw(0, "TEST 2: Drive 30 cm fwd")
-start_x, start_y = driver.get_position()
-draw(20, "Start: {},{}".format(start_x, start_y))
-driver.move_distance(30)
-end_x, end_y = driver.get_position()
-draw(40, "End:   {},{}".format(end_x, end_y))
-delta = end_y - start_y
-draw(60, "Delta Y: {}".format(delta))
-draw(90, "Expected ~ -30 (attack) or ~ +30 (defence)")
-pause(4)
+# ---------- Main test loop ----------
+ev3.screen.print("Movement Test")
+ev3.screen.print("Press centre to start")
+while Button.CENTER not in ev3.buttons.pressed():
+    wait(50)
+ev3.screen.clear()
 
-# ═══════════════════════════════════════════════════════════════════
-# Test 3 -- Turn 90 deg clockwise and counter-clockwise
-# ═══════════════════════════════════════════════════════════════════
+# State machine for the test
+# 0 = searching, 1 = approaching ball, 2 = ball reached, 3 = facing hoop, 4 = done
+state = 0
+ball_dance_done = False
 
-clear()
-draw(0, "TEST 3: Turn 90 CW")
-start_h = driver.get_heading()
-draw(20, "Start H: {}".format(start_h))
-driver.turn_angle(90)
-mid_h = driver.get_heading()
-draw(40, "After +90: {}".format(mid_h))
-driver.turn_angle(-90)
-end_h = driver.get_heading()
-draw(60, "After -90: {}".format(end_h))
-draw(90, "Mid should be start+90")
-draw(110, "End should be start")
-pause(4)
+while True:
+    # Allow emergency stop with back button
+    if Button.UP in ev3.buttons.pressed():
+        robot.stop()
+        ev3.screen.print("Stopped")
+        break
 
-# ═══════════════════════════════════════════════════════════════════
-# Test 4 -- Reset position to (0,0,0) and verify
-# ═══════════════════════════════════════════════════════════════════
+    # Get latest IR data
+    pos = robot.IR_position
+    strength = robot.IR_strength
 
-clear()
-draw(0, "TEST 4: reset_position()")
-driver.reset_position(0, 0, 0)
-x, y = driver.get_position()
-h = driver.get_heading()
-draw(20, "X: {}".format(x))
-draw(40, "Y: {}".format(y))
-draw(60, "H: {}".format(h))
-draw(90, "Expected: 0, 0, 0")
-pause(3)
+    # ---- State 0: Searching for the ball ----
+    if state == 0:
+        ev3.screen.print("Searching...")
+        # If we see a strong enough signal, switch to approach
+        if strength is not None and strength > IR_BALL_CLOSE_THRESHOLD:
+            state = 1
+        else:
+            # Slowly spin in place to scan
+            robot.spin_angle(0.2)  # ~11° per step
+            wait(100)
 
-# ═══════════════════════════════════════════════════════════════════
-# Test 5 -- Square test (drift check)
-# Drive 20 cm fwd, turn 90, repeat 4x.
-# Final position should be close to start.
-# ═══════════════════════════════════════════════════════════════════
+    # ---- State 1: Approaching the ball ----
+    elif state == 1:
+        ev3.screen.print("Approaching...")
+        if strength is None or strength < 10:
+            # Lost the signal, go back to searching
+            state = 0
+            continue
 
-clear()
-draw(0, "TEST 5: Square drift")
-driver.reset_position(0, 0, 0)
-for i in range(4):
-    driver.move_distance(20)
-    driver.turn_angle(90)
-    draw(20 + i * 15, "Leg {} done".format(i + 1))
-fx, fy = driver.get_position()
-fh = driver.get_heading()
-draw(90, "Final: {},{}".format(fx, fy))
-draw(110, "Head:  {}".format(fh))
-draw(130, "Drift X:{:.1f} Y:{:.1f}".format(fx, fy))
-draw(150, "Expect close to 0,0,0")
-pause(4)
+        # Convert IR direction (0‑9) to angle from robot's nose
+        # 5 = straight ahead, 0 = far left, 9 = far right
+        # Each step is about 10° – we convert to radians
+        angle_to_ball = (pos - 5) * (pi / 18)   # positive = right
 
-# ═══════════════════════════════════════════════════════════════════
-# Test 6 -- Boundary & foul detection (simulated)
-# ═══════════════════════════════════════════════════════════════════
+        # Turn toward the ball (spin, not pivot – we don't have it yet)
+        robot.spin_angle(angle_to_ball / 2.0)   # turn half the error to avoid overshoot
 
-clear()
-draw(0, "TEST 6: Foul/boundary logic")
+        # Drive a small step forward (5 cm)
+        robot.move_distance(5.0, SLOW_SPEED)
 
-# Simulate being in the middle of the field
-driver.reset_position(79, 109.5, 0)
-draw(20, "Mid-field in bounds?: {}".format(driver.is_in_bounds()))
+        # If the ball is very close (strong signal and centered), we've reached it
+        if strength > 60 and 4 <= pos <= 6:
+            state = 2
 
-# Simulate near edge
-driver.reset_position(1, 109.5, 0)
-draw(40, "Near edge in bounds?: {}".format(driver.is_in_bounds()))
+    # ---- State 2: Ball reached – dance! ----
+    elif state == 2:
+        robot.stop()
+        ev3.screen.print("Ball found!")
+        ball_dance()
+        state = 3
+        ball_dance_done = True
 
-# Simulate white tape (foul box)
-driver.signal_ground_colour("White")
-draw(60, "White tape -> foul?: {}".format(driver.is_in_foul_area()))
+    # ---- State 3: Face the hoop – then dance again ----
+    elif state == 3:
+        ev3.screen.print("Facing hoop...")
+        robot.face_hoop()
+        hoop_dance()
+        state = 4
+        ev3.screen.print("Test complete!")
+        ev3.speaker.beep(200, 500)
+        break
 
-# Simulate black tape (border)
-driver.signal_ground_colour("Black")
-draw(80, "Black tape -> foul?: {}".format(driver.is_in_foul_area()))
-draw(100, "Black tape -> bord?: {}".format(driver.sees_black_tape()))
+    wait(50)
 
-# Simulate no tape
-driver.signal_ground_colour(None)
-draw(120, "None tape -> foul?: {}".format(driver.is_in_foul_area()))
-
-pause(4)
-
-# ═══════════════════════════════════════════════════════════════════
-# Test 7 -- drive_to_point to a fixed target
-# ═══════════════════════════════════════════════════════════════════
-
-clear()
-draw(0, "TEST 7: drive_to_point")
-driver.reset_position(0, 0, 0)
-target_x = 30
-target_y = 40
-draw(20, "Start: 0,0")
-draw(40, "Target: {},{}".format(target_x, target_y))
-driver.drive_to_point(target_x, target_y)
-fx, fy = driver.get_position()
-draw(60, "Final: {},{}".format(fx, fy))
-draw(90, "Expect close to target")
-draw(110, "Error X:{:.1f} Y:{:.1f}".format(fx - target_x, fy - target_y))
-pause(4)
-
-# ═══════════════════════════════════════════════════════════════════
-# Test 8 -- face_hoop
-# ═══════════════════════════════════════════════════════════════════
-
-clear()
-draw(0, "TEST 8: face_hoop")
-driver.reset_position(79, 109.5, 0)
-# Turn away first so we can see it correct
-driver.turn_angle(45)
-draw(20, "Before: {}".format(driver.get_heading()))
-driver.face_hoop()
-draw(40, "After:  {}".format(driver.get_heading()))
-draw(70, "Expect ~0 for attack")
-draw(90, "Expect ~180 for defence")
-pause(4)
-
-# ═══════════════════════════════════════════════════════════════════
-# Test 9 -- Signal flow (foul -> foul box -> foul over)
-# ═══════════════════════════════════════════════════════════════════
-
-clear()
-draw(0, "TEST 9: Foul signal flow")
-
-# Start normal
-draw(20, "Foul active?: {}".format(driver.is_foul_active()))
-
-# Simulate Dexter calling foul
-driver.signal_in_foul_box()
-draw(40, "After signal_in: {}".format(driver.is_foul_active()))
-
-# Simulate foul timer done
-driver.signal_foul_over()
-draw(60, "After signal_over: {}".format(driver.is_foul_active()))
-
-# Note: home_from_foul_box() is NOT auto-run here because
-# start_foul_monitor() was not called.  This is just a unit test.
-
-draw(90, "Expect: False, True, True")
-draw(110, "(foul cleared by homing)")
-pause(4)
-
-# ═══════════════════════════════════════════════════════════════════
-# All tests done
-# ═══════════════════════════════════════════════════════════════════
-
-clear()
-draw(0, "ALL TESTS COMPLETE")
-draw(30, "Check each screen for results.")
-draw(60, "Update robot_config.py")
-draw(80, "if odometry drifts.")
-pause(3)
+# Clean up
+robot.stop()
+robot.shutdown()
